@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/RelativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="Time" />
+
+        <TextView
+            android:id="@+id/textView_datadistribution"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="4dp"
+            android:text="DataTime" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/ItemTitle"
+            android:layout_width="match_parent"
+            android:layout_height="66dp"
+            android:gravity="left"
+            android:text="专题名字"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:typeface="sans" />
+
+        <TextView
+            android:id="@+id/ItemText"
+            android:layout_width="match_parent"
+            android:layout_height="14dp"
+            android:gravity="left"
+            android:text="专题关键字" />
+    </LinearLayout>
+
+</LinearLayout>

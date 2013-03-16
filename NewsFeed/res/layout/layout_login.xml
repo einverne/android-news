@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffd6d3d6"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout_login"
+        android:layout_width="240.0dip"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30.0dip"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@id/textView_newstitle"
+            style="@style/custom_shadow_black_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10.0dip"
+            android:text="用户登录："
+            android:textSize="16.0dip" />
+
+        <EditText
+            android:id="@+id/editText_username"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textView_newstitle"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20.0dip"
+            android:hint="用户名或Email" >
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/editText_psw"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editText_username"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10.0dip"
+            android:hint="密码"
+            android:inputType="textPassword" />
+
+        <LinearLayout
+            android:id="@+id/ll2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editText_psw"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10.0dip"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/button_denglu"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:onClick="onSubmitClick"
+                android:text="登录" />
+
+            <Button
+                android:id="@+id/button_quxiao"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:onClick="onCancelClick"
+                android:text="取消" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@id/textView_newsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="48.0dip"
+            android:text="..."
+            android:textSize="14.0dip" />
+    </RelativeLayout>
+
+</RelativeLayout>
