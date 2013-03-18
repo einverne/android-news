@@ -3,7 +3,9 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="100dip"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingLeft="2dp"
+    android:paddingRight="2dp" >
 
     <RelativeLayout
         android:id="@+id/RelativeLayout1"
@@ -18,7 +20,10 @@
             android:layout_height="16dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
+            android:layout_marginTop="1dp"
             android:src="@drawable/ic_launcher" />
 
         <TextView
@@ -49,10 +54,11 @@
         <TextView
             android:id="@+id/Title"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="26dp"
             android:gravity="left"
+            android:maxHeight="30dp"
             android:text="新闻标题"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:typeface="sans" />
 
@@ -60,6 +66,8 @@
             android:id="@+id/ItemDes"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:gravity="left"
+            android:maxHeight="40dp"
             android:text="新闻描述" />
 
         <TextView
