@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.and.netease.utils.DBAdapter;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -56,7 +57,8 @@ public class zhuanti extends ListActivity {
 			String date = c.getString(4);
 
 			HashMap<String, Object> map = new HashMap<String, Object>();
-			//ICON CNN 媒体来源
+			//ICON CNN 媒体来源  EV_BUG
+			map.put("icon",getIcon("abc"));
 			map.put("source","CNN");
 			map.put("ItemTime", date);
 			map.put("Title", Title);
@@ -66,8 +68,8 @@ public class zhuanti extends ListActivity {
 		}
 
 		listItemAdapter = new SimpleAdapter(this, listItem,
-				R.layout.zhuanti_item, new String[] { "source","ItemTime", "Title",
-						"description", "ItemMedio" }, new int[] {R.id.textView_source,
+				R.layout.zhuanti_item, new String[] { "icon","source","ItemTime", "Title",
+						"description", "ItemMedio" }, new int[] {R.id.imageView_icon,R.id.textView_source,
 						R.id.textView_ItemTime, R.id.Title, R.id.ItemDes,
 						R.id.textView_keywords });
 		// 添加并且显示
@@ -91,6 +93,23 @@ public class zhuanti extends ListActivity {
 				});
 	}
 
+	/**
+	 * 传入资源名字 返回资源id
+	 * @param name 资源名字
+	 * @return 资源的id
+	 */
+	protected int getIcon(String name){
+		Resources res = getResources();
+		int id =res.getIdentifier(name, "drawable", getPackageName());
+		if (id == 0) {
+			return R.drawable.icon;		//EV_BUG 默认ICON图片
+		}else{
+			return id;
+		}
+	}
+	
+	
+	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// 如果是返回键,直接返回到桌面
