@@ -18,7 +18,7 @@
                 android:id="@+id/layout_top"
                 android:layout_width="match_parent"
                 android:layout_height="48dip"
-                android:background="#669900" >
+                android:background="#36b0be" >
 
                 <ImageView
                     android:id="@+id/img_biaoti"

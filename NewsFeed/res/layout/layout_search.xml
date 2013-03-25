@@ -24,18 +24,20 @@
             android:gravity="right|center_vertical"
             android:orientation="horizontal" >
 
-            <Button
+            <ImageButton
                 android:id="@+id/button_advanced_search"
                 android:layout_width="100dip"
-                android:layout_height="wrap_content"
+                android:layout_height="35dip"
                 android:layout_weight="1"
+                android:src="@drawable/searchb"
                 android:text="高级检索" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/search"
                 android:layout_width="100dip"
-                android:layout_height="wrap_content"
+                android:layout_height="35dip"
                 android:layout_weight="1"
+                android:src="@drawable/searchb2"
                 android:text="检索" />
 
         </LinearLayout>
