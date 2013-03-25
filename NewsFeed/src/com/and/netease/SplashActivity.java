@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 public class SplashActivity extends Activity {
 
-	private final int SPLASH_DISPLAY_LENGHT = 800;
+	private final int SPLASH_DISPLAY_LENGHT = 500;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
