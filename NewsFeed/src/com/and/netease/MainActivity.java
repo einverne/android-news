@@ -1,5 +1,7 @@
 package com.and.netease;
 
+import com.and.netease.utils.CheckNetwork;
+
 import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.DialogInterface;
@@ -12,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
@@ -36,6 +39,14 @@ public class MainActivity extends TabActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		Log.d(TAG, "Main create");
+		
+		CheckNetwork checknet = new CheckNetwork(this);
+		if (checknet.check()) {
+			Toast.makeText(this, "网络可用", Toast.LENGTH_SHORT).show();
+		}else {
+			Toast.makeText(this, "网络不可用", Toast.LENGTH_SHORT).show();
+		}
+		
 		bottom_layout = (RelativeLayout) findViewById(R.id.layout_bottom);
 		tabHost = getTabHost();
 		tabHost.addTab(tabHost.newTabSpec("zuijinxinwen")
