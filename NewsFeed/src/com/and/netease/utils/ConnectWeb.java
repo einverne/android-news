@@ -16,18 +16,22 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
-//import atg.taglib.json.util.JSONException;
-//import atg.taglib.json.util.JSONObject;
+
+import android.content.Context;
+import android.net.wifi.WifiManager;
 import android.util.Log;
+import android.widget.Toast;
 
 //将请求地址写入构造函数URL中，然后将取得的数据加入数据库adapter的不同的表中
-public class ConnectWeb {
-	/**
-	 * 联网
-	 * 
-	 */
-	DBAdapter dbadapter;
 
+/**
+ * 联网类
+ * @author 
+ *
+ */
+public class ConnectWeb {
+	DBAdapter dbadapter;			//数据库对象
+	
 	public ConnectWeb(DBAdapter adapter) {
 		dbadapter = adapter;
 	}

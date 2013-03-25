@@ -2,13 +2,13 @@ package com.and.netease;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.and.netease.utils.CheckNetwork;
 import com.and.netease.utils.ConnectWeb;
 import com.and.netease.utils.DBAdapter;
 import com.markupartist.android.widget.PullToRefreshListView;
@@ -132,7 +133,13 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 					@Override
 					public void onRefresh() {
 						// Do work to refresh the list here.
-						new GetDataTask().execute();
+						CheckNetwork checknet = new CheckNetwork(TabzuijinxinwenActivity.this);
+						if (checknet.check()) {
+							//Toast.makeText(TabzuijinxinwenActivity.this, "网络可用", Toast.LENGTH_SHORT).show();
+							new GetDataTask().execute();
+						}else {
+							Toast.makeText(TabzuijinxinwenActivity.this, "网络不可用", Toast.LENGTH_SHORT).show();
+						}
 					}
 				});
 	}
@@ -232,6 +239,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 
 		@Override
 		protected void onPostExecute(String[] result) {
+
 			for (int j = 0; j < 3; j++) {
 				HashMap<String, String> map = new HashMap<String, String>();
 				map.put("ItemTitle", "新闻标题 (刷新后)");

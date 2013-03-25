@@ -10,11 +10,12 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
 
 public class TabSearchActivity extends Activity {
@@ -27,7 +28,7 @@ public class TabSearchActivity extends Activity {
 		setContentView(R.layout.layout_search);
 		Log.d(TAG, "Search Start");
 
-		Button advanceSearchButton = (Button) findViewById(R.id.button_advanced_search);
+		ImageButton advanceSearchButton = (ImageButton) findViewById(R.id.button_advanced_search);
 		advanceSearchButton.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -37,7 +38,7 @@ public class TabSearchActivity extends Activity {
 			}
 		});
 
-		Button searchButton = (Button) findViewById(R.id.search);
+		ImageButton searchButton = (ImageButton) findViewById(R.id.search);
 		searchButton.setOnClickListener(new Button.OnClickListener() {
 
 			@Override

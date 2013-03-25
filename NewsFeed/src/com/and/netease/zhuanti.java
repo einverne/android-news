@@ -36,17 +36,17 @@ public class zhuanti extends ListActivity {
 		c = dbadapter.getnews(title);
 		Log.d("size", String.valueOf(c.getCount()));
 
-		ImageButton imgbtnButton = (ImageButton) findViewById(R.id.imgbtn_back);
-		imgbtnButton.setOnClickListener(new OnClickListener() {
-			// 相应返回事件
-			@Override
-			public void onClick(View v) {
-				// Intent intent = new Intent();
-				// intent.setClass(zhuanti.this, MainActivity.class);
-				// startActivity(intent);
-				finish();
-			}
-		});
+//		ImageButton imgbtnButton = (ImageButton) findViewById(R.id.imgbtn_back);
+//		imgbtnButton.setOnClickListener(new OnClickListener() {
+//			// 相应返回事件
+//			@Override
+//			public void onClick(View v) {
+//				// Intent intent = new Intent();
+//				// intent.setClass(zhuanti.this, MainActivity.class);
+//				// startActivity(intent);
+//				finish();
+//			}
+//		});
 
 		listItem = new ArrayList<HashMap<String, Object>>();
 		for (int i = 0; c.moveToNext(); i++) {
