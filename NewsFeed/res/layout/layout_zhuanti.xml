@@ -8,16 +8,7 @@
         android:id="@+id/layout_top"
         android:layout_width="match_parent"
         android:layout_height="40dip"
-        android:background="#669900"
-         >
-
-        <ImageButton
-            android:id="@+id/imgbtn_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:background="#669900"
-            android:src="@drawable/back" />
+        android:background="#36b0be" >
 
         <ImageView
             android:id="@+id/img_netease_top"
@@ -25,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="false"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/imgbtn_back"
+            android:layout_marginLeft="10dip"
             android:contentDescription="@null"
             android:src="@drawable/biaotizi" />
 

@@ -3,25 +3,24 @@
     android:id="@+id/splash_window"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/splash"
+    android:background="@drawable/splash2"
     android:orientation="vertical" >
 
-  <!--   <ProgressBar
+     <ProgressBar
         android:id="@+id/splash_progressBar1"
-        style="?android:attr/progressBarStyleSmall"
+        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="220.0px" />
 
-    <TextView
-        android:id="@+id/splash_textView1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="88.0px"
-        android:gravity="center"
-        android:text="loading..."
-        android:textColor="#ffffffff" /> -->
+     <TextView
+         android:id="@+id/splash_textView1"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="88.0px"
+         android:gravity="center"
+         android:text="loading..."
+         android:textColor="#ffffffff" />
 
 </LinearLayout>
