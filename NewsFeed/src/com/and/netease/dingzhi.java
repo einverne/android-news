@@ -1,7 +1,10 @@
 package com.and.netease;
  
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import android.R.string;
 import android.app.Activity;
@@ -24,6 +27,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +48,9 @@ public class dingzhi extends ListActivity {
         }
     }
     
+   
+        
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
  
@@ -52,8 +59,24 @@ public class dingzhi extends ListActivity {
  
         ladapter = new ListVIewAdapter(this);
  
+        List list = new ArrayList();
+        Map map = new HashMap();
+        for (int i=0;i<str.length;i++){
+        	map.put("title", "体育");
+        	map.put("description", "有关体育的一些新闻");
+        	map.put("s_time", "2012-12-12");
+        	map.put("e_time", "2012-12-12");
+        	list.add(map);
+        }
+        
         lv = this.getListView();
-        lv.setAdapter(ladapter);
+        
+        SimpleAdapter adapter = new SimpleAdapter(this, list, R.layout.dingzhi_zhuanti, new String[]{"title","description","s_time","e_time"}, new int[]{R.id.textView_title,R.id.textView_description,R.id.textView_startTime,R.id.textView_endTime});
+        lv.setAdapter(adapter);
+        
+        
+        
+    //    lv.setAdapter(ladapter);
         lv.setScrollBarStyle(1);
         
         lv.setOnItemClickListener(new OnItemClickListener() {
@@ -63,9 +86,9 @@ public class dingzhi extends ListActivity {
  
             	
             	Intent intent = new Intent();
-            	intent.setClass(dingzhi.this, zhuanti.class);
+            	intent.setClass(dingzhi.this, Dingzhi_zhuanti.class);
             	startActivity(intent);
-            	dingzhi.this.finish();
+            	//dingzhi.this.finish();
             	
                 //Toast.makeText(dingzhi.this, "位置：" + position,Toast.LENGTH_SHORT).show();
             }
