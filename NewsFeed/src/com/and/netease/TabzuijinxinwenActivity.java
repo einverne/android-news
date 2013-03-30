@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,27 +31,28 @@ import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
 public class TabzuijinxinwenActivity extends ListActivity implements
 		OnScrollListener {
 
-	private ArrayList<HashMap<String, String>> listItem;// 用来显示listview
-	private int MaxDataNum;
+	private final int MaxDataNum = 50;
 	private View moreView;
 	private Handler handler;
 	private SimpleAdapter listItemAdapter;
 	private int lastVisibleIndex;
 	private Button bt;
 	private ProgressBar pg;
-	int flag = 0;
+	private int flag = 0;
 
 	private DBAdapter dbadapter;
 	private Cursor c;
-	ConnectWeb conn;
+	private ConnectWeb conn;
 
+	ArrayList<HashMap<String, String>> listItem;
+	
+	private static final String TAG = "EV_Debug";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_zuijinxinwen);
-
-		MaxDataNum = 50;
-
+		Log.d(TAG, "Tabzuijinxinwen onCreate");
+		
 		moreView = getLayoutInflater().inflate(R.layout.moredata, null);
 		bt = (Button) moreView.findViewById(R.id.bt_load);
 		pg = (ProgressBar) moreView.findViewById(R.id.pg);
@@ -58,30 +60,38 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 
 		dbadapter = new DBAdapter(this);
 		dbadapter.open();
-		conn = new ConnectWeb(dbadapter);
-		conn.getzuijinxinwen();
-		/*
-		 * for (int i = 0; i < 20; i++) { dbadapter.insert("新闻专题标题" +
-		 * i,"题新闻专媒体","2012-11-"+i); }
-		 */
+
+		CheckNetwork checknet = new CheckNetwork(this);
+		if (checknet.check()) {
+			Toast.makeText(this, "网络可用", Toast.LENGTH_SHORT).show();
+			conn = new ConnectWeb(dbadapter);
+			conn.getzuijinxinwen();
+		} else {
+			Toast.makeText(this, "网络不可用", Toast.LENGTH_SHORT).show();
+		}
+
 		c = dbadapter.getzuijinxinwen(0, MaxDataNum);
 		listItem = new ArrayList<HashMap<String, String>>();
 		for (int i = 0; i < 10 && c.moveToNext(); i++) {
 			c.moveToPosition(i);
-			String keyWords = c.getString(1);
-			String number = c.getString(2);
-
+			String title = c.getString(1);
+			String keywords = c.getString(2);
+//			String date = c.getString(3);
+//			String counts = c.getString(4);
+			
 			HashMap<String, String> map = new HashMap<String, String>();
-			map.put("ItemTitle", keyWords);
-			map.put("ItemText", number);
+			map.put("date", "date");
+			map.put("counts", "counts");
+			map.put("ItemTitle", title);
+			map.put("ItemText", "keywords");
 			listItem.add(map);
 		}
 
-		// 生成适配器的Item和动态数组对应的元素
 		listItemAdapter = new SimpleAdapter(this, listItem,
-				R.layout.zuijinxinwen_item, 
-				new String[] { "ItemTitle","ItemText"},
-				new int[] { R.id.ItemTitle, R.id.ItemText });
+				R.layout.zuijinxinwen_item, new String[] { "date", "counts",
+						"ItemTitle", "ItemText" }, new int[] {
+						R.id.textView_datedistribution, R.id.textView_count,
+						R.id.ItemTitle, R.id.ItemText });
 		// 添加并且显示
 		((PullToRefreshListView) getListView()).addFooterView(moreView);
 		setListAdapter(listItemAdapter);
@@ -114,7 +124,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 					@Override
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
-						//EV_BUG  /这里的BUG在下拉刷新之后 数据库没有刷新，所以点击新生成的专题列表就会FC
+						// EV_BUG /这里的BUG在下拉刷新之后 数据库没有刷新，所以点击新生成的专题列表就会FC
 						String title = (String) listItem.get(arg2 - 1).get(
 								"ItemTitle");
 						Bundle bundle = new Bundle();
@@ -133,12 +143,15 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 					@Override
 					public void onRefresh() {
 						// Do work to refresh the list here.
-						CheckNetwork checknet = new CheckNetwork(TabzuijinxinwenActivity.this);
+						CheckNetwork checknet = new CheckNetwork(
+								TabzuijinxinwenActivity.this);
 						if (checknet.check()) {
-							//Toast.makeText(TabzuijinxinwenActivity.this, "网络可用", Toast.LENGTH_SHORT).show();
+							// Toast.makeText(TabzuijinxinwenActivity.this,
+							// "网络可用", Toast.LENGTH_SHORT).show();
 							new GetDataTask().execute();
-						}else {
-							Toast.makeText(TabzuijinxinwenActivity.this, "网络不可用", Toast.LENGTH_SHORT).show();
+						} else {
+							Toast.makeText(TabzuijinxinwenActivity.this,
+									"网络不可用", Toast.LENGTH_SHORT).show();
 						}
 					}
 				});
@@ -162,7 +175,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		}
 
 		else {
-			//数据已经不足5条
+			// 数据已经不足5条
 			for (int i = count; i < MaxDataNum && c.moveToNext(); i++) {
 				c.moveToPosition(i);
 				String text = c.getString(1);
@@ -208,20 +221,20 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		// 滑到底部后自动加载，判断listview已经停止滚动并且最后可视的条目等于adapter的条目
 		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
 				&& lastVisibleIndex == listItemAdapter.getCount()) {
-//			   当滑到底部时自动加载
-			 pg.setVisibility(View.VISIBLE);
-			 bt.setVisibility(View.GONE);
-			 handler.postDelayed(new Runnable() {
-			
-			 @Override
-			 public void run() {
-			 loadMoreData();
-			 bt.setVisibility(View.VISIBLE);
-			 pg.setVisibility(View.GONE);
-			 listItemAdapter.notifyDataSetChanged();
-			 }
-			
-			 }, 1000);
+			// 当滑到底部时自动加载
+			pg.setVisibility(View.VISIBLE);
+			bt.setVisibility(View.GONE);
+			handler.postDelayed(new Runnable() {
+
+				@Override
+				public void run() {
+					loadMoreData();
+					bt.setVisibility(View.VISIBLE);
+					pg.setVisibility(View.GONE);
+					listItemAdapter.notifyDataSetChanged();
+				}
+
+			}, 1000);
 		}
 	}
 

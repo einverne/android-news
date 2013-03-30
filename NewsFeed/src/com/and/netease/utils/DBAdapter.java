@@ -37,8 +37,10 @@ public class DBAdapter
 	public static final String newsKEY_ZhuantiId = "zhuantiId";
 
 	public static final String zuijinxinwenKEY_ROWID = "_id";// 是最近新闻的专题们
-	public static final String zuijinxinwenKEY_Words = "words";
-	public static final String zuijinxinwenKEY_Count = "count";
+	public static final String zuijinxinwenKEY_Words = "words";		//专题关键字
+	public static final String zuijinxinwenKEY_Count = "count";		//
+	public static final String zuijinxinwenKEY_Title = "title";		//
+	public static final String zuijinxinwenKEY_Date = "date";		//专题日期
 
 	public static final String peoplesKEY_ROWID = "_id";
 	public static final String peoplesKEY_Title = "title";
@@ -74,12 +76,44 @@ public class DBAdapter
 		db.close();
 		DBHelper.close();
 	}
-
-	// ---向数据库中插入一个标题---
-	public long insert(String words, int count) {
+	
+	public long simpleinsert(String title,String date,String words,  int count) {
+		db = DBHelper.getWritableDatabase();
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(zuijinxinwenKEY_Title, title);
+		initialValues.put(zuijinxinwenKEY_Date, date);
+		initialValues.put(zuijinxinwenKEY_Words,words);
+		initialValues.put(zuijinxinwenKEY_Count, count);
+		Log.d("test", "before simpleinsert");
+		long result=db.insert(DATABASE_TABLE_zuijinxinwen, null, initialValues);//insert()函数的返回值是新数据插入的位置，即ID值。
+		Log.d("test", "after simpleinsert "+String.valueOf(result));
+		if (result<0)
+		{
+			Cursor mCursor =db.query(true, DATABASE_TABLE_zuijinxinwen,
+					new String[] { zuijinxinwenKEY_ROWID, zuijinxinwenKEY_Title,
+							zuijinxinwenKEY_Count}, zuijinxinwenKEY_Title + "='"
+							+ title+"'", null, null, null, null, null);
+			
+			if (mCursor != null) {
+				mCursor.moveToFirst();
+				result=Integer.parseInt((String)mCursor.getString(0));
+			}
+			
+			
+		}
+		db.close();
+		DBHelper.close();
+		Log.d("test", "after simpleinsert "+String.valueOf(result));
+		return result;
+	}
+	
+	// ---向数据库中插入一个标题--- 最近新闻
+	public long insert(String words, String title ,String date,int count) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(zuijinxinwenKEY_Words, words);
 		initialValues.put(zuijinxinwenKEY_Count, count);
+		initialValues.put(zuijinxinwenKEY_Title, title);
+		initialValues.put(zuijinxinwenKEY_Date, date);
 		int temp = 0;
 		Cursor c = db.query(DATABASE_TABLE_zuijinxinwen,
 				new String[] { zuijinxinwenKEY_Count }, zuijinxinwenKEY_Words
