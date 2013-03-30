@@ -44,13 +44,6 @@ public class search extends Activity  implements OnScrollListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_search_result);
 		Log.d(TAG, "search_result_start");
-
-	//	moreView = getLayoutInflater().inflate(R.layout.moredata, null);
-	//	Log.d(TAG, "search");
-	//	bt = (Button) moreView.findViewById(R.id.bt_load);
-		
-	//	pg = (ProgressBar) moreView.findViewById(R.id.pg);
-	//	handler = new Handler();
 		
 		MaxDataNum=20;
 //		// get Intent Bundle
@@ -123,20 +116,6 @@ public class search extends Activity  implements OnScrollListener {
 			}
 		});
 
-		// new AlertDialog.Builder(search.this)
-		// .setTitle(R.string.app_name)
-		// .setMessage(keyword)
-		// .setPositiveButton(R.string.hello, new
-		// DialogInterface.OnClickListener() {
-		//
-		// @Override
-		// public void onClick(DialogInterface dialog, int which) {
-		// // TODO Auto-generated method stub
-		//
-		// }
-		// })
-		// .show();
-
 		
 		Button btnButton = (Button)findViewById(R.id.button_dingzhi);
 		btnButton.setOnClickListener(new OnClickListener() {
@@ -159,12 +138,16 @@ public class search extends Activity  implements OnScrollListener {
 		
 		
 	}
-	private void loadMoreData() {
+
+		public List<Map<String, Object>> loadMoreData() {
 		// TODO Auto-generated method stub
 //		ConnectWeb conn;
 //		conn=new ConnectWeb();
 //		List<Map<String, Object>> list=conn.getsearch(keyword,"20120202","20131212","T",1,30);
+		search conn = new search();
+		List<Map<String,Object>> list = conn.testData();
 		int count = listItemAdapter.getCount();
+		
 		if (count+5<MaxDataNum) {
 			for(int i = count; i < count+5 ; i++){
 				HashMap<String, Object> map = new HashMap<String, Object>();
@@ -180,7 +163,10 @@ public class search extends Activity  implements OnScrollListener {
 				map.put("ItemText", "新闻专题摘要");
 				listItem.add(map);
             }
+            
 		}
+		
+		return listItem;
 	}
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
