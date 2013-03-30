@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 /**
  * ≈–∂œÕ¯¬Á «∑Ò¡¨Ω”
@@ -12,10 +13,13 @@ import android.net.NetworkInfo;
  * 
  */
 public class CheckNetwork {
-	private static Activity activity;
+	
+	private static final String TAG = "EV_Debug";
+	private Activity activity;
 
 	public CheckNetwork(Activity activity) {
 		this.activity = activity;
+		Log.d(TAG,"CheckNetwork");
 	}
 
 	public boolean check() {
