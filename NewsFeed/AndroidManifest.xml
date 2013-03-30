@@ -59,6 +59,7 @@
         </activity>
         <activity android:name="ViewHolder" >
         </activity>
+        <activity android:name="Dingzhi_zhuanti"></activity>
     </application>
 
 </manifest>
