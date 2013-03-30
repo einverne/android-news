@@ -1,18 +1,13 @@
 package com.and.netease;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.MotionEvent;
-import android.widget.Toast;
 
 public class SplashActivity extends Activity {
 
-	private final int SPLASH_DISPLAY_LENGHT = 500;
+	private final int SPLASH_DISPLAY_LENGHT = 200;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
