@@ -135,7 +135,7 @@
         android:layout_height="wrap_content" >
 
         <ImageButton
-            android:id="@+id/imageButton1"
+            android:id="@+id/imageButton_login"
             android:layout_width="122px"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_launcher" 
@@ -146,7 +146,7 @@
             android:layout_width="122px"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/imageButton1"
+            android:layout_toRightOf="@+id/imageButton_login"
             android:src="@drawable/ic_launcher" />
 
         <ImageButton
@@ -169,7 +169,7 @@
             android:id="@+id/button6"
             android:layout_width="245px"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/imageButton1"
+            android:layout_above="@+id/imageButton_login"
             android:layout_alignParentLeft="true"
             android:text="add" />
 
