@@ -30,6 +30,7 @@ public class MainActivity extends TabActivity {
 
 	static int screenwidth;
 	private static final String TAG = "EV_Debug";
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,10 +52,6 @@ public class MainActivity extends TabActivity {
 		radioGroup = (RadioGroup) findViewById(R.id.radiogroup);
 		radioGroup.setOnCheckedChangeListener(checkedChangeListener);
 
-		// img = new ImageView(this);
-		// img.setImageResource(R.drawable.tab_front_bg);
-		// bottom_layout.addView(img);
-
 		biaoti = (TextView) findViewById(R.id.biaoti);
 		CharSequence zuijinxinwenCharSequence = getText(R.string.biaoti_zuijinxinwen);
 		biaoti.setText(zuijinxinwenCharSequence);
@@ -63,13 +60,10 @@ public class MainActivity extends TabActivity {
 
 		imgButton = (ImageButton) findViewById(R.id.imageButton_search);
 		imgButton.setOnClickListener(new OnClickListener() {
-			//设置标题栏搜索
+			// 设置标题栏搜索
+			@Override
 			public void onClick(View v) {
 				tabHost.setCurrentTabByTag("search");
-				// MoveBg.moveFrontBg(img, startLeft, (int) screenwidth * 1 / 4,
-				// 0, 0);
-				// startLeft = img.getWidth() * 2;
-
 				RadioButton RB = (RadioButton) findViewById(R.id.radio_search);
 				RB.setChecked(true);
 
@@ -77,6 +71,22 @@ public class MainActivity extends TabActivity {
 				biaoti.setText(quanwenCharSequence);
 			}
 		});
+
+		// 响应标题栏登陆ImageButton
+		ImageButton imagebutton_search = (ImageButton) findViewById(R.id.imageButton_login);
+		imagebutton_search.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				tabHost.setCurrentTab(3);
+				
+				RadioButton RB = (RadioButton) findViewById(R.id.radio_login);
+				RB.setChecked(true);
+
+				CharSequence quanwenCharSequence = getText(R.string.biaoti_denglu);
+				biaoti.setText(quanwenCharSequence);
+			}
+		});
+
 	}
 
 	public void ChangeTab(int i) {
@@ -104,32 +114,22 @@ public class MainActivity extends TabActivity {
 			switch (checkedId) {
 			case R.id.radio_zuijinxinwen:
 				tabHost.setCurrentTabByTag("zuijinxinwen");
-				// MoveBg.moveFrontBg(img, startLeft, 0, 0, 0);
-				// startLeft = img.getWidth();
 				CharSequence zuijinxinwenCharSequence = getText(R.string.biaoti_zuijinxinwen);
 				biaoti.setText(zuijinxinwenCharSequence);
 				break;
 			case R.id.radio_search:
 				tabHost.setCurrentTabByTag("search");
-				// MoveBg.moveFrontBg(img, startLeft, (int) screenwidth * 1 / 4,
-				// 0, 0);
-				// startLeft = img.getWidth() * 2;
+
 				CharSequence quanwenCharSequence = getText(R.string.biaoti_quanwen);
 				biaoti.setText(quanwenCharSequence);
 				break;
 			case R.id.radio_hot:
 				tabHost.setCurrentTabByTag("hot");
-				// MoveBg.moveFrontBg(img, startLeft, screenwidth * 2 / 4, 0,
-				// 0);
-				// startLeft = img.getWidth() * 3;
 				CharSequence redianCharSequence = getText(R.string.biaoti_redian);
 				biaoti.setText(redianCharSequence);
 				break;
 			case R.id.radio_login:
 				tabHost.setCurrentTabByTag("login");
-				// MoveBg.moveFrontBg(img, startLeft, screenwidth * 3 / 4, 0,
-				// 0);
-				// startLeft = img.getWidth() * 4;
 				CharSequence dengluCharSequence = getText(R.string.biaoti_denglu);
 				biaoti.setText(dengluCharSequence);
 				break;
@@ -151,7 +151,7 @@ public class MainActivity extends TabActivity {
 	protected void dialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 		builder.setTitle("警告");
-		builder.setIcon(R.drawable.ic_launcher);			//EV_BUG
+		builder.setIcon(R.drawable.ic_launcher); // EV_BUG
 		builder.setMessage("确定要退出吗?");
 		builder.setPositiveButton("确认",
 				new android.content.DialogInterface.OnClickListener() {
