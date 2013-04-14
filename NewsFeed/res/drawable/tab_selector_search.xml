@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@drawable/current_search_tab" android:state_checked="true"/>
-    <item android:drawable="@drawable/back_search_tab" android:state_checked="false"/>
+    <item android:drawable="@drawable/quanwen2" android:state_checked="true"/>
+    <item android:drawable="@drawable/quanwen1" android:state_checked="false"/>
 
 </selector>
