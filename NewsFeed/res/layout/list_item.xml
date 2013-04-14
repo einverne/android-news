@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="@color/list_item_background"
+    android:orientation="vertical" >
+
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="80dip"
         android:layout_gravity="center_horizontal"
-        android:background="#e6e6e6" >
+        android:background="@color/list_item_background" >
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
@@ -15,7 +17,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:text="@string/hello"
-            android:textColor="@drawable/black"
+            android:textColor="@color/black"
             android:textSize="15sp" />
 
         <CheckBox

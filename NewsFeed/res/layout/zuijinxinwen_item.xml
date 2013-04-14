@@ -3,6 +3,7 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="100dp"
+    android:background="@color/list_item_background"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -18,7 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:text="Count" />
+            android:text="Count"
+            android:textColor="@color/textView_color" />
 
         <TextView
             android:id="@+id/textView_datedistribution"
@@ -26,7 +28,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="4dp"
-            android:text="DateTime" />
+            android:text="DateTime"
+            android:textColor="@color/textView_color" />
+
     </RelativeLayout>
 
     <LinearLayout
@@ -40,6 +44,7 @@
             android:layout_height="66dp"
             android:gravity="left"
             android:text="专题名字"
+            android:textColor="@color/textView_color"
             android:textSize="15sp"
             android:textStyle="bold"
             android:typeface="sans" />
@@ -49,7 +54,10 @@
             android:layout_width="match_parent"
             android:layout_height="14dp"
             android:gravity="left"
-            android:text="专题关键字" />
+            android:text="专题关键字"
+            android:textColor="@color/textView_color"
+            android:textSize="10sp" />
+
     </LinearLayout>
 
 </LinearLayout>
