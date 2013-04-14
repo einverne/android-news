@@ -46,7 +46,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 
 	ArrayList<HashMap<String, String>> listItem;
 	
-	private static final String TAG = "EV_Debug";
+	private static final String TAG = "EV_DEBUG";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -243,7 +243,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		protected String[] doInBackground(Void... params) {
 			// Simulates a background job.
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 
 			}

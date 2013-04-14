@@ -14,7 +14,7 @@ import android.util.Log;
  */
 public class CheckNetwork {
 	
-	private static final String TAG = "EV_Debug";
+	private static final String TAG = "EV_DEBUG";
 	private Activity activity;
 
 	public CheckNetwork(Activity activity) {
