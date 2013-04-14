@@ -4,9 +4,9 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="D:/Android/Android-sdk/extras/android/support/v4/android-support-v4.jar"/>
-	<classpathentry kind="lib" path="D:/Android/Android-sdk/platforms/android-8/android.jar"/>
-	<classpathentry kind="lib" path="D:/Android/Android-sdk/tools/support/annotations.jar"/>
-	<classpathentry kind="lib" path="D:/Android/WorkSpace_RMIWEB/pulltorefresh/bin/pulltorefresh.jar"/>
+	<classpathentry kind="lib" path="D:/AndroidDevelop/android-sdk/extras/android/support/v4/android-support-v4.jar"/>
+	<classpathentry kind="lib" path="D:/AndroidDevelop/android-sdk/platforms/android-8/android.jar"/>
+	<classpathentry kind="lib" path="D:/AndroidDevelop/android-sdk/tools/support/annotations.jar"/>
+	<classpathentry kind="lib" path="D:/AndroidDevelop/workspace/pulltorefresh/bin/pulltorefresh.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
