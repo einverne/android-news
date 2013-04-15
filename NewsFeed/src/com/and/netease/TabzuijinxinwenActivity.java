@@ -42,7 +42,6 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 
 	private DBAdapter dbadapter;
 	private Cursor c;
-	private ConnectWeb conn;
 
 	ArrayList<HashMap<String, String>> listItem;
 	
@@ -64,7 +63,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		CheckNetwork checknet = new CheckNetwork(this);
 		if (checknet.check()) {
 //			Toast.makeText(this, "网络可用", Toast.LENGTH_SHORT).show();
-			conn.getzuijinxinwen(dbadapter);
+			ConnectWeb.getzuijinxinwen(dbadapter);
 		} else {
 			Toast.makeText(this, "网络不可用", Toast.LENGTH_SHORT).show();
 		}
@@ -250,7 +249,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		protected String[] doInBackground(Void... params) {
 			// Simulates a background job.
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(1);
 			} catch (InterruptedException e) {
 
 			}

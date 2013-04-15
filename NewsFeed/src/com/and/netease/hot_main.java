@@ -54,7 +54,7 @@ public class hot_main extends Activity implements OnScrollListener {
 
 	// me
 	private ArrayList<HashMap<String, Object>> listItem1, listItem2, listItem0;
-	private int MaxDataNum = 30;
+	private int MaxDataNum = 50;
 	private View moreView;
 	private Handler handler;
 	private Button bt;
@@ -98,22 +98,22 @@ public class hot_main extends Activity implements OnScrollListener {
 			if (count + 5 < MaxDataNum) {
 				for (int i = count; i < count + 5 && c.moveToNext(); i++) {
 					c.moveToPosition(i);
-					String text = c.getString(1);
-					String time = c.getString(2);
+					String text = c.getString(c.getColumnIndex("title"));
+					String heat = c.getString(c.getColumnIndex("heat"));
 					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("ItemTitle", text);
-					map.put("ItemText", time);
+					map.put("ItemText", heat);
 					listItem0.add(map);
 				}
 			} else {
 				// 数据已经不足5条
 				for (int i = count; i < MaxDataNum && c.moveToNext(); i++) {
 					c.moveToPosition(i);
-					String text = c.getString(1);
-					String time = c.getString(2);
+					String text = c.getString(c.getColumnIndex("title"));
+					String heat = c.getString(c.getColumnIndex("heat"));
 					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("ItemTitle", text);
-					map.put("ItemText", time);
+					map.put("ItemText", heat);
 					listItem0.add(map);
 				}
 			}
@@ -163,23 +163,23 @@ public class hot_main extends Activity implements OnScrollListener {
 		switch (a) {
 		case 0: {
 			listItem0 = new ArrayList<HashMap<String, Object>>();
-			for (int i = 0; i < 10 && c.moveToNext(); i++) {
+			for (int i = 0; c.moveToNext(); i++) {
 				c.moveToPosition(i);
-				String text = c.getString(1);
-				String time = c.getString(2);
+				String text = c.getString(c.getColumnIndex("title"));
+				String heat = c.getString(c.getColumnIndex("heat"));
 
 				HashMap<String, Object> map = new HashMap<String, Object>();
 				map.put("ItemTitle", text);
-				map.put("ItemText", time);
+				map.put("ItemText", heat);
 
 				listItem0.add(map);
 			}
 
 			// 生成适配器的Item和动态数组对应的元素
 			listItemAdapter0 = new SimpleAdapter(this, listItem0,
-					R.layout.zuijinxinwen_item, new String[] { "ItemTitle",
-							"ItemText" }, new int[] { R.id.ItemTitle,
-							R.id.ItemText });
+					R.layout.hot_item, new String[] { "ItemTitle",
+							"ItemText" }, new int[] { R.id.textView_name,
+							R.id.textView_heat });
 			// 添加并且显示
 			// mylistview= (PullToRefreshListView)
 			// mPager.findViewById(R.id.hot_people);
@@ -199,9 +199,9 @@ public class hot_main extends Activity implements OnScrollListener {
 
 			// 生成适配器的Item和动态数组对应的元素
 			listItemAdapter1 = new SimpleAdapter(this, listItem1,
-					R.layout.zuijinxinwen_item, new String[] { "ItemTitle",
-							"ItemText" }, new int[] { R.id.ItemTitle,
-							R.id.ItemText });
+					R.layout.hot_item, new String[] { "ItemTitle",
+							"ItemText" }, new int[] { R.id.textView_name,
+							R.id.textView_heat });
 			// 添加并且显示
 			// mylistview= (PullToRefreshListView)
 			// mPager.findViewById(R.id.hot_place);
@@ -221,9 +221,9 @@ public class hot_main extends Activity implements OnScrollListener {
 
 			// 生成适配器的Item和动态数组对应的元素
 			listItemAdapter2 = new SimpleAdapter(this, listItem2,
-					R.layout.zuijinxinwen_item, new String[] { "ItemTitle",
-							"ItemText" }, new int[] { R.id.ItemTitle,
-							R.id.ItemText });
+					R.layout.hot_item, new String[] { "ItemTitle",
+							"ItemText" }, new int[] { R.id.textView_name,
+							R.id.textView_heat });
 			// 添加并且显示
 			// mylistview= (PullToRefreshListView)
 			// mPager.findViewById(R.id.hot_division);
@@ -299,7 +299,7 @@ public class hot_main extends Activity implements OnScrollListener {
 					long arg3) {
 				// Intent intent = new Intent(hot_main.this, zhuanti.class);
 				// startActivity(intent);
-				Toast.makeText(hot_main.this, "需要傳參數", Toast.LENGTH_LONG)
+				Toast.makeText(hot_main.this, "搜索功能需完善", Toast.LENGTH_LONG)
 						.show(); // EV_BUG
 			}
 		});
@@ -508,9 +508,7 @@ public class hot_main extends Activity implements OnScrollListener {
 
 		public GetDataTask(int i) {
 			index = i;
-
 		}
-
 		@Override
 		protected String[] doInBackground(Void... params) {
 			// Simulates a background job.

@@ -2,6 +2,8 @@ package com.and.netease;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.and.netease.utils.CheckNetwork;
 import com.and.netease.utils.DBAdapter;
 import android.app.ListActivity;
 import android.content.Intent;
@@ -17,6 +19,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 public class zhuanti extends ListActivity {
 	private static final String TAG = "Demo";
@@ -67,14 +70,22 @@ public class zhuanti extends ListActivity {
 					@Override
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
-						Log.d(TAG, "专题中点击的Item"+arg2);
-						c.moveToPosition(arg2);
-						String url = (String) c.getString(c.getColumnIndex("url"));
-						Bundle bundle = new Bundle();
-						Intent intent = new Intent(zhuanti.this, jutixinwen.class);
-						bundle.putString("url", url);
-						intent.putExtras(bundle);
-						startActivity(intent);
+
+						Log.d(TAG, "专题中点击的Item标号:"+arg2);
+						
+						CheckNetwork net = new CheckNetwork(zhuanti.this);
+						boolean net_conn  = net.check();
+						if (net_conn) {
+							c.moveToPosition(arg2);
+							String url = (String) c.getString(c.getColumnIndex("url"));
+							Bundle bundle = new Bundle();
+							Intent intent = new Intent(zhuanti.this, jutixinwen.class);
+							bundle.putString("url", url);
+							intent.putExtras(bundle);
+							startActivity(intent);
+						} else {
+							Toast.makeText(zhuanti.this, "请检查联网状态", Toast.LENGTH_SHORT).show();
+						}
 					}
 				});
 	}
