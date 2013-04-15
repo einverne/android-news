@@ -29,7 +29,6 @@ public class jutixinwen extends Activity {
 		TextView tv_text = (TextView) findViewById(R.id.textView_newsText);
 		dbadapter = new DBAdapter(this);
 		dbadapter.open();
-		conn = new ConnectWeb(dbadapter);
 		Bundle bundle = this.getIntent().getExtras();
 		String title = bundle.getString("url");
 		Map<String, String> map = conn.getjutixinwen(title);

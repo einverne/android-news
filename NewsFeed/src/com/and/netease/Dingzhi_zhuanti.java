@@ -44,7 +44,6 @@ public class Dingzhi_zhuanti extends ListActivity {
 			map.put("ItemTime", "date");
 			map.put("Title", "Title");
 			map.put("description", "description");
-			map.put("keywords", "key");
 			list.add(map);
         }
         
@@ -52,7 +51,7 @@ public class Dingzhi_zhuanti extends ListActivity {
 				R.layout.zhuanti_item, new String[] { "icon","source","ItemTime", "Title",
 						"description", "ItemMedio" }, new int[] {R.id.imageView_icon,R.id.textView_source,
 						R.id.textView_ItemTime, R.id.Title, R.id.ItemDes,
-						R.id.textView_keywords });
+						 });
 		// ÃÌº”≤¢«“œ‘ æ
 		setListAdapter(listItemAdapter);
         	

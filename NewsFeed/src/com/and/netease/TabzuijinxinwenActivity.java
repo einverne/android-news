@@ -63,9 +63,8 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 
 		CheckNetwork checknet = new CheckNetwork(this);
 		if (checknet.check()) {
-			Toast.makeText(this, "网络可用", Toast.LENGTH_SHORT).show();
-			conn = new ConnectWeb(dbadapter);
-			conn.getzuijinxinwen();
+//			Toast.makeText(this, "网络可用", Toast.LENGTH_SHORT).show();
+			conn.getzuijinxinwen(dbadapter);
 		} else {
 			Toast.makeText(this, "网络不可用", Toast.LENGTH_SHORT).show();
 		}
@@ -74,16 +73,16 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		listItem = new ArrayList<HashMap<String, String>>();
 		for (int i = 0; i < 10 && c.moveToNext(); i++) {
 			c.moveToPosition(i);
-			String title = c.getString(1);
-			String keywords = c.getString(2);
-//			String date = c.getString(3);
-//			String counts = c.getString(4);
+			String title = c.getString(c.getColumnIndex("title"));
+			String words = c.getString(c.getColumnIndex("words"));
+			String date = c.getString(c.getColumnIndex("date"));
+			String counts = c.getString(c.getColumnIndex("count"));
 			
 			HashMap<String, String> map = new HashMap<String, String>();
-			map.put("date", "date");
-			map.put("counts", "counts");
+			map.put("date", date);
+			map.put("counts", counts);
 			map.put("ItemTitle", title);
-			map.put("ItemText", "keywords");
+			map.put("ItemText", words);
 			listItem.add(map);
 		}
 
@@ -128,9 +127,9 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 						String title = (String) listItem.get(arg2 - 1).get(
 								"ItemTitle");
 						Bundle bundle = new Bundle();
-						Intent intent = new Intent();
-						intent.setClass(TabzuijinxinwenActivity.this,
+						Intent intent = new Intent(TabzuijinxinwenActivity.this,
 								zhuanti.class);
+						Log.d(TAG, "传递到专题数据"+title);
 						bundle.putString("title", title);
 						intent.putExtras(bundle);
 						startActivity(intent);
@@ -163,12 +162,16 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 			{
 				for (int i = count; i < count + 5 && c.moveToNext(); i++) {
 					c.moveToPosition(i);
-					String text = c.getString(1);
-					String time = c.getString(2);
+					String title = c.getString(c.getColumnIndex("title"));
+					String words = c.getString(c.getColumnIndex("words"));
+					String date = c.getString(c.getColumnIndex("date"));
+					String counts = c.getString(c.getColumnIndex("count"));
 
 					HashMap<String, String> map = new HashMap<String, String>();
-					map.put("ItemTitle", text);
-					map.put("ItemText", time);
+					map.put("date", date);
+					map.put("counts", counts);
+					map.put("ItemTitle", title);
+					map.put("ItemText", words);
 					listItem.add(map);
 				}
 			}
@@ -178,12 +181,16 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 			// 数据已经不足5条
 			for (int i = count; i < MaxDataNum && c.moveToNext(); i++) {
 				c.moveToPosition(i);
-				String text = c.getString(1);
-				String time = c.getString(2);
+				String title = c.getString(c.getColumnIndex("title"));
+				String words = c.getString(c.getColumnIndex("words"));
+				String date = c.getString(c.getColumnIndex("date"));
+				String counts = c.getString(c.getColumnIndex("count"));
 
 				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("ItemTitle", text);
-				map.put("ItemText", time);
+				map.put("date", date);
+				map.put("counts", counts);
+				map.put("ItemTitle", title);
+				map.put("ItemText", words);
 				listItem.add(map);
 			}
 		}
@@ -253,12 +260,12 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		@Override
 		protected void onPostExecute(String[] result) {
 
-			for (int j = 0; j < 3; j++) {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("ItemTitle", "新闻标题 (刷新后)");
-				map.put("ItemText", "新闻专题摘要");
-				listItem.add(j, map);
-			}
+//			for (int j = 0; j < 3; j++) {
+//				HashMap<String, String> map = new HashMap<String, String>();
+//				map.put("ItemTitle", "新闻标题 (刷新后)");
+//				map.put("ItemText", "新闻专题摘要");
+//				listItem.add(j, map);
+//			}
 			// listItem.Insert(2, "新闻");
 
 			// Call onRefreshComplete when the list has been refreshed.

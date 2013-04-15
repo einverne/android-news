@@ -81,8 +81,7 @@ public class hot_main extends Activity implements OnScrollListener {
 		// 显示数据库数据
 		dbadapter = new DBAdapter(this);
 		dbadapter.open();
-		conn = new ConnectWeb(dbadapter);
-		conn.getpeoples();
+		conn.getpeoples(dbadapter);
 		c = dbadapter.getpeople(0, MaxDataNum);
 
 		InitImageView();
@@ -528,7 +527,7 @@ public class hot_main extends Activity implements OnScrollListener {
 
 			switch (index) {
 			case 0:
-				List<Map<String, Object>> list = conn.getpeoplesmore();
+				List<Map<String, Object>> list = conn.getpeoplesmore(dbadapter);
 				for (int j = 0; j < list.size(); j++) {
 					Map<String, Object> map1 = list.get(j);
 					HashMap<String, Object> map = new HashMap<String, Object>();
