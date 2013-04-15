@@ -34,44 +34,29 @@ public class zhuanti extends ListActivity {
 		dbadapter = new DBAdapter(this);
 		dbadapter.open();
 		c = dbadapter.getnews(title);
-		Log.d("size", String.valueOf(c.getCount()));
-
-//		ImageButton imgbtnButton = (ImageButton) findViewById(R.id.imgbtn_back);
-//		imgbtnButton.setOnClickListener(new OnClickListener() {
-//			// 相应返回事件
-//			@Override
-//			public void onClick(View v) {
-//				// Intent intent = new Intent();
-//				// intent.setClass(zhuanti.this, MainActivity.class);
-//				// startActivity(intent);
-//				finish();
-//			}
-//		});
+		Log.d("EV_DEBUG_size", String.valueOf(c.getCount()));
 
 		listItem = new ArrayList<HashMap<String, Object>>();
 		for (int i = 0; c.moveToNext(); i++) {
 			c.moveToPosition(i);
-			String Title = c.getString(1);
-			String source = c.getString(2);
-			String description = c.getString(3);
-			String date = c.getString(4);
-
+			String Title = c.getString(c.getColumnIndex("title"));
+			String source = c.getString(c.getColumnIndex("source"));
+			String description = c.getString(c.getColumnIndex("description"));
+			String date = c.getString(c.getColumnIndex("date"));
+			
 			HashMap<String, Object> map = new HashMap<String, Object>();
-			//ICON CNN 媒体来源  EV_BUG
-			map.put("icon",getIcon("abc"));
-			map.put("source","CNN");
+			map.put("icon",getIcon(source));
+			map.put("source",source);
 			map.put("ItemTime", date);
 			map.put("Title", Title);
 			map.put("description", description);
-			map.put("keywords", "key");
 			listItem.add(map);
 		}
 
 		listItemAdapter = new SimpleAdapter(this, listItem,
 				R.layout.zhuanti_item, new String[] { "icon","source","ItemTime", "Title",
 						"description", "ItemMedio" }, new int[] {R.id.imageView_icon,R.id.textView_source,
-						R.id.textView_ItemTime, R.id.Title, R.id.ItemDes,
-						R.id.textView_keywords });
+						R.id.textView_ItemTime, R.id.Title, R.id.ItemDes });
 		// 添加并且显示
 		setListAdapter(listItemAdapter);
 
@@ -82,8 +67,9 @@ public class zhuanti extends ListActivity {
 					@Override
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
-						c.moveToPosition(arg2 - 1);
-						String url = (String) c.getString(5);
+						Log.d(TAG, "专题中点击的Item"+arg2);
+						c.moveToPosition(arg2);
+						String url = (String) c.getString(c.getColumnIndex("url"));
 						Bundle bundle = new Bundle();
 						Intent intent = new Intent(zhuanti.this, jutixinwen.class);
 						bundle.putString("url", url);

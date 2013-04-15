@@ -107,7 +107,14 @@ public class DBAdapter
 		return result;
 	}
 	
-	// ---向数据库中插入一个标题--- 最近新闻
+	/**
+	 * ---向数据库中插入一个标题--- 最近新闻
+	 * @param words keywords
+	 * @param title
+	 * @param date
+	 * @param count
+	 * @return
+	 */
 	public long insert(String words, String title ,String date,int count) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(zuijinxinwenKEY_Words, words);
@@ -137,6 +144,16 @@ public class DBAdapter
 			return 0;
 	}
 
+	/**
+	 * 
+	 * @param title
+	 * @param source
+	 * @param description
+	 * @param date
+	 * @param url
+	 * @param zhuantiId
+	 * @return
+	 */
 	public long insert(String title, String source, String description,
 			String date, String url, long zhuantiId) {
 		ContentValues initialValues = new ContentValues();
@@ -266,9 +283,10 @@ public class DBAdapter
 
 	// -----为最近新闻所调用 desc
 	public Cursor getzuijinxinwen(int num1, int num2) {
-		Cursor mCursor = db.query(DATABASE_TABLE_zuijinxinwen, new String[] {
+		String[] columns = new String[] {
 				zuijinxinwenKEY_ROWID, zuijinxinwenKEY_Words,
-				zuijinxinwenKEY_Count }, null, null, null, null,
+				zuijinxinwenKEY_Count,zuijinxinwenKEY_Date };
+		Cursor mCursor = db.query(DATABASE_TABLE_zuijinxinwen, null, null, null, null, null,
 				zuijinxinwenKEY_Count + " desc", String.valueOf(num1) + ","
 						+ String.valueOf(num2));
 		if (mCursor != null) {
@@ -302,19 +320,22 @@ public class DBAdapter
 					newsKEY_ZhuantiId }, newsKEY_ZhuantiId + "=" + 0, null,
 					null, null, null, null);
 		else {
-			mCursor = db.query(true, DATABASE_TABLE_zuijinxinwen, new String[] {
+			String[] columns = new String[] {
 					zuijinxinwenKEY_ROWID, zuijinxinwenKEY_Words,
-					zuijinxinwenKEY_Count }, zuijinxinwenKEY_Words + "='"
+					zuijinxinwenKEY_Count };
+			mCursor = db.query(true, DATABASE_TABLE_zuijinxinwen, null, zuijinxinwenKEY_Title + "='"
 					+ words + "'", null, null, null, null, null);
 
 			if (mCursor != null) {
 				mCursor.moveToFirst();
 			}
-			String id = (String) mCursor.getString(0);
-			mCursor = db.query(true, DATABASE_TABLE_news, new String[] {
+			String id = (String) mCursor.getString(mCursor.getColumnIndex("_id"));
+			Log.d(TAG, "getString函数:"+id);
+			String[] news_columns = new String[] {
 					newsKEY_ROWID, newsKEY_Title, newsKEY_Source,
 					newsKEY_Description, newsKEY_Date, newsKEY_Url,
-					newsKEY_ZhuantiId }, newsKEY_ZhuantiId + "=" + id, null,
+					newsKEY_ZhuantiId };
+			mCursor = db.query(true, DATABASE_TABLE_news, news_columns, newsKEY_ZhuantiId + "=" + id, null,
 					null, null, null, null);
 		}
 		if (mCursor != null)

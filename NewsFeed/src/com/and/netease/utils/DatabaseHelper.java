@@ -13,7 +13,7 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	// 数据库名
-	private static final String DATABASE_NAME = "NewsFeed21"  ;
+	private static final String DATABASE_NAME = "NewsFeed1"  ;
 	// 版本名
 	private static final int DATABASE_VERSION = 1;
 	// 表名
@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_CREATE_news = "create table if not exists news (_id integer primary key autoincrement, "
 			+ "title text not null, source text,description text,date text,url text,zhuantiId integer);";
 	private static final String DATABASE_CREATE_zuijinxinwen = "create table if not exists zuijinxinwen(_id integer primary key autoincrement, "
-			+ "words text not null,title text,date text,count integer,UNIQUE (words));";
+			+ "words text not null,date text,title text,count integer,UNIQUE (words));";
 	private static final String DATABASE_CREATE_peoples = "create table if not exists peoples (_id integer primary key autoincrement, "
 			+ "title text not null, heat integer,UNIQUE (title));";
 	private static final String DATABASE_CREATE_places = "create table if not exists places (_id integer primary key autoincrement, "
