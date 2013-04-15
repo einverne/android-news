@@ -34,7 +34,6 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_below="@+id/imageView_icon"
-            android:text="Time"
             android:textColor="@color/textView_color" />
 
         <TextView
@@ -44,7 +43,6 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="4dp"
             android:layout_toRightOf="@+id/imageView_icon"
-            android:text="SourceName"
             android:textColor="@color/textView_color" />
 
     </RelativeLayout>
@@ -69,19 +67,12 @@
         <TextView
             android:id="@+id/ItemDes"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="54dp"
             android:gravity="left"
             android:maxHeight="40dp"
             android:text="新闻描述"
             android:textColor="@color/textView_color" />
 
-        <TextView
-            android:id="@+id/textView_keywords"
-            android:layout_width="match_parent"
-            android:layout_height="14dp"
-            android:gravity="left"
-            android:text="关键字"
-            android:textColor="@color/textView_color" />
 
     </LinearLayout>
 
