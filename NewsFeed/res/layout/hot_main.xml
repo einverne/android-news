@@ -8,7 +8,7 @@
         android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
         android:layout_height="30dp"
-        android:background="#FFFFFF" >
+        android:background="@color/list_item_background" >
 
         <TextView
             android:id="@+id/text1"
@@ -45,6 +45,7 @@
         android:id="@+id/cursor"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="@color/list_item_background"
         android:scaleType="matrix"
         android:src="@drawable/a" />
 
@@ -54,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="1.0"
-        android:background="#000000"
+        android:background="@color/list_item_background"
         android:flipInterval="30"
         android:persistentDrawingCache="animation" />
 

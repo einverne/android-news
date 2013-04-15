@@ -71,6 +71,12 @@
                 android:text="时间" />
         </LinearLayout>
 
+        <ProgressBar
+            android:id="@+id/progressBar_jutixinwen"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
