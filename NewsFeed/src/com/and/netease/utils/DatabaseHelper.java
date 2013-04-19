@@ -29,6 +29,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ "title text not null, heat integer,UNIQUE (title));";
 	private static final String DATABASE_CREATE_divisions = "create table if not exists divisions (_id integer primary key autoincrement, "
 			+ "title text not null, heat integer,UNIQUE (title));";
+	public static final String usernewsKEY_ROWID = "_id";// 专题带下来的新闻们
+	public static final String usernewsKEY_Title = "title";
+	public static final String usernewsKEY_Source = "source";
+	public static final String usernewsKEY_Date = "date";
+	public static final String usernewsKEY_Words = "words";
+	public static final String usernewsKEY_Description = "description";
+	public static final String usernewsKEY_Url = "url";
+	public static final String usernewsKEY_user= "user";	
+	public static final String usernewsKEY_jobname = "jobname";	
+	private static final String DATABASE_CREATE_userzhuanti = "create table if not exists userzhuanti(_id integer primary key autoincrement, "
+			+ "user text not null,jobname text not null,from text,to text,days integer,count integer,UNIQUE (user,jobname));";
+	private static final String DATABASE_CREATE_usernews = "create table if not exists usernews (_id integer primary key autoincrement, "
+			+ "title text not null, source text,words text,description text,date text,url text,user text,jobname text);";
+	
 
 	private static final String TAG = "EV_Debug";
 	
@@ -45,6 +59,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(DATABASE_CREATE_places);
 		db.execSQL(DATABASE_CREATE_divisions);
 		db.execSQL(DATABASE_CREATE_zuijinxinwen);
+		db.execSQL(DATABASE_CREATE_userzhuanti );
+		db.execSQL(DATABASE_CREATE_usernews);
 	}
 
 	@Override
@@ -57,6 +73,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS places");
 		db.execSQL("DROP TABLE IF EXISTS divisions");
 		db.execSQL("DROP TABLE IF EXISTS zuijinxinwen");
+		db.execSQL("DROP TABLE IF EXISTS userzhuanti");
+		db.execSQL("DROP TABLE IF EXISTS usernews");
 		onCreate(db);
 	}
 
