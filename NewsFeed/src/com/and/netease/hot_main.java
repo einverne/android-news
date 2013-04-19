@@ -182,7 +182,7 @@ public class hot_main extends Activity implements OnScrollListener {
 		}
 	}
 
-	public void showlistview(int x, PullToRefreshListView mylistview) {
+	public void showlistview(int x, final PullToRefreshListView mylistview) {
 		a = x;
 		switch (a) {
 		case 0: {
@@ -330,9 +330,9 @@ public class hot_main extends Activity implements OnScrollListener {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				// Intent intent = new Intent(hot_main.this, zhuanti.class);
-				// startActivity(intent);
-				String str_title = ((TextView)findViewById(R.id.textView_name)).toString();
+				HashMap<String, Object> map =(HashMap<String, Object>)mylistview.getItemAtPosition(arg2);			
+				String str_title =(String) map.get("ItemTitle");
+				Log.d("zjj",str_title);
 				Bundle bundle = new Bundle();
 				bundle.putSerializable("keyword", str_title);				
 				Intent intent = new Intent(hot_main.this,search.class);
