@@ -15,6 +15,72 @@ import org.json.JSONObject;
 import android.util.Log;
 
 public class ConnectWeb {
+	
+	/**
+	 * 获取用户定制内容的某一项,需呀参数user和jobname
+	 * http://localhost:8080/RMI_WEB/rmi?r=getJobOfUser&user=gaojinping&jobname=20111222194809870
+	 * @param  aboutchina 传true 或 false
+	 * @param 
+	 * @return
+	 */
+	static public void getJobOfUser(DBAdapter dbadapter,String username,String jobname)
+	{
+		String theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getJobOfUser&user="+username+"&jobname="+jobname;
+		String todaydate = todaydate();
+		try {
+			String str = HttpConn.getJsonFromUrlGet(theurl);
+			// 通过json 来解析收到的字符串
+			JSONObject jay = new JSONObject(str);
+			Log.d("test", "get result");
+			JSONObject result = new JSONObject((String) jay.getString("result"));
+			// 解析key result所对应的值
+			// count是总共取到的专题条数
+			int count = Integer.parseInt((String) result.getString("count"));
+			String to= (String) result.getString("to");
+			String from=(String) result.getString("from");
+			int days= Integer.parseInt((String) result.getString("days"));
+			long jobid=dbadapter.userinsert(username, jobname, days, from, to, count);
+			if(jobid<=0)
+				return;
+			Log.d("test count", String.valueOf(count));
+			// clusters包括两部分,分别是 others 和 专题数组
+			JSONObject clusters = new JSONObject(
+					(String) result.getString("clusters"));
+			// 取出专题数组
+			JSONArray cluster = clusters.getJSONArray("cluster");
+			// 循环从专题数取出每个专题进行解析
+			Log.d("test cluster.length()", String.valueOf(cluster.length()));// 0
+			for (int i = 0; i < cluster.length(); i += 1) {
+				// 挨个取出专题
+				JSONObject onecluster = (JSONObject) cluster.get(i);
+				//words = jiexiwords(words);
+				
+				// 取出doc，doc是具体新闻名的数组
+				JSONArray doc = onecluster.getJSONArray("doc");
+				// 取出第一条新闻名作为专题的标题
+				// 此时将专题插入专题表
+				// 目标是：如果有重名 而 新闻个数不同 就将之前的覆盖掉；然后返回 id
+				// 将新闻插入新闻表
+				for (int j= 0; j < doc.length(); j += 1) {
+					JSONObject onenews = (JSONObject) doc.get(i);
+					String title = (String) onenews.getString("title");
+					String words = (String) onenews.getString("words");
+					words = jiexiwords(words);
+					String source = (String) onenews.getString("source");
+					String description = (String) onenews.getString("description");
+					String date = (String) onenews.getString("date");
+					String url = (String) onenews.getString("url");
+					dbadapter.userinsertnews(title, source, description, date, url, words, jobid);
+					}
+				}
+			
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
 	/**
 	 * 提交一个任务
 	 * http://localhost:8080/RMI_WEB/rmi?r=submitJob&query=date:[20110101x TO x] AND (title:China Customs"20OR description:"China Customs" OR text:"China Customs")&aboutChina=true&user=test&desc=chania
