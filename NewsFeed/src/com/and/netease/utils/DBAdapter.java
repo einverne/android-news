@@ -23,6 +23,8 @@ public class DBAdapter
 	private static final String DATABASE_TABLE_places = "places";
 	private static final String DATABASE_TABLE_divisions = "divisions";
 	private static final String DATABASE_TABLE_zuijinxinwen = "zuijinxinwen";
+	private static final String DATABASE_TABLE_user = "user";
+	private static final String DATABASE_TABLE_usernews = "usernews";
 
 	// 数据库数据格式
 	/*
@@ -43,9 +45,9 @@ public class DBAdapter
 	public static final String zuijinxinwenKEY_Date = "date";		//专题日期
 	
 	public static final String userKEY_ROWID = "_id";// 是最近新闻的专题们
-	public static final String userKEY_To = "to";		//专题关键字
+	public static final String userKEY_To = "to1";		//专题关键字
 	public static final String userKEY_Count = "count";		//
-	public static final String userKEY_From = "from";		//
+	public static final String userKEY_From = "from1";		//
 	public static final String userKEY_Days = "days";		//专题日期
 	public static final String userKEY_user= "user";	
 	public static final String userKEY_jobname = "jobname";	
@@ -59,8 +61,7 @@ public class DBAdapter
 	public static final String usernewsKEY_Words = "words";
 	public static final String usernewsKEY_Description = "description";
 	public static final String usernewsKEY_Url = "url";
-	public static final String usernewsKEY_user= "user";	
-	public static final String usernewsKEY_jobname = "jobname";	
+	public static final String usernewsKEY_ZhuantiId = "zhuantiId";
 	
 	
 	public static final String peoplesKEY_ROWID = "_id";
@@ -98,35 +99,7 @@ public class DBAdapter
 		DBHelper.close();
 	}
 	
-	public long simpleinsert(String title,String date,String words,  int count) {
-		db = DBHelper.getWritableDatabase();
-		ContentValues initialValues = new ContentValues();
-		initialValues.put(zuijinxinwenKEY_Title, title);
-		initialValues.put(zuijinxinwenKEY_Date, date);
-		initialValues.put(zuijinxinwenKEY_Words,words);
-		initialValues.put(zuijinxinwenKEY_Count, count);
-		Log.d("test", "before simpleinsert");
-		long result=db.insert(DATABASE_TABLE_zuijinxinwen, null, initialValues);//insert()函数的返回值是新数据插入的位置，即ID值。
-		Log.d("test", "after simpleinsert "+String.valueOf(result));
-		if (result<0)
-		{
-			Cursor mCursor =db.query(true, DATABASE_TABLE_zuijinxinwen,
-					new String[] { zuijinxinwenKEY_ROWID, zuijinxinwenKEY_Title,
-							zuijinxinwenKEY_Count}, zuijinxinwenKEY_Title + "='"
-							+ title+"'", null, null, null, null, null);
-			
-			if (mCursor != null) {
-				mCursor.moveToFirst();
-				result=Integer.parseInt((String)mCursor.getString(0));
-			}
-			
-			
-		}
-		db.close();
-		DBHelper.close();
-		Log.d("test", "after simpleinsert "+String.valueOf(result));
-		return result;
-	}
+
 	
 	/**
 	 * ---向数据库中插入一个标题--- 最近新闻
@@ -134,35 +107,73 @@ public class DBAdapter
 	 * @param title
 	 * @param date
 	 * @param count
-	 * @return
-	 */
-	public long insert(String words, String title ,String date,int count) {
+	 * @return	*/
+	public long userinsert(String user, String jobname ,int days,String from,String to,int count) {
+		db = DBHelper.getWritableDatabase();
 		ContentValues initialValues = new ContentValues();
-		initialValues.put(zuijinxinwenKEY_Words, words);
-		initialValues.put(zuijinxinwenKEY_Count, count);
+		initialValues.put(userKEY_user, user);
+		initialValues.put(userKEY_Count, count);
+		initialValues.put(userKEY_jobname, jobname);
+		initialValues.put(userKEY_To, to);
+		initialValues.put(userKEY_From, from);
+		initialValues.put(userKEY_Days, days);
+		Cursor mCursor = db.query(DATABASE_TABLE_user,
+				new String[] { userKEY_ROWID}, userKEY_user
+						+ " = '"+user+"'  and "+userKEY_jobname+" = '"+jobname+"'",null, null, null, null, null);
+		long result=-1;
+		if (mCursor .moveToFirst()!=false) {
+				result=-1;
+			
+		}
+		else
+		{
+			result=db.insert(DATABASE_TABLE_user, null, initialValues);
+		}
+	
+			
+		
+		db.close();
+		DBHelper.close();
+		Log.d("test", "after simpleinsert "+String.valueOf(result));
+	return result;
+	}
+	
+	public long insert(String words, String title ,String date,int count) {
+		db = DBHelper.getWritableDatabase();
+		ContentValues initialValues = new ContentValues();
 		initialValues.put(zuijinxinwenKEY_Title, title);
 		initialValues.put(zuijinxinwenKEY_Date, date);
-		int temp = 0;
-		Cursor c = db.query(DATABASE_TABLE_zuijinxinwen,
-				new String[] { zuijinxinwenKEY_Count }, zuijinxinwenKEY_Words
-						+ "=?", new String[] { words }, null, null, null, null);
-		c.moveToFirst();
-		for (int i = 0; i < c.getCount(); i++) {
-			String incount = c.getString(0);
-			if (Integer.parseInt(incount) != count)
-				temp = db.update(DATABASE_TABLE_zuijinxinwen, initialValues,
-						zuijinxinwenKEY_Words + " = '" + words + "'", null);
-			else
-				temp = -1;
-			c.moveToNext();
+		initialValues.put(zuijinxinwenKEY_Words,words);
+		initialValues.put(zuijinxinwenKEY_Count, count);
+		Cursor mCursor =db.query(true, DATABASE_TABLE_zuijinxinwen,
+				new String[] { zuijinxinwenKEY_ROWID,
+						zuijinxinwenKEY_Count}, zuijinxinwenKEY_Words+ "='"
+						+ words+"'", null, null, null, null, null);
+		long result=-1;
+		if (mCursor .moveToFirst()!=false) {
+			int dbcount=Integer.parseInt((String)mCursor.getString(1));
+			if (count !=dbcount)
+			{
+				db.update(DATABASE_TABLE_zuijinxinwen, initialValues,zuijinxinwenKEY_ROWID+"="+(String)mCursor.getString(0) , null);
+				db.delete(DATABASE_TABLE_news, newsKEY_ZhuantiId+"="+(String)mCursor.getString(0), null);
+				result=Integer.parseInt((String)mCursor.getString(0));
+			}else
+			{
+				result=-1;
+			}
+			
 		}
-		c.close();
-		if (temp == 0)// 如果temp！=0 update了 就不insert
-			return db.insert(DATABASE_TABLE_zuijinxinwen, null, initialValues);
-		else if (temp < 0)
-			return temp;
 		else
-			return 0;
+		{
+			result=db.insert(DATABASE_TABLE_zuijinxinwen, null, initialValues);
+		}
+	
+			
+		
+		db.close();
+		DBHelper.close();
+		Log.d("test", "after simpleinsert "+String.valueOf(result));
+	return result;
 	}
 
 	/**
@@ -177,6 +188,7 @@ public class DBAdapter
 	 */
 	public long insert(String title, String source, String description,
 			String date, String url, long zhuantiId) {
+		db = DBHelper.getWritableDatabase();
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(newsKEY_Title, title);
 		initialValues.put(newsKEY_Source, source);
@@ -184,129 +196,145 @@ public class DBAdapter
 		initialValues.put(newsKEY_Description, description);
 		initialValues.put(newsKEY_Url, url);
 		initialValues.put(newsKEY_ZhuantiId, zhuantiId);
-
-		return db.insert(DATABASE_TABLE_news, null, initialValues);
+		
+		long result= db.insert(DATABASE_TABLE_news, null, initialValues);
+		db.close();
+		DBHelper.close();
+		return result;
+	}
+	/**
+	 * 
+	 * @param title
+	 * @param source
+	 * @param description
+	 * @param date
+	 * @param url
+	 * @param zhuantiId
+	 * @return
+	 * 
+	 */
+	public long userinsertnews(String title, String source, String description,
+			String date, String url, String words,long zhuantiId) {
+		db = DBHelper.getWritableDatabase();
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(usernewsKEY_Title, title);
+		initialValues.put(usernewsKEY_Source, source);
+		initialValues.put(usernewsKEY_Date, date);
+		initialValues.put(usernewsKEY_Description, description);
+		initialValues.put(usernewsKEY_Url, url);
+		initialValues.put(usernewsKEY_Words, words);
+		initialValues.put(usernewsKEY_ZhuantiId, zhuantiId);
+		
+		long result= db.insert(DATABASE_TABLE_usernews , null, initialValues);
+		db.close();
+		DBHelper.close();
+		return result;
 	}
 
-	// 热点的数据库插入
-	public Cursor rawquery(String str) {
-		Cursor c = db.rawQuery(str, null);
-		c.moveToFirst();
-		return c;
-	}
+
+
 
 	public long insertpeople(String title, int heat) // 如果有update就是0，如果有insert，就返回位置，如果没有
 														// 就返回-1
 	{
+		db = DBHelper.getWritableDatabase();
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(peoplesKEY_Title, title);
 		initialValues.put(peoplesKEY_Heat, String.valueOf(heat));
-		int temp = 0;
-		Cursor c = db.query(DATABASE_TABLE_peoples,
-				new String[] { peoplesKEY_Heat }, peoplesKEY_Title + "=?",
+		Cursor mCursor = db.query(DATABASE_TABLE_peoples,
+				new String[] { peoplesKEY_ROWID,peoplesKEY_Heat }, peoplesKEY_Title + "=?",
 				new String[] { title }, null, null, null, null);
-		c.moveToFirst();
-		Log.d("test c count in insertpeople", String.valueOf(c.getCount()));
-		for (int i = 0; i < c.getCount(); i++) {
-			String dbheat = c.getString(0);
-			Log.d("test dbheat insertpeople", dbheat);
-			Log.d("test heat insertpeople", String.valueOf(heat));
-			if (Integer.parseInt(dbheat) != heat)
-				temp = db.update(DATABASE_TABLE_peoples, initialValues,
-						peoplesKEY_Title + " = '" + title + "'", null);
-			else
-				temp = -1;
-			c.moveToNext();
+		long result=-1;
+		if (mCursor.moveToFirst()!=false) {
+			int dbheat=Integer.parseInt((String)mCursor.getString(1));
+			if (heat !=dbheat)
+			{
+				db.update(DATABASE_TABLE_peoples, initialValues,peoplesKEY_ROWID+"="+(String)mCursor.getString(0) , null);
+				result=Integer.parseInt((String)mCursor.getString(0));
+			}else
+			{
+				result=-1;
+			}
+			
 		}
-		c.close();
-		if (temp == 0)// 如果temp！=0 update了 就不insert
-			return db.insert(DATABASE_TABLE_peoples, null, initialValues);
-		else if (temp < 0)
-			return temp;
 		else
-			return 0;
+		{
+			result=db.insert(DATABASE_TABLE_peoples, null, initialValues);
+		}
+		db.close();
+		DBHelper.close();
+	return result;
 	}
 
 	public long insertplace(String title, int heat) {
+		db = DBHelper.getWritableDatabase();
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(placesKEY_Title, title);
 		initialValues.put(placesKEY_Heat, heat);
-		int temp = 0;
-		// query(table, columns, selection, selectionArgs, groupBy, having,
-		// orderBy, limit);
+	
 
-		Cursor c = db.query(DATABASE_TABLE_places,
-				new String[] { placesKEY_Heat }, placesKEY_Title + "=?",
+		Cursor mCursor = db.query(DATABASE_TABLE_places,
+				new String[] { placesKEY_ROWID,placesKEY_Heat }, placesKEY_Title + "=?",
 				new String[] { title }, null, null, null, null);
-		// Cursor c=db.query(
-		// "SELECT "+placesKEY_Heat+" FROM "+DATABASE_TABLE_places+" WHERE "+placesKEY_Title+"  = '"+
-		// title+"'", null);
-		c.moveToFirst();
-		for (int i = 0; i < c.getCount(); i++) {
-			String dbheat = c.getString(0);
-			if (Integer.parseInt(dbheat) != heat)
-				temp = db.update(DATABASE_TABLE_places, initialValues,
-						placesKEY_Title + " = '" + title + "'", null);
-			else
-				temp = -1;
-			c.moveToNext();
+		long result=-1;
+		if (mCursor.moveToFirst()!=false) {
+			mCursor.moveToFirst();
+			int dbheat=Integer.parseInt((String)mCursor.getString(1));
+			if (heat !=dbheat)
+			{
+				db.update(DATABASE_TABLE_places, initialValues,placesKEY_ROWID+"="+(String)mCursor.getString(0) , null);
+				result=Integer.parseInt((String)mCursor.getString(0));
+			}else
+			{
+				result=-1;
+			}
+			
 		}
-		c.close();
-		if (temp == 0)// 如果temp！=0 update了 就不insert
-			return db.insert(DATABASE_TABLE_places, null, initialValues);
-		else if (temp < 0)
-			return temp;
 		else
-			return 0;
+		{
+			result=db.insert(DATABASE_TABLE_places, null, initialValues);
+		}
+		db.close();
+		DBHelper.close();
+	return result;
 	}
 
 	public long insertdivision(String title, int heat) {
+		db = DBHelper.getWritableDatabase();
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(divisionsKEY_Title, title);
 		initialValues.put(divisionsKEY_Heat, heat);
-		int temp = 0;
-		Cursor c = db.query(DATABASE_TABLE_divisions,
-				new String[] { divisionsKEY_Heat }, divisionsKEY_Title + "=?",
+		Cursor mCursor = db.query(DATABASE_TABLE_divisions,
+				new String[] { divisionsKEY_ROWID,divisionsKEY_Heat }, divisionsKEY_Title + "=?",
 				new String[] { title }, null, null, null, null);
-		c.moveToFirst();
-		for (int i = 0; i < c.getCount(); i++) {
-			String dbheat = c.getString(0);
-			if (Integer.parseInt(dbheat) != heat)
-				temp = db.update(DATABASE_TABLE_divisions, initialValues,
-						divisionsKEY_Title + " = '" + title + "'", null);
-			else
-				temp = -1;
-			c.moveToNext();
+		long result=-1;
+		if (mCursor.moveToFirst()!=false) {
+			mCursor.moveToFirst();
+			int dbheat=Integer.parseInt((String)mCursor.getString(1));
+			if (heat !=dbheat)
+			{
+				db.update(DATABASE_TABLE_divisions, initialValues,divisionsKEY_ROWID+"="+(String)mCursor.getString(0) , null);
+				result=Integer.parseInt((String)mCursor.getString(0));
+			}else
+			{
+				result=-1;
+			}
+			
 		}
-		c.close();
-		if (temp == 0)// 如果temp！=0 update了 就不insert
-			return db.insert(DATABASE_TABLE_divisions, null, initialValues);
-		else if (temp < 0)
-			return temp;
 		else
-			return 0;
+		{
+			result=db.insert(DATABASE_TABLE_divisions, null, initialValues);
+		}
+		db.close();
+		DBHelper.close();
+	return result;
 	}
 
-	// ---删除---
-	public void deleteAll() {
-		db.delete(DATABASE_TABLE_news, newsKEY_ROWID + ">0", null);
-		db.delete(DATABASE_TABLE_peoples, peoplesKEY_ROWID + ">0", null);
-		db.delete(DATABASE_TABLE_places, placesKEY_ROWID + ">0", null);
-		db.delete(DATABASE_TABLE_divisions, divisionsKEY_ROWID + ">0", null);
-		db.delete(DATABASE_TABLE_zuijinxinwen, newsKEY_ROWID + ">0", null);
-	}
 
-	public int deletenews(long Id) {
-		return db.delete(DATABASE_TABLE_news,
-				newsKEY_ZhuantiId + "=" + String.valueOf(Id), null);
-
-	}
 
 	// -----为最近新闻所调用 desc
 	public Cursor getzuijinxinwen(int num1, int num2) {
-		String[] columns = new String[] {
-				zuijinxinwenKEY_ROWID, zuijinxinwenKEY_Words,
-				zuijinxinwenKEY_Count,zuijinxinwenKEY_Date };
+		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = db.query(DATABASE_TABLE_zuijinxinwen, null, null, null, null, null,
 				zuijinxinwenKEY_Date+ " desc"+","+zuijinxinwenKEY_Count+ " desc", String.valueOf(num1) + ","
 						+ String.valueOf(num2));
@@ -315,11 +343,42 @@ public class DBAdapter
 
 		}
 
+		db.close();
+		DBHelper.close();
 		return mCursor;
 	}
 
+	public Cursor getusernews(String userid) {
+		db = DBHelper.getWritableDatabase();
+		Cursor mCursor = db.query(DATABASE_TABLE_usernews,
+				new String[] { usernewsKEY_ROWID}, usernewsKEY_ZhuantiId+"="+userid,null, null, null, null, null);
+		if (mCursor != null) {
+			mCursor.moveToFirst();
+
+		}
+
+		db.close();
+		DBHelper.close();
+		return mCursor;
+	}
+	
+	public Cursor getuser(String user,String jobname) {
+		db = DBHelper.getWritableDatabase();
+		Cursor mCursor = db.query(DATABASE_TABLE_user,
+				new String[] { userKEY_ROWID}, userKEY_user
+						+ " = '"+user+"'  and "+userKEY_jobname+" = '"+jobname+"'",null, null, null, null, null);
+		if (mCursor != null) {
+			mCursor.moveToFirst();
+
+		}
+
+		db.close();
+		DBHelper.close();
+		return mCursor;
+	}
 	// ---检索一个指定行---
 	public Cursor getselectedrow(int rowId) throws SQLException {
+		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = db.query(true, DATABASE_TABLE_zuijinxinwen,
 				new String[] { zuijinxinwenKEY_ROWID, zuijinxinwenKEY_Words,
 						zuijinxinwenKEY_Count }, zuijinxinwenKEY_ROWID + "="
@@ -329,10 +388,27 @@ public class DBAdapter
 
 		}
 
+		db.close();
+		DBHelper.close();
 		return mCursor;
 	}
+	public Cursor getnews(int id)
+	{
+		db = DBHelper.getWritableDatabase();
+		Cursor mCursor = db.query(true, DATABASE_TABLE_news,null, newsKEY_ZhuantiId + "="
+						+ id, null, null, null, null, null);
+		if (mCursor != null) {
+			mCursor.moveToFirst();
 
+		}
+
+		db.close();
+		DBHelper.close();
+		return mCursor;
+	}
+	
 	public Cursor getnews(String words) throws SQLException {
+		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = null;
 		if (words.equals("others"))
 			mCursor = db.query(true, DATABASE_TABLE_news, new String[] {
@@ -341,9 +417,6 @@ public class DBAdapter
 					newsKEY_ZhuantiId }, newsKEY_ZhuantiId + "=" + 0, null,
 					null, null, null, null);
 		else {
-			String[] columns = new String[] {
-					zuijinxinwenKEY_ROWID, zuijinxinwenKEY_Words,
-					zuijinxinwenKEY_Count };
 			mCursor = db.query(true, DATABASE_TABLE_zuijinxinwen, null, zuijinxinwenKEY_Title + "='"
 					+ words + "'", null, null, null, null, null);
 
@@ -362,11 +435,14 @@ public class DBAdapter
 		if (mCursor != null)
 			mCursor.moveToFirst();
 
+		db.close();
+		DBHelper.close();
 		return mCursor;
 	}
 
 	// -----为热点activity所调用
 	public Cursor getpeople(int num1, int num2) {
+		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = db.query(DATABASE_TABLE_peoples, new String[] {
 				peoplesKEY_ROWID, peoplesKEY_Title, peoplesKEY_Heat }, null,
 				null, null, null, peoplesKEY_Heat + " desc",
@@ -374,6 +450,8 @@ public class DBAdapter
 		if (mCursor != null) {
 			mCursor.moveToFirst();
 		}
+		db.close();
+		DBHelper.close();
 		return mCursor;
 	}
 
@@ -387,10 +465,13 @@ public class DBAdapter
 
 		}
 
+		db.close();
+		DBHelper.close();
 		return mCursor;
 	}
 
 	public Cursor getdivision(int num1, int num2) {
+		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = db.query(DATABASE_TABLE_divisions, new String[] {
 				divisionsKEY_ROWID, divisionsKEY_Title, divisionsKEY_Heat },
 				null, null, null, null, divisionsKEY_Heat + " desc",
@@ -399,13 +480,15 @@ public class DBAdapter
 			mCursor.moveToFirst();
 
 		}
-
+		db.close();
+		DBHelper.close();
 		return mCursor;
 	}
 
 	// -----为专题activity所调用
 
 	public long getselectednews(String words) {
+		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = db.query(true, DATABASE_TABLE_zuijinxinwen,
 				new String[] { zuijinxinwenKEY_ROWID, zuijinxinwenKEY_Words,
 						zuijinxinwenKEY_Count }, zuijinxinwenKEY_Words + "='"
@@ -414,41 +497,112 @@ public class DBAdapter
 			mCursor.moveToFirst();
 
 		String id = mCursor.getString(0);
-		return Integer.parseInt(id);
+		int result=Integer.parseInt(id);
+		db.close();
+		DBHelper.close();
+		return result;
 
 	}
 
 	// ---删除一个指定标题---
-	public boolean deleteothers() {
-		return db
-				.delete(DATABASE_TABLE_news, newsKEY_ZhuantiId + "=" + 0, null) > 0;
-	}
 
-	// 一个游标（Cursor）对象，但注意Cursors是不同步的
 
-	/*
-	 * public Cursor getAllHotspots() { return db.query(DATABASE_TABLE_hotspots,
-	 * new String[]
-	 * {hotspotsKEY_ROWID,hotspotsKEY_Name,hotspotsKEY_Heat},null,null
-	 * ,null,null,hotspotsKEY_Heat); }
-	 * 
-	 * /*
-	 * 
-	 * 
-	 * //---删除一个指定标题--- public boolean deleteTitle(long rowId) { return
-	 * db.delete(DATABASE_TABLE, KEY_ROWID +"=" + rowId, null) > 0; }
-	 * //---检索一个指定标题--- public Cursor getTitle(long rowId) throws SQLException {
-	 * Cursor mCursor =db.query(true, DATABASE_TABLE, new String[]
-	 * {KEY_ROWID,KEY_ItemText,KEY_ItemText},KEY_ROWID + "=" +
-	 * rowId,null,null,null,null,null); if (mCursor != null) {
-	 * mCursor.moveToFirst();
-	 * 
-	 * }
-	 * 
-	 * return mCursor; } //---更新一个标题-- public boolean updateTitle(long rowId,
-	 * String name,String summary) { ContentValues args = new ContentValues();
-	 * args.put(KEY_ItemText, name); args.put(KEY_ItemText, summary); //
-	 * args.put(KEY_PUBLISHER, publisher); return db.update(DATABASE_TABLE,
-	 * args,KEY_ROWID + "=" + rowId, null) > 0; }
-	 */
+	// ---删除---
+
+		//--按时间排序，删除到只剩前30条,如果本身不足30条，比如只有10条，就只剩10条
+		private void delete_news()
+		{
+			Cursor mCursor = db.query(DATABASE_TABLE_news, new String[] {
+					newsKEY_ROWID, newsKEY_Title,newsKEY_Source,newsKEY_Description,newsKEY_Date,newsKEY_Url }, null, null,
+					null, null, newsKEY_Date+ " desc","30");
+			if (mCursor != null) 
+				mCursor.moveToFirst();
+			do{
+				ContentValues initialValues = new ContentValues();
+				initialValues.put(newsKEY_Source, mCursor.getString(1));
+				initialValues.put(newsKEY_Date, mCursor.getString(2));
+				initialValues.put(newsKEY_Description, mCursor.getString(3));
+				initialValues.put(newsKEY_Url, mCursor.getString(4));
+				initialValues.put(newsKEY_ZhuantiId, mCursor.getString(5));
+				
+
+				db.insert(DATABASE_TABLE_news, null, initialValues);			
+			}while(mCursor.moveToNext());
+		}
+		private void delete_peoples()
+		{
+			Cursor mCursor = db.query(DATABASE_TABLE_peoples, new String[] {
+					peoplesKEY_ROWID, peoplesKEY_Title, peoplesKEY_Heat}, null, null,
+					null, null, peoplesKEY_Heat+ " desc","30");
+			if (mCursor != null) 
+				mCursor.moveToFirst();
+			do{
+				ContentValues initialValues = new ContentValues();
+				initialValues.put(peoplesKEY_Title, mCursor.getString(1));
+				initialValues.put(peoplesKEY_Heat, mCursor.getString(2));
+				
+
+				db.insert(DATABASE_TABLE_peoples, null, initialValues);			
+			}while(mCursor.moveToNext());
+		}
+		private void delete_divisions()
+		{
+			Cursor mCursor = db.query(DATABASE_TABLE_divisions, new String[] {
+					divisionsKEY_ROWID, divisionsKEY_Title, divisionsKEY_Heat}, null, null,
+					null, null, divisionsKEY_Heat+ " desc","30");
+			if (mCursor != null) 
+				mCursor.moveToFirst();
+			do{
+				ContentValues initialValues = new ContentValues();
+				initialValues.put(divisionsKEY_Title, mCursor.getString(1));
+				initialValues.put(divisionsKEY_Heat, mCursor.getString(2));
+				
+
+				db.insert(DATABASE_TABLE_divisions, null, initialValues);			
+			}while(mCursor.moveToNext());
+		}
+		private void delete_places()
+		{
+			Cursor mCursor = db.query(DATABASE_TABLE_places, new String[] {
+					placesKEY_ROWID, placesKEY_Title, placesKEY_Heat}, null, null,
+					null, null, placesKEY_Heat+ " desc","30");
+			if (mCursor != null) 
+				mCursor.moveToFirst();
+			do{
+				ContentValues initialValues = new ContentValues();
+				initialValues.put(placesKEY_Title, mCursor.getString(1));
+				initialValues.put(placesKEY_Heat, mCursor.getString(2));
+				
+
+				db.insert(DATABASE_TABLE_places, null, initialValues);			
+			}while(mCursor.moveToNext());
+		}
+		private void delete_zuijinxinwen()
+		{
+			
+			Cursor mCursor = db.query(DATABASE_TABLE_zuijinxinwen, new String[] {
+					zuijinxinwenKEY_ROWID, zuijinxinwenKEY_Words, zuijinxinwenKEY_Count}, null, null,
+					null, null, zuijinxinwenKEY_Count+ " desc","30");
+			if (mCursor != null) 
+				mCursor.moveToFirst();
+			do{
+				ContentValues initialValues = new ContentValues();
+				initialValues.put(zuijinxinwenKEY_Words, mCursor.getString(1));
+				initialValues.put(zuijinxinwenKEY_Count, mCursor.getString(2));
+				
+
+				db.insert(DATABASE_TABLE_zuijinxinwen, null, initialValues);			
+			}while(mCursor.moveToNext());
+		}
+		public void delete() {
+			db = DBHelper.getWritableDatabase();
+			this.delete_divisions();
+			this.delete_news();
+			this.delete_places();
+			this.delete_zuijinxinwen();
+			this.delete_peoples();
+
+			db.close();
+			DBHelper.close();
+		}
 }
