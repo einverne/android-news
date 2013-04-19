@@ -21,7 +21,7 @@ public class ConnectWeb {
 		Map<String, Object> map = null;
 
 		try {
-			String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetDocs&s="+keyword+"&dateF=2012051300&dateT=20121106x&relate=T&start=0&max=20";
+			String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetDocs&s="+keyword+"&dateF="+dateF+"&dateT="+dateT+"&relate="+relateToChina+"&start="+Integer.toString(start)+"&max="+Integer.toString(max);
 			String str = HttpConn.getJsonFromUrlGet(theurl);
 			JSONArray jay = new JSONArray(str);
 
@@ -109,7 +109,7 @@ public class ConnectWeb {
 	}
 
 	/**
-	 * 
+	 * ≤Â»ÎNews±Ì
 	 * @param dbadapter
 	 * @param doc
 	 * @param oneclusterid
