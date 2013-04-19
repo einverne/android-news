@@ -15,6 +15,38 @@ import android.util.Log;
 
 public class ConnectWeb {
 
+	static public boolean getlogin(String name,String psw)
+	{
+		boolean result=false;
+		String theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=VerifyUser&name="+name+"&pwd="+psw;
+		String str = HttpConn.getJsonFromUrlGet(theurl);
+		result= Boolean.valueOf(str).booleanValue();
+		return result;
+	}
+	static public boolean CheckUsed(String name)
+	{
+		boolean result=false;
+		String theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=CheckUsed&name="+name;
+		String str = HttpConn.getJsonFromUrlGet(theurl);
+		result= Boolean.valueOf(str).booleanValue();
+		return result;
+		
+	}
+	/**
+	 * 
+	 * @param keyword
+	 * @param dateF 2020121106
+	 * @param dateT 2020121106x x表示其余不计 2020121106 20201211
+	 * @return 符合搜索语句的条数
+	 */
+	static public int  getsearchcount(String keyword,String dateF, String dateT) {
+	String theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetNewsHit&s=title:\""+keyword+"\"ANDdate:["+dateF+" TO "+dateT+"]";
+	String str = HttpConn.getJsonFromUrlGet(theurl);
+	return  Integer.parseInt(str);
+
+	}
+	
+	
 	static public List<Map<String, Object>> getsearch(String keyword,
 			String dateF, String dateT, String relateToChina, int start, int max) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
