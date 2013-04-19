@@ -2,6 +2,7 @@ package com.and.netease;
 
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.widget.EditText;
 
 public class hot_item extends ListActivity {
 	
@@ -11,6 +12,9 @@ public class hot_item extends ListActivity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.layout_zhuanti);
+		
+		
+		
 	}
 
 }
