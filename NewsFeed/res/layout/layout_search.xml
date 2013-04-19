@@ -24,20 +24,20 @@
             android:gravity="right|center_vertical"
             android:orientation="horizontal" >
 
-            <ImageButton
+            <Button
                 android:id="@+id/button_advanced_search"
-                android:layout_width="100dip"
+                android:layout_width="120dp"
                 android:layout_height="35dip"
-                android:layout_weight="1"
-                android:src="@drawable/searchb"
+                android:layout_marginRight="20dp"
+                android:background="#339900"
                 android:text="高级检索" />
 
-            <ImageButton
+            <Button
                 android:id="@+id/search"
-                android:layout_width="100dip"
+                android:layout_width="120dp"
                 android:layout_height="35dip"
-                android:layout_weight="1"
-                android:src="@drawable/searchb2"
+              android:layout_marginRight="30dp"
+				android:background="#669900"
                 android:text="检索" />
 
         </LinearLayout>
@@ -49,11 +49,13 @@
             android:layout_below="@+id/linearLayout1"
             android:orientation="vertical" >
 
-            <ListView
-                android:id="@+id/listView_hotword"
+            <GridView
+                android:id="@+id/gridView1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-            </ListView>
+                android:layout_height="wrap_content"
+                android:numColumns="3" >
+            </GridView>
+
         </LinearLayout>
     </RelativeLayout>
 
