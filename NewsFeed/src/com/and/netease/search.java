@@ -3,6 +3,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.and.netease.utils.CheckNetwork;
+import com.and.netease.utils.ConnectWeb;
 import com.and.netease.utils.DBAdapter;
 import android.app.Activity;
 import android.content.Intent;
@@ -45,7 +48,7 @@ public class search extends Activity  implements OnScrollListener {
 		setContentView(R.layout.layout_search_result);
 		Log.d(TAG, "search_result_start");
 		
-		MaxDataNum=20;
+		MaxDataNum=60;
 //		// get Intent Bundle
 		Bundle bundle = this.getIntent().getExtras();
 //		// get data in Bundle
@@ -59,17 +62,7 @@ public class search extends Activity  implements OnScrollListener {
 			handler = new Handler();
 			// 生成动态数组，加入数据
 		listItem = new ArrayList<Map<String, Object>>();	
-//		for (int i = 0; i <= list.size(); i++) {
-//			Log.d(TAG,""+i);
-//			Map<String, Object>map1=list.get(1);
-//			HashMap<String, Object> map = new HashMap<String, Object>();
-//			map.put("ItemTitle", (String)map1.get("title") );			
-//			map.put("ItemText", (String)map1.get("description"));
-//			Log.d("search2",(String)map1.get("description"));
-//			map.put("date", (String)map1.get("date") );
-//    		listItem.add(map);      
-//		}
-//		List<Map<String,Object>> jbxx = new ArrayList<Map<String,Object>>();
+
 	
 		
 		
@@ -109,10 +102,18 @@ public class search extends Activity  implements OnScrollListener {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				// Intent intent =new Intent();
-				// intent.setClass(search.this, zhuanti.class);
-				// startActivity(intent);
-				// TabzuijinxinwenActivity.this.finish();
+				
+				CheckNetwork net = new CheckNetwork(search.this);
+				boolean net_conn  = net.check();
+				if (net_conn) {					
+					String url =listItem.get(arg2).get("url").toString();
+					Log.d("wwwwwwww", url);
+					Bundle bundle = new Bundle();
+					Intent intent = new Intent(search.this, jutixinwen.class);
+					bundle.putString("url", url);
+					intent.putExtras(bundle);
+					startActivity(intent);
+				}
 			}
 		});
 
@@ -138,25 +139,71 @@ public class search extends Activity  implements OnScrollListener {
 		
 		
 	}
-
+	
+	
+	
+	
+	//取搜索结果
+		public List<Map<String, Object>> getData()
+		{
+			ConnectWeb conn;
+			conn=new ConnectWeb();
+			List<Map<String, Object>> list=conn.getsearch(keyword,"20130202","20130418","T",1,30);
+			//search conn = new search();
+			//List<Map<String,Object>> list = conn.testData();
+			
+			if(list!=null)
+			{
+				Log.d("wwwwwww",""+list.size());
+			
+				for(int i = 0; i < list.size(); i++)
+				{
+					HashMap<String, Object> map = new HashMap<String, Object>();
+					Map<String, Object> map1=list.get(i);
+					map.put("ItemTitle", map1.get("title") );		
+					map.put("ItemText", (String)map1.get("description")+i);
+					map.put("url", map1.get("url"));
+					listItem.add(map);
+					Log.d("wwwww",listItem.toString());
+				}
+				
+			}
+			else
+			{
+				Toast.makeText(search.this, "budui",Toast.LENGTH_SHORT).show();
+				
+			}
+			
+			return listItem;
+			
+			
+		}
+		
+		
+		
+		
+		
 		public List<Map<String, Object>> loadMoreData() {
 		// TODO Auto-generated method stub
-//		ConnectWeb conn;
-//		conn=new ConnectWeb();
-//		List<Map<String, Object>> list=conn.getsearch(keyword,"20120202","20131212","T",1,30);
-		search conn = new search();
-		List<Map<String,Object>> list = conn.testData();
+		ConnectWeb conn;
+		conn=new ConnectWeb();
+		List<Map<String, Object>> list=conn.getsearch(keyword,"20130202","20130418","T",30,40);
+	//	search conn = new search();
+	//	List<Map<String,Object>> list = conn.testData();
+		
 		int count = listItemAdapter.getCount();
 		
-		if (count+5<MaxDataNum) {
+		if (count+10<MaxDataNum) {
 			for(int i = count; i < count+5 ; i++){
 				HashMap<String, Object> map = new HashMap<String, Object>();
-				map.put("ItemTitle", "新闻标题    " + i);
-				map.put("ItemText", "新闻专题摘要");
+				Map<String, Object> map1=list.get(i);
+				map.put("ItemTitle", map1.get("title") );		
+				map.put("ItemText", (String)map1.get("description")+i);
+				map.put("url", map1.get("url"));
 				listItem.add(map);
 			}
 		} else {
-			// 数据已经不足5条
+			// 数据已经不足10条
             for (int i = count; i < MaxDataNum; i++) {
             	HashMap<String, Object> map = new HashMap<String, Object>();
                 map.put("ItemTitle", "新闻标题    " + i);
@@ -171,60 +218,30 @@ public class search extends Activity  implements OnScrollListener {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			Intent intent = new Intent();
-			intent.setClass(search.this, MainActivity.class);
-			startActivityForResult(intent, 1);
+		//	Intent intent = new Intent();
+		//	intent.setClass(search.this, MainActivity.class);
+		//	startActivityForResult(intent, 1);
 			search.this.finish();
 		}
 		return true;
 	}
 	
-	public List<Map<String, Object>> getData()
-	{
-//		ConnectWeb conn;
-//		conn=new ConnectWeb();
-//		List<Map<String, Object>> list=conn.getsearch(keyword,"20120202","20131212","T",1,30);
-		search conn = new search();
-		List<Map<String,Object>> list = conn.testData();
-		Log.d(TAG,"isqn2");
-		if(list!=null)
-		{
-		
-			for(int i = 0; i < list.size(); i++)
-			{
-				HashMap<String, Object> map = new HashMap<String, Object>();
-				Map<String, Object> map1=list.get(i);
-				map.put("ItemTitle", map1.get("title") );		
-				map.put("ItemText", (String)map1.get("description")+i);
-				listItem.add(map);
-			}
-			
-		}
-		else
-		{
-			Toast.makeText(search.this, "budui",Toast.LENGTH_SHORT).show();
-			
-		}
-		
-		return listItem;
-		
-		
-	}
 	
-	public List<Map<String, Object>> testData()
-	{
-		
-		Map<String,Object> mapt = null;
-		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
-		for(int i = 0;i<10;i++){	
-			mapt = new HashMap<String,Object>();		
-			mapt.put("title", i+"");
-			mapt.put("description", i+"hh");
-			list.add(mapt);
-		}
-		return list;
 	
-	}
+//	public List<Map<String, Object>> testData()
+//	{
+//		
+//		Map<String,Object> mapt = null;
+//		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+//		for(int i = 0;i<10;i++){	
+//			mapt = new HashMap<String,Object>();		
+//			mapt.put("title", i+"");
+//			mapt.put("description", i+"hh");
+//			list.add(mapt);
+//		}
+//		return list;
+//	
+//	}
 	
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
