@@ -44,14 +44,15 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 	private Cursor c;
 
 	ArrayList<HashMap<String, String>> listItem;
-	
+
 	private static final String TAG = "EV_DEBUG";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_zuijinxinwen);
 		Log.d(TAG, "Tabzuijinxinwen onCreate");
-		
+
 		moreView = getLayoutInflater().inflate(R.layout.moredata, null);
 		bt = (Button) moreView.findViewById(R.id.bt_load);
 		pg = (ProgressBar) moreView.findViewById(R.id.pg);
@@ -59,14 +60,6 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 
 		dbadapter = new DBAdapter(this);
 		dbadapter.open();
-
-		CheckNetwork checknet = new CheckNetwork(this);
-		if (checknet.check()) {
-//			Toast.makeText(this, "网络可用", Toast.LENGTH_SHORT).show();
-			ConnectWeb.getzuijinxinwen(dbadapter);
-		} else {
-			Toast.makeText(this, "网络不可用", Toast.LENGTH_SHORT).show();
-		}
 
 		c = dbadapter.getzuijinxinwen(0, MaxDataNum);
 		listItem = new ArrayList<HashMap<String, String>>();
@@ -76,7 +69,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 			String words = c.getString(c.getColumnIndex("words"));
 			String date = c.getString(c.getColumnIndex("date"));
 			String counts = c.getString(c.getColumnIndex("count"));
-			
+
 			HashMap<String, String> map = new HashMap<String, String>();
 			map.put("date", date);
 			map.put("counts", counts);
@@ -93,8 +86,10 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		// 添加并且显示
 		((PullToRefreshListView) getListView()).addFooterView(moreView);
 		setListAdapter(listItemAdapter);
+
 		// 加载更多
 		((PullToRefreshListView) getListView()).setOnScrollListener(this);
+
 		bt.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -111,7 +106,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 						pg.setVisibility(View.GONE);
 						listItemAdapter.notifyDataSetChanged();
 					}
-				}, 1000);
+				}, 10);
 			}
 		});
 
@@ -126,9 +121,9 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 						String title = (String) listItem.get(arg2 - 1).get(
 								"ItemTitle");
 						Bundle bundle = new Bundle();
-						Intent intent = new Intent(TabzuijinxinwenActivity.this,
-								zhuanti.class);
-						Log.d(TAG, "传递到专题数据"+title);
+						Intent intent = new Intent(
+								TabzuijinxinwenActivity.this, zhuanti.class);
+						Log.d(TAG, "传递到专题数据" + title);
 						bundle.putString("title", title);
 						intent.putExtras(bundle);
 						startActivity(intent);
@@ -174,9 +169,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 					listItem.add(map);
 				}
 			}
-		}
-
-		else {
+		} else {
 			// 数据已经不足5条
 			for (int i = count; i < MaxDataNum && c.moveToNext(); i++) {
 				c.moveToPosition(i);
@@ -196,24 +189,22 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 	}
 
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		c.close();
-		dbadapter.close();
-	}
-
-	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	// view 报告滑动状态的视图
+	// firstVisibleItem 可视的第一个列表项的索引
+	// visibleItemCount 可视的列表项个数
+	// totalItemCount 总共的列表项个数
+	// 计算最后可见条目的索引
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
-		// 计算最后可见条目的索引
+
 		lastVisibleIndex = firstVisibleItem + visibleItemCount - 1;
-		// 所有的条目已经和最大条数相等，则移除底部的View
+		//所有的条目已经和最大条数相等，则移除底部的View
 		if ((totalItemCount >= MaxDataNum || (c.isAfterLast() == true))
 				&& flag == 0) {
 			((PullToRefreshListView) getListView()).removeFooterView(moreView);
@@ -222,16 +213,22 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		}
 	}
 
+	// view 报告滑动状态的视图
+	// scrollState 滑动状态
+	// 滑动状态包括
+	// SCROLL_STATE_IDLE : 0 视图没有滑动
+	// SCROLL_STATE_TOUCH_SCROLL : 1 用户正在触摸滑动，手指仍在屏幕上
+	// SCROLL_STATE_FLING : 2 用户之前触摸滑动，现在正在滑行，直到停止
+	// 滑到底部后自动加载，判断listview已经停止滚动并且最后可视的条目等于adapter的条目
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
-		// 滑到底部后自动加载，判断listview已经停止滚动并且最后可视的条目等于adapter的条目
+
 		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
-				&& lastVisibleIndex == listItemAdapter.getCount()) {
-			// 当滑到底部时自动加载
+				|| lastVisibleIndex == listItemAdapter.getCount()) {
+			//当滑到底部时自动加载
 			pg.setVisibility(View.VISIBLE);
 			bt.setVisibility(View.GONE);
 			handler.postDelayed(new Runnable() {
-
 				@Override
 				public void run() {
 					loadMoreData();
@@ -240,31 +237,46 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 					listItemAdapter.notifyDataSetChanged();
 				}
 
-			}, 1000);
+			}, 100);
 		}
 	}
 
 	private class GetDataTask extends AsyncTask<Void, Void, String[]> {
 		@Override
 		protected String[] doInBackground(Void... params) {
-			// Simulates a background job.
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-
-			}
+			ConnectWeb.getzuijinxinwen(dbadapter);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(String[] result) {
+			Log.d(TAG, "TabzuijinxinwenActivity PostExecute");
+			c = dbadapter.getzuijinxinwen(0, MaxDataNum);
+			// listItem.clear();
+			listItem = new ArrayList<HashMap<String, String>>();
+			for (int i = 0; i < 10 && c.moveToNext(); i++) {
+				c.moveToPosition(i);
+				String title = c.getString(c.getColumnIndex("title"));
+				String words = c.getString(c.getColumnIndex("words"));
+				String date = c.getString(c.getColumnIndex("date"));
+				String counts = c.getString(c.getColumnIndex("count"));
 
-//			for (int j = 0; j < 3; j++) {
-//				HashMap<String, String> map = new HashMap<String, String>();
-//				map.put("ItemTitle", "新闻标题 (刷新后)");
-//				map.put("ItemText", "新闻专题摘要");
-//				listItem.add(j, map);
-//			}
+				HashMap<String, String> map = new HashMap<String, String>();
+				map.put("date", date);
+				map.put("counts", counts);
+				map.put("ItemTitle", title);
+				map.put("ItemText", words);
+				listItem.add(map);
+			}
+
+			listItemAdapter.notifyDataSetChanged();
+
+			// for (int j = 0; j < 3; j++) {
+			// HashMap<String, String> map = new HashMap<String, String>();
+			// map.put("ItemTitle", "新闻标题 (刷新后)");
+			// map.put("ItemText", "新闻专题摘要");
+			// listItem.add(j, map);
+			// }
 			// listItem.Insert(2, "新闻");
 
 			// Call onRefreshComplete when the list has been refreshed.
@@ -274,4 +286,10 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		}
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		c.close();
+		dbadapter.close();
+	}
 }
