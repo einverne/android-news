@@ -43,20 +43,24 @@ public class DBAdapter
 	public static final String zuijinxinwenKEY_Date = "date";		//专题日期
 	
 	public static final String userKEY_ROWID = "_id";// 是最近新闻的专题们
-	public static final String userKEY_Words = "words";		//专题关键字
+	public static final String userKEY_To = "to";		//专题关键字
 	public static final String userKEY_Count = "count";		//
-	public static final String userKEY_Title = "title";		//
-	public static final String userKEY_Date = "date";		//专题日期
+	public static final String userKEY_From = "from";		//
+	public static final String userKEY_Days = "days";		//专题日期
 	public static final String userKEY_user= "user";	
 	public static final String userKEY_jobname = "jobname";	
 
+
+	
 	public static final String usernewsKEY_ROWID = "_id";// 专题带下来的新闻们
 	public static final String usernewsKEY_Title = "title";
 	public static final String usernewsKEY_Source = "source";
 	public static final String usernewsKEY_Date = "date";
+	public static final String usernewsKEY_Words = "words";
 	public static final String usernewsKEY_Description = "description";
 	public static final String usernewsKEY_Url = "url";
-	public static final String usernewsKEY_ZhuantiId = "zhuantiId";
+	public static final String usernewsKEY_user= "user";	
+	public static final String usernewsKEY_jobname = "jobname";	
 	
 	
 	public static final String peoplesKEY_ROWID = "_id";
