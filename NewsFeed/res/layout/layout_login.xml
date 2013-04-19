@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#ffd6d3d6"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout_login"
-        android:layout_width="240.0dip"
+    <LinearLayout
+        android:id="@+id/LinearLayout2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="30.0dip"
         android:orientation="vertical" >
 
@@ -19,69 +18,122 @@
             style="@style/custom_shadow_black_text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="10.0dip"
             android:text="用户登录："
             android:textSize="16.0dip" />
-
-        <EditText
-            android:id="@+id/editText_username"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textView_newstitle"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20.0dip"
-            android:hint="用户名或Email" >
 
-            <requestFocus />
-        </EditText>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:layout_margin="5dp"
+            android:orientation="horizontal" >
 
-        <EditText
-            android:id="@+id/editText_psw"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/editText_username"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10.0dip"
-            android:hint="密码"
-            android:inputType="textPassword" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" >
+
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="23dp"
+                    android:layout_marginLeft="20dp"
+                    android:src="@drawable/logb" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" >
+
+                <EditText
+                    android:id="@+id/editText_username"
+                    android:layout_width="186dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20.0dip"
+                    android:layout_marginLeft="20dp"
+                    android:hint="用户名或Email" >
+
+                    <requestFocus />
+                </EditText>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_margin="5dp"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" >
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/ic_pass" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                 android:layout_marginTop="1.0dip" >
+
+                <EditText
+                    android:id="@+id/editText_psw"
+                    android:layout_width="186dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
+                    android:ems="10"
+                    android:hint="密码"
+                    android:inputType="textPassword" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll2"
-            android:layout_width="fill_parent"
+            android:layout_width="272dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editText_psw"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="10.0dip"
+            android:layout_marginLeft="25dp"
             android:orientation="horizontal" >
 
             <Button
                 android:id="@+id/button_denglu"
-                android:layout_width="0.0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
+                android:layout_width="120dp"
+                android:layout_height="44dp"
+                 android:layout_marginLeft="10dp"
+                android:background="#3366FF"
                 android:onClick="onSubmitClick"
                 android:text="登录" />
 
             <Button
                 android:id="@+id/button_quxiao"
-                android:layout_width="0.0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                 android:layout_marginLeft="15dp"
+                android:background="#3399FF"
                 android:onClick="onCancelClick"
                 android:text="取消" />
+
         </LinearLayout>
 
         <TextView
             android:id="@id/textView_newsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ll2"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="48.0dip"
             android:text="..."
             android:textSize="14.0dip" />
-    </RelativeLayout>
+    </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>
