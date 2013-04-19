@@ -19,19 +19,10 @@ public class ConnectWeb {
 			String dateF, String dateT, String relateToChina, int start, int max) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map = null;
-		// String url =
-		// "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetDocs&s="+keyword+"&dateF=2012051300&dateT=20121106x&relate=T&start=0&max=20";
+
 		try {
-			/*
-			 * HttpPost request=new HttpPost(url); HttpResponse response=new
-			 * DefaultHttpClient().execute(request);
-			 * if(response.getStatusLine().getStatusCode()==HttpStatus.SC_OK) {
-			 * String str=EntityUtils.toString(response.getEntity());
-			 */
-			String str = "";
-			/*
-			 * first inforMap title text source description date url second
-			 */
+			String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetDocs&s="+keyword+"&dateF=2012051300&dateT=20121106x&relate=T&start=0&max=20";
+			String str = HttpConn.getJsonFromUrlGet(theurl);
 			JSONArray jay = new JSONArray(str);
 
 			for (int i = 0; i < jay.length(); i += 1) {
