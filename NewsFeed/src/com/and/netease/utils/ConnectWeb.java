@@ -15,7 +15,22 @@ import org.json.JSONObject;
 import android.util.Log;
 
 public class ConnectWeb {
-	
+	/**
+	 * 提交一个任务
+	 * http://localhost:8080/RMI_WEB/rmi?r=submitJob&query=date:[20110101x TO x] AND (title:China Customs"20OR description:"China Customs" OR text:"China Customs")&aboutChina=true&user=test&desc=chania
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 */
+	static public boolean submitJob(String username,String query,String aboutchina,String description)
+	{
+		String theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=submitJob&query="+query+"&aboutChina="+aboutchina+"&user="+username+"&desc="+description;
+		String str = HttpConn.getJsonFromUrlGet(theurl);
+		boolean result= Boolean.valueOf(str).booleanValue();
+		return result;
+		
+	}
 	/**
 	 * http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=deleteJob&username=gaojinping&jobname=20111222194809870
 	 * 20120523191938669 删除指定用户的指定定制任务
