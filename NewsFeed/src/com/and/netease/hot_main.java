@@ -36,6 +36,7 @@ import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import android.content.Intent;
 import android.database.Cursor;
 import com.and.netease.utils.ConnectWeb;
 import com.and.netease.utils.DBAdapter;
@@ -331,8 +332,8 @@ public class hot_main extends Activity implements OnScrollListener {
 					long arg3) {
 				// Intent intent = new Intent(hot_main.this, zhuanti.class);
 				// startActivity(intent);
-				Toast.makeText(hot_main.this, "搜索功能需完善", Toast.LENGTH_LONG)
-						.show(); // EV_BUG
+				Intent intent = new Intent(hot_main.this,hot_item.class);
+				startActivity(intent);
 			}
 		});
 	}
