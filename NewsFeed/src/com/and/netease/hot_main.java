@@ -332,7 +332,11 @@ public class hot_main extends Activity implements OnScrollListener {
 					long arg3) {
 				// Intent intent = new Intent(hot_main.this, zhuanti.class);
 				// startActivity(intent);
-				Intent intent = new Intent(hot_main.this,hot_item.class);
+				String str_title = ((TextView)findViewById(R.id.textView_name)).toString();
+				Bundle bundle = new Bundle();
+				bundle.putSerializable("keyword", str_title);				
+				Intent intent = new Intent(hot_main.this,search.class);
+				intent.putExtras(bundle);
 				startActivity(intent);
 			}
 		});
