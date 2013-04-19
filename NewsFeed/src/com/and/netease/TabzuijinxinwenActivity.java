@@ -222,7 +222,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 	// 滑到底部后自动加载，判断listview已经停止滚动并且最后可视的条目等于adapter的条目
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
-
+		//OnScrollListener.SCROLL_STATE_IDLE 表示ListView不动
 		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
 				|| lastVisibleIndex == listItemAdapter.getCount()) {
 			//当滑到底部时自动加载
@@ -236,7 +236,6 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 					pg.setVisibility(View.GONE);
 					listItemAdapter.notifyDataSetChanged();
 				}
-
 			}, 100);
 		}
 	}
