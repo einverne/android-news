@@ -13,9 +13,9 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	// 数据库名
-	private static final String DATABASE_NAME = "NewsFeed1"  ;
+	private static final String DATABASE_NAME = "NewsFeed100"  ;
 	// 版本名
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 3;
 	// 表名
 	
 	// 这个常量包括创建所需表的SQL语句
@@ -29,19 +29,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ "title text not null, heat integer,UNIQUE (title));";
 	private static final String DATABASE_CREATE_divisions = "create table if not exists divisions (_id integer primary key autoincrement, "
 			+ "title text not null, heat integer,UNIQUE (title));";
-	public static final String usernewsKEY_ROWID = "_id";// 专题带下来的新闻们
-	public static final String usernewsKEY_Title = "title";
-	public static final String usernewsKEY_Source = "source";
-	public static final String usernewsKEY_Date = "date";
-	public static final String usernewsKEY_Words = "words";
-	public static final String usernewsKEY_Description = "description";
-	public static final String usernewsKEY_Url = "url";
-	public static final String usernewsKEY_user= "user";	
-	public static final String usernewsKEY_jobname = "jobname";	
-	private static final String DATABASE_CREATE_userzhuanti = "create table if not exists userzhuanti(_id integer primary key autoincrement, "
-			+ "user text not null,jobname text not null,from text,to text,days integer,count integer,UNIQUE (user,jobname));";
+	private static final String DATABASE_CREATE_userzhuanti = "create table if not exists user(_id integer primary key autoincrement, "
+			+ "user text not null,jobname text not null,from1 text,to1 text,days integer,count integer,UNIQUE (user,jobname));";
 	private static final String DATABASE_CREATE_usernews = "create table if not exists usernews (_id integer primary key autoincrement, "
-			+ "title text not null, source text,words text,description text,date text,url text,user text,jobname text);";
+			+ "title text not null, source text,words text,description text,date text,url text,zhuantiId integer);";
 	
 
 	private static final String TAG = "EV_Debug";
