@@ -41,7 +41,24 @@ public class DBAdapter
 	public static final String zuijinxinwenKEY_Count = "count";		//
 	public static final String zuijinxinwenKEY_Title = "title";		//
 	public static final String zuijinxinwenKEY_Date = "date";		//专题日期
+	
+	public static final String userKEY_ROWID = "_id";// 是最近新闻的专题们
+	public static final String userKEY_Words = "words";		//专题关键字
+	public static final String userKEY_Count = "count";		//
+	public static final String userKEY_Title = "title";		//
+	public static final String userKEY_Date = "date";		//专题日期
+	public static final String userKEY_user= "user";	
+	public static final String userKEY_jobname = "jobname";	
 
+	public static final String usernewsKEY_ROWID = "_id";// 专题带下来的新闻们
+	public static final String usernewsKEY_Title = "title";
+	public static final String usernewsKEY_Source = "source";
+	public static final String usernewsKEY_Date = "date";
+	public static final String usernewsKEY_Description = "description";
+	public static final String usernewsKEY_Url = "url";
+	public static final String usernewsKEY_ZhuantiId = "zhuantiId";
+	
+	
 	public static final String peoplesKEY_ROWID = "_id";
 	public static final String peoplesKEY_Title = "title";
 	public static final String peoplesKEY_Heat = "heat";
@@ -287,7 +304,7 @@ public class DBAdapter
 				zuijinxinwenKEY_ROWID, zuijinxinwenKEY_Words,
 				zuijinxinwenKEY_Count,zuijinxinwenKEY_Date };
 		Cursor mCursor = db.query(DATABASE_TABLE_zuijinxinwen, null, null, null, null, null,
-				zuijinxinwenKEY_Date+","+zuijinxinwenKEY_Count + " desc", String.valueOf(num1) + ","
+				zuijinxinwenKEY_Date+ " desc"+","+zuijinxinwenKEY_Count , String.valueOf(num1) + ","
 						+ String.valueOf(num2));
 		if (mCursor != null) {
 			mCursor.moveToFirst();
