@@ -67,6 +67,8 @@ public class hot_main extends Activity implements OnScrollListener {
 	// 数据显示
 	private DBAdapter dbadapter;
 	private Cursor c;
+	private Cursor c_place;
+	private Cursor c_division;
 	ConnectWeb conn;
 
 	@Override
@@ -83,6 +85,14 @@ public class hot_main extends Activity implements OnScrollListener {
 		dbadapter.open();
 		conn.getpeoples(dbadapter);
 		c = dbadapter.getpeople(0, MaxDataNum);
+		
+		conn.getplaces(dbadapter);
+		c_place = dbadapter.getplace(0, MaxDataNum);
+		
+		conn.getdivisions(dbadapter);
+		c_division=dbadapter.getdivision(0, MaxDataNum);
+		
+		
 
 		InitImageView();
 		InitTextView();
@@ -121,18 +131,24 @@ public class hot_main extends Activity implements OnScrollListener {
 		case 1:
 			count = listItemAdapter1.getCount();
 			if (count + 5 < MaxDataNum) {
-				for (int i = count; i < count + 5; i++) {
+				for (int i = count; i < count + 5 && c_place.moveToNext(); i++) {
+					c_place.moveToPosition(i);
+					String text = c_place.getString(c_place.getColumnIndex("title"));
+					String heat = c_place.getString(c_place.getColumnIndex("heat"));
 					HashMap<String, Object> map = new HashMap<String, Object>();
-					map.put("ItemTitle", "加载数据    " + i);
-					map.put("ItemText", "新闻专题摘要");
+					map.put("ItemTitle", text);
+					map.put("ItemText", heat);
 					listItem1.add(map);
 				}
 			} else {
 				// 数据已经不足5条
-				for (int i = count; i < MaxDataNum; i++) {
+				for (int i = count; i < MaxDataNum && c_place.moveToNext(); i++) {
+					c_place.moveToPosition(i);
+					String text = c_place.getString(c_place.getColumnIndex("title"));
+					String heat = c_place.getString(c_place.getColumnIndex("heat"));
 					HashMap<String, Object> map = new HashMap<String, Object>();
-					map.put("ItemTitle", "新闻标题    " + i);
-					map.put("ItemText", "新闻专题摘要");
+					map.put("ItemTitle", text);
+					map.put("ItemText", heat);
 					listItem1.add(map);
 				}
 			}
@@ -140,17 +156,24 @@ public class hot_main extends Activity implements OnScrollListener {
 		case 2:
 			count = listItemAdapter2.getCount();
 			if (count + 5 < MaxDataNum) {
-				for (int i = count; i < count + 5; i++) {
+				for (int i = count; i < count + 5 && c_division.moveToNext(); i++) {
+					c_division.moveToPosition(i);
+					String text = c_division.getString(c_division.getColumnIndex("title"));
+					String heat = c_division.getString(c_division.getColumnIndex("heat"));
 					HashMap<String, Object> map = new HashMap<String, Object>();
-					map.put("ItemTitle", "加载数据    " + i);
-					map.put("ItemText", "新闻专题摘要");
+					map.put("ItemTitle", text);
+					map.put("ItemText", heat);
 					listItem2.add(map);
 				}
 			} else {
-				for (int i = count; i < MaxDataNum; i++) {
+				// 数据已经不足5条
+				for (int i = count; i < MaxDataNum && c_division.moveToNext(); i++) {
+					c_division.moveToPosition(i);
+					String text = c_division.getString(c_division.getColumnIndex("title"));
+					String heat = c_division.getString(c_division.getColumnIndex("heat"));
 					HashMap<String, Object> map = new HashMap<String, Object>();
-					map.put("ItemTitle", "新闻标题    " + i);
-					map.put("ItemText", "新闻专题摘要");
+					map.put("ItemTitle", text);
+					map.put("ItemText", heat);
 					listItem2.add(map);
 				}
 			}
@@ -190,10 +213,15 @@ public class hot_main extends Activity implements OnScrollListener {
 		}
 		case 1: {
 			listItem1 = new ArrayList<HashMap<String, Object>>();
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; c_place.moveToNext(); i++) {
+				c_place.moveToPosition(i);
+				String text = c_place.getString(c_place.getColumnIndex("title"));
+				String heat = c_place.getString(c_place.getColumnIndex("heat"));
+
 				HashMap<String, Object> map = new HashMap<String, Object>();
-				map.put("ItemTitle", "地名" + i);
-				map.put("ItemText", "新闻专题摘要");
+				map.put("ItemTitle", text);
+				map.put("ItemText", heat);
+
 				listItem1.add(map);
 			}
 
@@ -204,7 +232,7 @@ public class hot_main extends Activity implements OnScrollListener {
 							R.id.textView_heat });
 			// 添加并且显示
 			// mylistview= (PullToRefreshListView)
-			// mPager.findViewById(R.id.hot_place);
+			// mPager.findViewById(R.id.hot_people);
 			mylistview.addFooterView(moreView);
 			mylistview.setAdapter(listItemAdapter1);
 
@@ -212,10 +240,15 @@ public class hot_main extends Activity implements OnScrollListener {
 		}
 		case 2: {
 			listItem2 = new ArrayList<HashMap<String, Object>>();
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; c_division.moveToNext(); i++) {
+				c_division.moveToPosition(i);
+				String text = c_division.getString(c_division.getColumnIndex("title"));
+				String heat = c_division.getString(c_division.getColumnIndex("heat"));
+
 				HashMap<String, Object> map = new HashMap<String, Object>();
-				map.put("ItemTitle", "机构名" + i);
-				map.put("ItemText", "新闻专题摘要");
+				map.put("ItemTitle", text);
+				map.put("ItemText", heat);
+
 				listItem2.add(map);
 			}
 
@@ -226,12 +259,11 @@ public class hot_main extends Activity implements OnScrollListener {
 							R.id.textView_heat });
 			// 添加并且显示
 			// mylistview= (PullToRefreshListView)
-			// mPager.findViewById(R.id.hot_division);
+			// mPager.findViewById(R.id.hot_people);
 			mylistview.addFooterView(moreView);
 			mylistview.setAdapter(listItemAdapter2);
 
 			break;
-
 		}
 		}
 
@@ -539,28 +571,33 @@ public class hot_main extends Activity implements OnScrollListener {
 				mylistview1.onRefreshComplete();
 				break;
 			case 1:
-				for (int j = 0; j < 3; j++) {
+				List<Map<String, Object>> list_place = conn.getpeoplesmore(dbadapter);
+				for (int j = 0; j < list_place.size(); j++) {
+					Map<String, Object> map1 = list_place.get(j);
 					HashMap<String, Object> map = new HashMap<String, Object>();
-					map.put("ItemTitle", "刷新内容");
-					map.put("ItemText", "新闻专题摘要");
+					map.put("ItemTitle", (String) map1.get("title"));
+					map.put("ItemText", (String) map1.get("heat"));
 					listItem1.add(j, map);
 				}
-				PullToRefreshListView mylistview2 = (PullToRefreshListView) mPager
+
+				PullToRefreshListView mylistview_place = (PullToRefreshListView) mPager
 						.findViewById(R.id.hot_place);
-				mylistview2.onRefreshComplete();
+				mylistview_place.onRefreshComplete();
 				break;
 			case 2:
-				for (int j = 0; j < 3; j++) {
+				List<Map<String, Object>> list_division = conn.getpeoplesmore(dbadapter);
+				for (int j = 0; j < list_division.size(); j++) {
+					Map<String, Object> map1 = list_division.get(j);
 					HashMap<String, Object> map = new HashMap<String, Object>();
-					map.put("ItemTitle", "刷新内容");
-					map.put("ItemText", "新闻专题摘要");
+					map.put("ItemTitle", (String) map1.get("title"));
+					map.put("ItemText", (String) map1.get("heat"));
 					listItem2.add(j, map);
 				}
-				PullToRefreshListView mylistview3 = (PullToRefreshListView) mPager
-						.findViewById(R.id.hot_division);
-				mylistview3.onRefreshComplete();
-				break;
 
+				PullToRefreshListView mylistview_division = (PullToRefreshListView) mPager
+						.findViewById(R.id.hot_division);
+				mylistview_division.onRefreshComplete();
+				break;
 			}
 
 			super.onPostExecute(result);
