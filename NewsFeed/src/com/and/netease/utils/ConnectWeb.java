@@ -1,5 +1,6 @@
 package com.and.netease.utils;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +15,64 @@ import org.json.JSONObject;
 import android.util.Log;
 
 public class ConnectWeb {
+	
+	/**
+	 * http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=deleteJob&username=gaojinping&jobname=20111222194809870
+	 * 20120523191938669 删除指定用户的指定定制任务
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 */
+	static public boolean deleteJob(String name,String jobname)
+	{
+		String theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=deleteJob&username="+name+"&jobname="+jobname;
+		String str = HttpConn.getJsonFromUrlGet(theurl);
+		boolean result= Boolean.valueOf(str).booleanValue();
+		return result;
+	}
+	static public List<Map<String, Object>>getAllJobsOfUser(String name){
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		Map<String, Object> map = null;
+		String theurl="http://localhost:8080/RMI_WEB/rmi?r=getAllJobsOfUser&user="+name;
+		try {
+			String str = HttpConn.getJsonFromUrlGet(theurl);
+			JSONArray jay = new JSONArray(str);
 
+			for (int i = 0; i < jay.length(); i += 1) {
+				JSONObject inforMap =(JSONObject) jay.get(i);
+				String createtime = (String) inforMap.getString("createtime");
+				String aboutChina = (String) inforMap.getString("aboutChina");
+				String endtime = (String) inforMap.getString("endtime");
+				String description = (String) inforMap.getString("description");
+				String query = (String) inforMap.getString("query");
+				String name1 = (String) inforMap.getString("name");
+				String status = (String) inforMap.getString("status");
+				String result = (String) inforMap.getString("result");
+				String end = (String) inforMap.getString("end");
+				String type = (String) inforMap.getString("type");
+
+				map = new HashMap<String, Object>();
+				map.put("createtime", createtime);
+				map.put("aboutChina", aboutChina);
+				map.put("endtime", endtime);
+				map.put("description", description);
+				map.put("query", query);
+				map.put("name", name1);
+				map.put("status", status);
+				map.put("result", result);
+				map.put("end", end);
+				map.put("type", type);
+				// 2012-06-05 08:14:54
+				list.add(map);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 	static public boolean getlogin(String name,String psw)
 	{
 		boolean result=false;
