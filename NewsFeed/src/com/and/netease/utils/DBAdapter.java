@@ -304,7 +304,7 @@ public class DBAdapter
 				zuijinxinwenKEY_ROWID, zuijinxinwenKEY_Words,
 				zuijinxinwenKEY_Count,zuijinxinwenKEY_Date };
 		Cursor mCursor = db.query(DATABASE_TABLE_zuijinxinwen, null, null, null, null, null,
-				zuijinxinwenKEY_Date+ " desc"+","+zuijinxinwenKEY_Count , String.valueOf(num1) + ","
+				zuijinxinwenKEY_Date+ " desc"+","+zuijinxinwenKEY_Count+ " desc", String.valueOf(num1) + ","
 						+ String.valueOf(num2));
 		if (mCursor != null) {
 			mCursor.moveToFirst();
