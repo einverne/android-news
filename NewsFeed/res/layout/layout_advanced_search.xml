@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dip"
-            android:src="@drawable/biaotizi" />
+            android:src="@drawable/biaotizi2" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -27,13 +27,6 @@
             android:text="全文检索-高级检索"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
-
-        <Button
-            android:id="@+id/button_advanced_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="搜索" />
     </RelativeLayout>
 
     <LinearLayout
@@ -44,21 +37,6 @@
         android:layout_marginTop="5dip"
         android:background="#e6e6e6"
         android:orientation="vertical" >
-
-        <EditText
-            android:id="@+id/keyword"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:hint="检索语句"
-            android:singleLine="true" />
-
-        <TextView
-            android:id="@+id/textView_example"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="例如:(标题:&quot;Google&quot; OR 摘要:&quot;Google&quot; OR 正文:&quot;Google&quot;) AND 标题:&quot;Samsung&quot;"
-            android:textColor="#444444" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -73,7 +51,7 @@
                 android:layout_marginRight="10dip"
                 android:text="关键字"
                 android:textColor="@color/black"
-                android:textSize="22sp" />
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/searchkeyword"
@@ -90,68 +68,25 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dip" >
-
-            <TextView
-                android:id="@+id/textView_newsText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginRight="10dip"
-                android:text="文本出现位置"
-                android:textColor="@color/black"
-                android:textSize="22sp" />
-
-            <Spinner
-                android:id="@+id/spinner_position"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|center_vertical"
-                android:layout_weight="1" >
-            </Spinner>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="2dip" >
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginRight="10dip"
-                android:text="连接词"
-                android:textColor="@color/black"
-                android:textSize="22sp" />
-
-            <Spinner
-                android:id="@+id/spinner_conj"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|center_vertical"
-                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
-
-            <Button
-                android:id="@+id/addsearch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:capitalize="none"
-                android:clickable="false"
-                android:text="添加检索条件" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dip"
+            android:layout_marginTop="20dp"
             android:orientation="vertical" >
 
             <TextView
@@ -162,16 +97,19 @@
                 android:layout_marginRight="10dip"
                 android:text="报道日期"
                 android:textColor="@color/black"
-                android:textSize="22sp" />
+                android:textSize="18sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="70dp"
+                android:layout_marginTop="20dp" >
 
                 <Button
                     android:id="@+id/button_startdate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="80dp"
+                    android:layout_height="40dp"
+                    android:background="@color/button_background"
                     android:gravity="center_vertical|center_horizontal"
                     android:text="起始日期" />
 
@@ -181,19 +119,22 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:paddingLeft="10dip"
-                    android:text="TextView"
+                    android:text="From"
                     android:textColor="#000000"
                     android:textSize="22sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="70dp"
+                android:layout_marginTop="15dp" >
 
                 <Button
                     android:id="@+id/button1_enddate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="80dp"
+                    android:layout_height="40dp"
+                    android:background="@color/button_background"
                     android:text="结束日期" />
 
                 <TextView
@@ -202,11 +143,20 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:paddingLeft="10dip"
-                    android:text="TextView"
+                    android:text="To"
                     android:textColor="#000000"
                     android:textSize="22sp" />
             </LinearLayout>
         </LinearLayout>
+
+        <Button
+            android:id="@+id/button_advanced_search"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="40dp"
+            android:background="@color/button_background"
+            android:text="搜索" />
     </LinearLayout>
 
 </LinearLayout>
