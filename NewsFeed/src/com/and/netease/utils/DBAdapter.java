@@ -456,6 +456,7 @@ public class DBAdapter
 	}
 
 	public Cursor getplace(int num1, int num2) {
+		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = db.query(DATABASE_TABLE_places, new String[] {
 				placesKEY_ROWID, placesKEY_Title, placesKEY_Heat }, null, null,
 				null, null, placesKEY_Heat + " desc", String.valueOf(num1)
