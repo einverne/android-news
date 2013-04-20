@@ -26,7 +26,6 @@ public class ConnectWeb {
 	static public void getJobOfUser(DBAdapter dbadapter,String username,String jobname)
 	{
 		String theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getJobOfUser&user="+username+"&jobname="+jobname;
-		String todaydate = todaydate();
 		try {
 			String str = HttpConn.getJsonFromUrlGet(theurl);
 			// 通过json 来解析收到的字符串
@@ -53,7 +52,6 @@ public class ConnectWeb {
 			for (int i = 0; i < cluster.length(); i += 1) {
 				// 挨个取出专题
 				JSONObject onecluster = (JSONObject) cluster.get(i);
-				//words = jiexiwords(words);
 				
 				// 取出doc，doc是具体新闻名的数组
 				JSONArray doc = onecluster.getJSONArray("doc");
