@@ -100,13 +100,12 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 
 					@Override
 					public void run() {
-						// TODO Auto-generated method stub
 						loadMoreData();
 						bt.setVisibility(View.VISIBLE);
 						pg.setVisibility(View.GONE);
 						listItemAdapter.notifyDataSetChanged();
 					}
-				}, 10);
+				}, 100);
 			}
 		});
 
@@ -139,12 +138,10 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 						CheckNetwork checknet = new CheckNetwork(
 								TabzuijinxinwenActivity.this);
 						if (checknet.check()) {
-							// Toast.makeText(TabzuijinxinwenActivity.this,
-							// "网络可用", Toast.LENGTH_SHORT).show();
 							new GetDataTask().execute();
 						} else {
 							Toast.makeText(TabzuijinxinwenActivity.this,
-									"网络不可用", Toast.LENGTH_SHORT).show();
+									"网络不可用,请检查联网状态", Toast.LENGTH_SHORT).show();
 						}
 					}
 				});
@@ -251,7 +248,6 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		protected void onPostExecute(String[] result) {
 			Log.d(TAG, "TabzuijinxinwenActivity PostExecute");
 			c = dbadapter.getzuijinxinwen(0, MaxDataNum);
-			// listItem.clear();
 			listItem = new ArrayList<HashMap<String, String>>();
 			for (int i = 0; i < 10 && c.moveToNext(); i++) {
 				c.moveToPosition(i);
@@ -270,17 +266,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 
 			listItemAdapter.notifyDataSetChanged();
 
-			// for (int j = 0; j < 3; j++) {
-			// HashMap<String, String> map = new HashMap<String, String>();
-			// map.put("ItemTitle", "新闻标题 (刷新后)");
-			// map.put("ItemText", "新闻专题摘要");
-			// listItem.add(j, map);
-			// }
-			// listItem.Insert(2, "新闻");
-
-			// Call onRefreshComplete when the list has been refreshed.
 			((PullToRefreshListView) getListView()).onRefreshComplete();
-
 			super.onPostExecute(result);
 		}
 	}
