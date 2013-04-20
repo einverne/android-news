@@ -84,21 +84,7 @@ public class DBAdapter
 	public DBAdapter(Context ctx) {
 		this.context = ctx;
 		DBHelper = new DatabaseHelper(context);
-	}
-
-	// ---打开数据库---
-	public DBAdapter open() throws SQLException {
-		Log.d("DBA", "DBA open");
-		db = DBHelper.getWritableDatabase();
-		return this;
-	}
-
-	// ---关闭数据库---
-	public void close() {
-		db.close();
-		DBHelper.close();
-	}
-	
+	}	
 
 	
 	/**

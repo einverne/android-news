@@ -39,7 +39,6 @@ public class jutixinwen extends Activity {
 		progressBar = (ProgressBar)findViewById(R.id.progressBar_jutixinwen);
 		
 		dbadapter = new DBAdapter(this);
-		dbadapter.open();
 		Bundle bundle = this.getIntent().getExtras();
 		title = bundle.getString("url");
 		
@@ -86,7 +85,6 @@ public class jutixinwen extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		dbadapter.close();
 	}
 
 	@Override
