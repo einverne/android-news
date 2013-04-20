@@ -420,8 +420,8 @@ public class DBAdapter
 					newsKEY_ZhuantiId }, newsKEY_ZhuantiId + "=" + 0, null,
 					null, null, null, null);
 		else {
-			mCursor = db.query(true, DATABASE_TABLE_zuijinxinwen, null, zuijinxinwenKEY_Title + "='"
-					+ words + "'", null, null, null, null, null);
+			mCursor = db.query(true, DATABASE_TABLE_zuijinxinwen, null, zuijinxinwenKEY_Title + "=\""
+					+ words + "\"", null, null, null, null, null);
 
 			if (mCursor != null) {
 				mCursor.moveToFirst();
