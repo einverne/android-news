@@ -1,6 +1,10 @@
 package com.and.netease;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -26,12 +30,10 @@ public class advanced_search extends Activity {
 	private int mMonth;
 	private int mDay;
 	private int tag;
-	private String[] pos = new String[] { "所有位置", "标题", "摘要", "正文" };
-	private String[] conjStrings = new String[] { "and", "or", "not", };
 	static final int DATE_DIALOG_ID = 0;
 	TextView startTextView;
 	TextView endTextView;
-
+	String syear;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,10 +42,6 @@ public class advanced_search extends Activity {
 		Log.d(TAG, "advanced_search_start");
 
 		final EditText searchkeywordEdit = (EditText) findViewById(R.id.searchkeyword);
-		final EditText keywordEdit = (EditText) findViewById(R.id.keyword);
-		final Spinner pos = (Spinner) findViewById(R.id.spinner_position);
-		final Spinner conjSpinner = (Spinner) findViewById(R.id.spinner_conj);
-
 		Button startdateButton = (Button) findViewById(R.id.button_startdate);
 		Button enddateButton = (Button) findViewById(R.id.button1_enddate);
 		startTextView = (TextView) findViewById(R.id.startdate);
@@ -54,41 +52,49 @@ public class advanced_search extends Activity {
 		// use AlertDialog to show search keyword
 		searchkeywordEdit.setText(keyword);
 
-		ArrayAdapter<String> posAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, this.pos);
-		// 设置弹出的下拉了表的样式
-		posAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		pos.setAdapter(posAdapter);
-
-		ArrayAdapter<String> conjAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, conjStrings);
-		conjAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		conjSpinner.setAdapter(conjAdapter);
-
 		Button advancedButton = (Button) findViewById(R.id.button_advanced_search);
 		advancedButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				//Keyword 
-				keyword = keywordEdit.getText().toString();
+				keyword = searchkeywordEdit.getText().toString();
 				
 				if (keyword.length()<=0) {
 					Toast.makeText(advanced_search.this, "请输入关键词", Toast.LENGTH_SHORT).show();
 					return;
 				}
+				
+				
 				// Date 
 				
 				String startTime = startTextView.getText().toString();
 				String endTime = endTextView.getText().toString();
+				DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");    
+				DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd"); 
+				Date date1 = null; 
+				Date date2 = null;
+				try {
+					date1 = format1.parse(startTime);
+					date2 = format1.parse(endTime);
+					Log.d("wwwwwwst", ""+date1);
+					Log.d("wwwwwwet", ""+date2);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
-				keyword = keyword + startTime + " " + endTime; //形成检索的字符串
+				if (date1==null||date2==null||date1.compareTo(date2)>0) {
+					Toast.makeText(advanced_search.this, "请输入合法日期", Toast.LENGTH_SHORT).show();
+					return;
+				}
 				
+				//传参
 				Intent intent = new Intent();
 				intent.setClass(advanced_search.this, search.class);
 				Bundle bundle = new Bundle();
+				bundle.putString("dateF", startTime);
+				bundle.putString("dateT", endTime);
 				bundle.putString("keyword", keyword);
 				intent.putExtras(bundle);
 				startActivity(intent);
@@ -102,41 +108,7 @@ public class advanced_search extends Activity {
 		mDay = c.get(Calendar.DAY_OF_MONTH);
 		// 设置当前时间
 
-		Button addSearchButton = (Button) findViewById(R.id.addsearch);
-		addSearchButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				CharSequence keyCharSequence = searchkeywordEdit.getText();
-				if (keyCharSequence.length() <= 0) {
-					Toast.makeText(advanced_search.this, "请输入关键词",
-							Toast.LENGTH_LONG).show();
-					return;
-				}
-
-				// 将关键字添加到搜索语句
-				CharSequence posCharSequence = pos.getSelectedItem().toString();
-
-				if (posCharSequence.toString() == "所有位置") {
-					posCharSequence = "标题:\"" + keyCharSequence + "\" OR "
-							+ "摘要:\"" + keyCharSequence + "\" OR " + "正文:\"";
-
-				} else {
-					posCharSequence = posCharSequence + ":\"";
-				}
-
-				keywordEdit.append(posCharSequence);
-				keywordEdit.append(keyCharSequence);
-				keywordEdit.append("\"");
-				CharSequence conjCharSequence = conjSpinner.getSelectedItem()
-						.toString();
-				conjCharSequence = " " + conjCharSequence;
-				keywordEdit.append(conjCharSequence);
-
-				searchkeywordEdit.setText("");
-				// 清空关键字
-
-			}
-		});
+		
 
 		startdateButton.setOnClickListener(new OnClickListener() {
 
@@ -175,13 +147,15 @@ public class advanced_search extends Activity {
 		if (t == 0) {
 			startTextView.setText(new StringBuilder()
 					// Month is 0 based so add 1
-					.append(mMonth + 1).append("-").append(mDay).append("-")
-					.append(mYear).append(" "));
+					.append(mYear).append("-").append(mMonth + 1).append("-")
+					.append(mDay).append(" "));
+			
+			
 		} else if (t == 1) {
-			endTextView.setText(new StringBuilder().append(mMonth + 1)
-					.append("-").append(mDay).append("-").append(mYear)
+			endTextView.setText(new StringBuilder().append(mYear)
+					.append("-").append(mMonth + 1).append("-").append(mDay)
 					.append(" "));
-
+			
 		}
 	}
 
