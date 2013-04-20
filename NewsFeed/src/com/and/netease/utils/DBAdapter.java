@@ -148,8 +148,8 @@ public class DBAdapter
 		initialValues.put(zuijinxinwenKEY_Count, count);
 		Cursor mCursor =db.query(true, DATABASE_TABLE_zuijinxinwen,
 				new String[] { zuijinxinwenKEY_ROWID,
-						zuijinxinwenKEY_Count}, zuijinxinwenKEY_Words+ "='"
-						+ words+"'", null, null, null, null, null);
+						zuijinxinwenKEY_Count}, zuijinxinwenKEY_Words+ "=\""
+						+ words+"\"", null, null, null, null, null);
 		long result=-1;
 		if (mCursor .moveToFirst()!=false) {
 			int dbcount=Integer.parseInt((String)mCursor.getString(1));
