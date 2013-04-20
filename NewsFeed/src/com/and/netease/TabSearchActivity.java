@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -28,7 +29,7 @@ public class TabSearchActivity extends Activity {
 		setContentView(R.layout.layout_search);
 		Log.d(TAG, "Search Start");
 
-		ImageButton advanceSearchButton = (ImageButton) findViewById(R.id.button_advanced_search);
+		Button advanceSearchButton = (Button) findViewById(R.id.button_advanced_search);
 		advanceSearchButton.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -38,7 +39,7 @@ public class TabSearchActivity extends Activity {
 			}
 		});
 
-		ImageButton searchButton = (ImageButton) findViewById(R.id.search);
+		Button searchButton = (Button) findViewById(R.id.search);
 		searchButton.setOnClickListener(new Button.OnClickListener() {
 
 			@Override
@@ -55,7 +56,17 @@ public class TabSearchActivity extends Activity {
 			}
 		});
 
-		ListView lvhot = (ListView) findViewById(R.id.listView_hotword);
+		/*
+		 * 
+		 * 
+		 * 获取热点关键词
+		 * 3个人名、地名、机构名
+		 * 
+		 * 
+		 */
+		
+		GridView lvhot = (GridView)findViewById(R.id.gridView1);
+		
 		ArrayList<HashMap<String, Object>> listItem = new ArrayList<HashMap<String, Object>>();
 		for (int i = 0; i < 10; i++) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
@@ -81,6 +92,8 @@ public class TabSearchActivity extends Activity {
 
 	}
 
+	
+	
 	public void jumptoAdvancedSearch() {
 		Intent intent = new Intent(TabSearchActivity.this, advanced_search.class);
 		Bundle bundle = new Bundle();
