@@ -21,6 +21,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
+            android:layout_marginTop="3dp"
+             android:textSize="15sp"
             android:text="Count"
             android:textColor="@color/textView_color" />
 
@@ -29,7 +31,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="4dp"
             android:text="DateTime"
             android:textColor="@color/textView_color" />
 
@@ -40,12 +41,14 @@
         android:layout_height="80dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:layout_marginTop="4dp"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/ItemTitle"
             android:layout_width="match_parent"
-            android:layout_height="66dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
             android:gravity="left"
             android:text="专题名字"
             android:textColor="@color/textView_color"
@@ -56,12 +59,12 @@
         <TextView
             android:id="@+id/ItemText"
             android:layout_width="match_parent"
-            android:layout_height="14dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
             android:gravity="left"
             android:text="专题关键字"
             android:textColor="@color/textView_color"
-            android:textSize="10sp" />
-
+            android:textSize="12sp" />
     </LinearLayout>
 
 </LinearLayout>
