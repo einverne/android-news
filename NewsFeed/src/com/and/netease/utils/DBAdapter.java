@@ -134,6 +134,7 @@ public class DBAdapter
 		
 		db.close();
 		DBHelper.close();
+		mCursor.close();
 		Log.d("test", "after simpleinsert "+String.valueOf(result));
 	return result;
 	}
@@ -169,7 +170,7 @@ public class DBAdapter
 		}
 	
 			
-		
+		mCursor.close();
 		db.close();
 		DBHelper.close();
 		Log.d("test", "after simpleinsert "+String.valueOf(result));
@@ -261,6 +262,7 @@ public class DBAdapter
 		{
 			result=db.insert(DATABASE_TABLE_peoples, null, initialValues);
 		}
+		mCursor.close();
 		db.close();
 		DBHelper.close();
 	return result;
@@ -294,6 +296,7 @@ public class DBAdapter
 		{
 			result=db.insert(DATABASE_TABLE_places, null, initialValues);
 		}
+		mCursor.close();
 		db.close();
 		DBHelper.close();
 	return result;
@@ -325,6 +328,7 @@ public class DBAdapter
 		{
 			result=db.insert(DATABASE_TABLE_divisions, null, initialValues);
 		}
+		mCursor.close();
 		db.close();
 		DBHelper.close();
 	return result;
@@ -342,16 +346,16 @@ public class DBAdapter
 			mCursor.moveToFirst();
 
 		}
-
+		
 		db.close();
 		DBHelper.close();
 		return mCursor;
 	}
 
-	public Cursor getusernews(String userid) {
+	public Cursor getusernews(long userid) {
 		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = db.query(DATABASE_TABLE_usernews,
-				new String[] { usernewsKEY_ROWID}, usernewsKEY_ZhuantiId+"="+userid,null, null, null, null, null);
+				null, usernewsKEY_ZhuantiId+"="+String.valueOf(userid),null, null, null, null, null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
 
@@ -365,7 +369,7 @@ public class DBAdapter
 	public Cursor getuser(String user,String jobname) {
 		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = db.query(DATABASE_TABLE_user,
-				new String[] { userKEY_ROWID}, userKEY_user
+				null, userKEY_user
 						+ " = '"+user+"'  and "+userKEY_jobname+" = '"+jobname+"'",null, null, null, null, null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
