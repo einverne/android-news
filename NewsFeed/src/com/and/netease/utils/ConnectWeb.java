@@ -18,7 +18,7 @@ public class ConnectWeb {
 	
 	/**
 	 * 获取用户定制内容的某一项,需呀参数user和jobname
-	 * http://localhost:8080/RMI_WEB/rmi?r=getJobOfUser&user=gaojinping&jobname=20111222194809870
+	 * http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getJobOfUser&user=gaojinping&jobname=20111226095814434
 	 * @param  aboutchina 传true 或 false
 	 * @param 
 	 * @return
@@ -81,7 +81,7 @@ public class ConnectWeb {
 	}
 	/**
 	 * 提交一个任务
-	 * http://localhost:8080/RMI_WEB/rmi?r=submitJob&query=date:[20110101x TO x] AND (title:China Customs"20OR description:"China Customs" OR text:"China Customs")&aboutChina=true&user=test&desc=chania
+	 *  http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=submitJob&query=date:[20110101x TO x] AND (title:China Customs"20OR description:"China Customs" OR text:"China Customs")&aboutChina=true&user=test&desc=chania
 	 * @param request
 	 * @param response
 	 * @return
