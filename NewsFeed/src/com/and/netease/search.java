@@ -11,6 +11,7 @@ import com.and.netease.utils.ConnectWeb;
 import com.and.netease.utils.DBAdapter;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -82,10 +83,14 @@ public class search extends Activity {
 		getData();
 		if (listItem.size() != 0) {
 			// 生成适配器的Item和动态数组对应的元素
+//			listItemAdapter = new SimpleAdapter(this, listItem,
+//					R.layout.zuijinxinwen_item, new String[] { "ItemTitle",
+//							"ItemText" }, new int[] { R.id.ItemTitle,
+//							R.id.ItemText });
 			listItemAdapter = new SimpleAdapter(this, listItem,
-					R.layout.zuijinxinwen_item, new String[] { "ItemTitle",
-							"ItemText" }, new int[] { R.id.ItemTitle,
-							R.id.ItemText });
+					R.layout.zhuanti_item, new String[] { "icon","source","ItemTime", "Title",
+							"description", "ItemMedio" }, new int[] {R.id.imageView_icon,R.id.textView_source,
+							R.id.textView_ItemTime, R.id.Title, R.id.ItemDes });
 			// load more data
 			if (flagLoadMoreData != 5) {
 				moreView = getLayoutInflater().inflate(R.layout.moredata, null);
@@ -212,6 +217,8 @@ public class search extends Activity {
 		mMonth = c.get(Calendar.MONTH) + 1;// 获取当前月份
 		mDay = c.get(Calendar.DAY_OF_MONTH);// 获取当前月份的日期号码
 		String year = mYear + "";
+		int year1 = mYear-1;
+		String yearf= year1 + "";
 		if (mMonth <= 9) {
 			month = "0" + mMonth;
 		} else {
@@ -224,7 +231,7 @@ public class search extends Activity {
 			day = mDay + "";
 		}
 		dateT = year + month + day;
-		dateF = year + "01" + day + "";
+		dateF = yearf + month + day;
 		Log.d("Date", dateF + ":" + dateT + ":" + mMonth);
 	}
 
@@ -249,7 +256,21 @@ public class search extends Activity {
 		text.setText(te);
 		// text = "共有"+MaxDataNum+"条新闻";
 	}
-
+	
+	/**
+	 * 传入资源名字 返回资源id
+	 * @param name 资源名字
+	 * @return 资源的id
+	 */
+	protected int getIcon(String name){
+		Resources res = getResources();
+		int id =res.getIdentifier(name, "drawable", getPackageName());
+		if (id == 0) {
+			return R.drawable.icon;		//EV_BUG 默认ICON图片
+		}else{
+			return id;
+		}
+	}
 	/**
 	 * 第一次取搜索结果
 	 */
@@ -262,10 +283,15 @@ public class search extends Activity {
 			for (int i = 0; i < list.size(); i++) {
 				HashMap<String, Object> map = new HashMap<String, Object>();
 				Map<String, Object> map1 = list.get(i);
-				map.put("ItemTitle", map1.get("title"));
-				map.put("ItemText", (String) map1.get("description") + i);
+				String source = (String) map1.get("source");
+				map.put("Title", map1.get("title"));
+				map.put("source",source);
+				map.put("icon", getIcon(source));
+				map.put("ItemTime", map1.get("date"));
+				map.put("description", (String) map1.get("description") + i);
 				map.put("url", map1.get("url"));
 				listItem.add(map);
+
 			}
 			if (list.size() < 30) {
 				flagLoadMoreData = 5;
@@ -279,7 +305,7 @@ public class search extends Activity {
 	/**
 	 * 加载更多
 	 * 
-	 * @return
+	 * @return listItem
 	 */
 	public List<Map<String, Object>> loadMoreData() {
 		List<Map<String, Object>> list = ConnectWeb.getsearch(keyword, dateF,
@@ -290,12 +316,14 @@ public class search extends Activity {
 		// if (count+20<MaxDataNum) {
 		if (list.size() == 20) {
 			for (int i = count; i < count + 20; i++) {
-
 				HashMap<String, Object> map = new HashMap<String, Object>();
 				Map<String, Object> map1 = list.get(i);
-
-				map.put("ItemTitle", map1.get("title"));
-				map.put("ItemText", (String) map1.get("description") + i);
+				String source = (String) map1.get("source");
+				map.put("Title", map1.get("title"));
+				map.put("source",source);
+				map.put("icon", getIcon(source));
+				map.put("ItemTime", map1.get("date"));
+				map.put("description", (String) map1.get("description") + i);
 				map.put("url", map1.get("url"));
 				listItem.add(map);
 			}
@@ -304,8 +332,12 @@ public class search extends Activity {
 			for (int i = count; i < list.size(); i++) {
 				HashMap<String, Object> map = new HashMap<String, Object>();
 				Map<String, Object> map1 = list.get(i);
-				map.put("ItemTitle", map1.get("title"));
-				map.put("ItemText", (String) map1.get("description") + i);
+				String source = (String) map1.get("source");
+				map.put("Title", map1.get("title"));
+				map.put("source",source);
+				map.put("icon", getIcon(source));
+				map.put("ItemTime", map1.get("date"));
+				map.put("description", (String) map1.get("description") + i);
 				map.put("url", map1.get("url"));
 				listItem.add(map);
 				flagLoadMoreData = 5;
