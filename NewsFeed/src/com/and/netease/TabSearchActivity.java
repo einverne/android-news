@@ -2,9 +2,14 @@ package com.and.netease;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+
+import com.and.netease.utils.ConnectWeb;
+import com.and.netease.utils.DBAdapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -15,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -23,12 +29,31 @@ public class TabSearchActivity extends Activity {
 	private static final String TAG = "Demo";
 	protected String keyword;
 
+	ArrayList<HashMap<String, Object>> listItem;
+	// 数据显示
+		private DBAdapter dbadapter;
+		private Cursor c;
+		private Cursor cp;
+		private Cursor cd;
+		ConnectWeb conn;
+		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_search);
 		Log.d(TAG, "Search Start");
-
+		// 显示数据库数据
+				dbadapter = new DBAdapter(this);
+				dbadapter.open();
+				conn.getpeoples(dbadapter);
+				c = dbadapter.getpeople(0, 3);
+				conn.getplaces(dbadapter);
+				cp = dbadapter.getplace(0,3);
+				
+				conn.getdivisions(dbadapter);
+				cd=dbadapter.getdivision(0,3);
+			
+		//高级检索按钮
 		Button advanceSearchButton = (Button) findViewById(R.id.button_advanced_search);
 		advanceSearchButton.setOnClickListener(new Button.OnClickListener() {
 			@Override
@@ -38,7 +63,7 @@ public class TabSearchActivity extends Activity {
 				jumptoAdvancedSearch();
 			}
 		});
-
+		//普通检索按钮
 		Button searchButton = (Button) findViewById(R.id.search);
 		searchButton.setOnClickListener(new Button.OnClickListener() {
 
@@ -66,25 +91,27 @@ public class TabSearchActivity extends Activity {
 		 */
 		
 		GridView lvhot = (GridView)findViewById(R.id.gridView1);
-		
-		ArrayList<HashMap<String, Object>> listItem = new ArrayList<HashMap<String, Object>>();
-		for (int i = 0; i < 10; i++) {
-			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put("HotWord", "Hot" + i);
-			listItem.add(map);
-		}
-
+	
+		 listItem = new ArrayList<HashMap<String, Object>>();
+		getdata();
 		SimpleAdapter listItemAdapter = new SimpleAdapter(this, listItem,
-				R.layout.list_item, new String[] { "HotWord" },
-				new int[] { R.id.textView });
+				R.layout.search_hot_item, new String[] { "HotWord" },
+				new int[] { R.id.textView1 });
 		lvhot.setAdapter(listItemAdapter);
-
+		//click item
 		lvhot.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				Intent intent = new Intent(TabSearchActivity.this, search.class);
-				Toast.makeText(TabSearchActivity.this, "熱點的搜索", Toast.LENGTH_LONG).show();
+				keyword = (String) listItem.get(arg2).get("HotWord");
+				Log.d("wwwwkey", keyword);
+				Bundle bundle = new Bundle();
+				bundle.putString("keyword", keyword);
+				intent.putExtras(bundle);
+				startActivity(intent);
+			
+//				Toast.makeText(TabSearchActivity.this, "熱點的搜索", Toast.LENGTH_LONG).show();
 //				startActivity(intent);
 //				TabSearchActivity.this.finish();
 			}
@@ -93,7 +120,10 @@ public class TabSearchActivity extends Activity {
 	}
 
 	
-	
+	/**
+	 * 
+	 * 跳转高级检索
+	 */
 	public void jumptoAdvancedSearch() {
 		Intent intent = new Intent(TabSearchActivity.this, advanced_search.class);
 		Bundle bundle = new Bundle();
@@ -101,7 +131,10 @@ public class TabSearchActivity extends Activity {
 		intent.putExtras(bundle);
 		startActivity(intent);
 	}
-
+	/**
+	 * 
+	 * 跳转普通检索
+	 */
 	public void jumptoSearchResult() {
 		Intent intent = new Intent(TabSearchActivity.this, search.class);
 		Bundle bundle = new Bundle();
@@ -109,7 +142,50 @@ public class TabSearchActivity extends Activity {
 		intent.putExtras(bundle);
 		startActivity(intent);
 	}
-
+	/**
+	 * 
+	 * 从游标中取hot列表的数据
+	 * 
+	 */
+		public void getdata(){
+			
+			for (int i = 0; i<3; i++) {
+				//name
+				c.moveToPosition(i);
+				String text = c.getString(c.getColumnIndex("title"));
+				HashMap<String, Object> map = new HashMap<String, Object>();
+				map.put("HotWord", text);
+			//	Log.d("wwwwwhotname", text);		
+				//place
+				cp.moveToPosition(i);
+				String textp = cp.getString(cp.getColumnIndex("title"));
+				HashMap<String, Object> mapp = new HashMap<String, Object>();
+				mapp.put("HotWord", textp);		
+				//divide
+				cd.moveToPosition(i);
+				String textd = cd.getString(cd.getColumnIndex("title"));
+				HashMap<String, Object> mapd = new HashMap<String, Object>();
+				mapd.put("HotWord", textd);
+				if(i==0){
+				listItem.add(mapd);
+				listItem.add(map);
+				listItem.add(mapp);
+				}
+				if(i==1){
+					listItem.add(mapp);
+					listItem.add(mapd);
+					listItem.add(map);
+					}
+				if(i==2){
+					listItem.add(map);
+					listItem.add(mapp);
+					listItem.add(mapd);
+					
+					}
+			}
+			
+		}
+	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		return false;
