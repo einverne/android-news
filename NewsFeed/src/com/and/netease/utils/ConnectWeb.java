@@ -23,13 +23,15 @@ public class ConnectWeb {
 	 * @param 
 	 * @return
 	 */
-	static public void getJobOfUser(DBAdapter dbadapter,String username,String jobname)
+	static public boolean getJobOfUser(DBAdapter dbadapter,String username,String jobname)
 	{
+		boolean returnresult=true;
 		String theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getJobOfUser&user="+username+"&jobname="+jobname;
 		try {
 			String str = HttpConn.getJsonFromUrlGet(theurl);
 			// 通过json 来解析收到的字符串
 			JSONObject jay = new JSONObject(str);
+			
 			JSONObject result = new JSONObject((String) jay.getString("result"));
 			// 解析key result所对应的值
 			// count是总共取到的专题条数
@@ -39,7 +41,7 @@ public class ConnectWeb {
 			int days= Integer.parseInt((String) result.getString("days"));
 			long jobid=dbadapter.userinsert(username, jobname, days, from, to, count);
 			if(jobid<0)
-				return;
+				return returnresult;
 			Log.d("test getJobOfUser count", String.valueOf(count));
 			// clusters包括两部分,分别是 others 和 专题数组
 			JSONObject clusters = new JSONObject(
@@ -74,8 +76,9 @@ public class ConnectWeb {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			returnresult=false;
 		}
-		
+		return returnresult;
 		
 	}
 	/**
@@ -122,11 +125,13 @@ public class ConnectWeb {
 
 			for (int i = 0; i < jay.length(); i += 1) {
 				JSONObject inforMap =(JSONObject) jay.get(i);
+				//20130419170938025   
+				//2013-04-19 17:09:38
 				String createtime = (String) inforMap.getString("createtime");
-				Log.d("test get AllJobsOfUser ", "getAllJobsOfUser "+createtime);
+				createtime=jiexidate(createtime);
 				String aboutChina = (String) inforMap.getString("aboutChina");
-				Log.d("test get AllJobsOfUser ", "getAllJobsOfUser"+aboutChina);
 				String endtime = (String) inforMap.getString("endtime");
+				endtime=jiexidate(endtime);
 				String description = (String) inforMap.getString("description");
 				String query = (String) inforMap.getString("query");
 				String name1 = (String) inforMap.getString("name");
