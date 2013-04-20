@@ -2,7 +2,8 @@
 <resources>
 
     <drawable name="ltgray">#CCCCCC</drawable>
-	<color name="list_item_background">#F0F0F0</color>
+	<color name="list_item_background">#f2f2f3</color>
+	<color name="button_background">#5ac6d0</color>
 	<color name="biaoti_background">#36b0be</color>
 	<color name="textView_color">#000000</color>
     <color name="white">#FFFFFF</color>
