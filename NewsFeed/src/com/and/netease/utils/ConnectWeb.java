@@ -21,7 +21,7 @@ public class ConnectWeb {
 	 * http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getJobOfUser&user=gaojinping&jobname=20111226095814434
 	 * @param  aboutchina ´«true »ò false
 	 * @param 
-	 * @return
+	 * @return 
 	 */
 	static public boolean getJobOfUser(DBAdapter dbadapter,String username,String jobname)
 	{
@@ -115,7 +115,7 @@ public class ConnectWeb {
 	}
 	
 	//http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getAllJobsOfUser&user=test
-	static public List<Map<String, String>>getAllJobsOfUser(String name){
+	static public List<Map<String, String>>getAllJobsOfUser(DBAdapter dbadapter,String name){
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		Map<String, String> map = null;
 		String theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getAllJobsOfUser&user="+name;
@@ -137,7 +137,6 @@ public class ConnectWeb {
 				String name1 = (String) inforMap.getString("name");
 				String status = (String) inforMap.getString("status");
 				String end = (String) inforMap.getString("end");
-			
 					map = new HashMap<String, String>();
 					map.put("createtime", createtime);
 					map.put("aboutChina", aboutChina);
