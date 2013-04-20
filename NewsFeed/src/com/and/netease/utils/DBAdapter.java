@@ -378,16 +378,17 @@ public class DBAdapter
 			mCursor.moveToFirst();
 		}
 		long userid=Integer.parseInt(mCursor.getString(0));
-		 mCursor = db.query(DATABASE_TABLE_usernews,
+		mCursor.close();
+		Cursor mCursor1 = db.query(DATABASE_TABLE_usernews,
 				null, usernewsKEY_ZhuantiId+"="+String.valueOf(userid),null, null, null, null, null);
-		if (mCursor != null) {
-			mCursor.moveToFirst();
+		if (mCursor1 != null) {
+			mCursor1.moveToFirst();
 
 		}
 
 		db.close();
 		DBHelper.close();
-		return mCursor;
+		return mCursor1;
 
 	}
 	
