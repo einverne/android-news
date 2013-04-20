@@ -3,7 +3,7 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#ffd6d3d6"
+   android:background="#f2f2f3"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -112,7 +112,7 @@
                 android:layout_width="120dp"
                 android:layout_height="44dp"
                  android:layout_marginLeft="10dp"
-                android:background="#3366FF"
+                android:background="@color/button_background"
                 android:onClick="onSubmitClick"
                 android:text="登录" />
 
@@ -121,7 +121,7 @@
                 android:layout_width="120dp"
                 android:layout_height="match_parent"
                  android:layout_marginLeft="15dp"
-                android:background="#3399FF"
+                	android:background="@color/button_background"
                 android:onClick="onCancelClick"
                 android:text="取消" />
 
