@@ -516,9 +516,8 @@ public class DBAdapter
 		//--按时间排序，删除到只剩前30条,如果本身不足30条，比如只有10条，就只剩10条
 		private void delete_news()
 		{
-			Cursor mCursor = db.query(DATABASE_TABLE_news, new String[] {
-					newsKEY_ROWID, newsKEY_Title,newsKEY_Source,newsKEY_Description,newsKEY_Date,newsKEY_Url }, null, null,
-					null, null, newsKEY_Date+ " desc","30");
+			Cursor mCursor = db.query(DATABASE_TABLE_news, null, newsKEY_ZhuantiId+"<30", null,
+					null, null, null,null);
 			if (mCursor != null) 
 				mCursor.moveToFirst();
 			do{
