@@ -60,12 +60,21 @@ public class search extends Activity {
 		setContentView(R.layout.layout_search_result);
 		Log.d(TAG, "search_result_Activity_start");
 		MaxItem = 30;
-		getdate();
+		//取各个参数
 		Bundle bundle = this.getIntent().getExtras();
-		keyword = bundle.getString("keyword");
+		if(bundle.getString("dateF")==null){
+			//普通检索
+			getdate();
+			keyword = bundle.getString("keyword");
+		}
+		else{
+			//高级检索
+			dateF=bundle.getString("dateF");
+			dateT=bundle.getString("dateT");
+			keyword = bundle.getString("keyword");
+		}
 		getMaxDataNum();
 		myListView = (ListView) findViewById(R.id.listView_searchresult);
-
 		handler = new Handler();
 		// 生成动态数组，加入数据
 		listItem = new ArrayList<Map<String, Object>>();
@@ -99,10 +108,8 @@ public class search extends Activity {
 						public void run() {
 							// TODO Auto-generated method stub
 							loadMoreData();
-							// if(flagLoadMoreData!=5){
 							bt.setVisibility(View.VISIBLE);
 							pg.setVisibility(View.GONE);
-							// }
 							listItemAdapter.notifyDataSetChanged();
 						}
 
@@ -125,7 +132,6 @@ public class search extends Activity {
 				boolean net_conn = net.check();
 				if (net_conn) {
 					String url = listItem.get(arg2).get("url").toString();
-					Log.d("wwwwwwww", url);
 					Bundle bundle = new Bundle();
 					Intent intent = new Intent(search.this, jutixinwen.class);
 					bundle.putString("url", url);
@@ -206,13 +212,13 @@ public class search extends Activity {
 		mMonth = c.get(Calendar.MONTH) + 1;// 获取当前月份
 		mDay = c.get(Calendar.DAY_OF_MONTH);// 获取当前月份的日期号码
 		String year = mYear + "";
-		if (mMonth < 9) {
+		if (mMonth <= 9) {
 			month = "0" + mMonth;
 		} else {
 			month = "" + mMonth;
 
 		}
-		if (mDay < 9) {
+		if (mDay <= 9) {
 			day = "0" + mDay;
 		} else {
 			day = mDay + "";
@@ -250,6 +256,8 @@ public class search extends Activity {
 	public List<Map<String, Object>> getData() {
 		List<Map<String, Object>> list = ConnectWeb.getsearch(keyword, dateF,
 				dateT, "F", 0, 30);
+		Log.d("wwwwddddddatef",dateF);
+		Log.d("wwwwddddddatet",dateT);
 		if (list.size() != 0) {
 			for (int i = 0; i < list.size(); i++) {
 				HashMap<String, Object> map = new HashMap<String, Object>();
@@ -264,7 +272,6 @@ public class search extends Activity {
 			}
 		} else {
 			Toast.makeText(search.this, "NO DATA!", Toast.LENGTH_SHORT).show();
-
 		}
 		return listItem;
 	}
