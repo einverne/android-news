@@ -351,6 +351,20 @@ public class DBAdapter
 		DBHelper.close();
 		return mCursor;
 	}
+	
+	public Cursor getzuijinxinwenFromDate(String date) {
+		db = DBHelper.getWritableDatabase();
+		Cursor mCursor = db.query(DATABASE_TABLE_zuijinxinwen, null, zuijinxinwenKEY_Date+"='"+date+"'", null, null, null,
+				zuijinxinwenKEY_Count+ " desc", null);
+		if (mCursor != null) {
+			mCursor.moveToFirst();
+
+		}
+		
+		db.close();
+		DBHelper.close();
+		return mCursor;
+	}
 
 	public Cursor getusernews(long userid) {
 		db = DBHelper.getWritableDatabase();
