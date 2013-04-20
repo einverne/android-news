@@ -114,7 +114,7 @@ public class ConnectWeb {
 	static public List<Map<String, Object>>getAllJobsOfUser(String name){
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map = null;
-		String theurl="http://localhost:8080/RMI_WEB/rmi?r=getAllJobsOfUser&user="+name;
+		String theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getAllJobsOfUser&user="+name;
 		try {
 			String str = HttpConn.getJsonFromUrlGet(theurl);
 			JSONArray jay = new JSONArray(str);
