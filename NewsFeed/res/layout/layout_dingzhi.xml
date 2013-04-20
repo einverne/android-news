@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+     android:background="#f2f2f3"
+    >
 
     <RelativeLayout
         android:id="@+id/layout_top"
@@ -17,7 +19,7 @@
             android:layout_alignParentLeft="false"
             android:layout_centerVertical="true"
             android:contentDescription="@null"
-            android:src="@drawable/biaotizi" />
+            android:src="@drawable/biaotizi2" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -33,6 +35,11 @@
     <ListView
         android:id="@+id/android:list"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent" 
+        android:background="#f2f2f3"
+          android:footerDividersEnabled="false"
+        android:divider="@color/white"  
+ 	   android:dividerHeight="1px"
+        />
 
 </LinearLayout>
