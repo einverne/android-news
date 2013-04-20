@@ -49,8 +49,10 @@ public class hot_main extends Activity implements OnScrollListener {
 	private List<View> listViews;
 	private ImageView cursor;
 	private TextView t1, t2, t3;
+	private int lastVisibleIndex;
 	private int offset = 0;
 	private int currIndex = 0;
+	private int curdex_scroll=0;
 	private int bmpW;
 
 	// me
@@ -62,7 +64,10 @@ public class hot_main extends Activity implements OnScrollListener {
 	private ProgressBar pg;
 	SimpleAdapter listItemAdapter0, listItemAdapter1, listItemAdapter2;
 	int flag = 0;
-	// private PullToRefreshListView mylistview;//这里一定要好好处理
+	boolean flag_remove0=false;
+	boolean flag_remove1=false;
+	boolean flag_remove2=false;
+	
 	int a;
 
 	// 数据显示
@@ -83,6 +88,7 @@ public class hot_main extends Activity implements OnScrollListener {
 
 		// 显示数据库数据
 		dbadapter = new DBAdapter(this);
+		//dbadapter.open();
 		conn.getpeoples(dbadapter);
 		c = dbadapter.getpeople(0, MaxDataNum);
 		
@@ -110,7 +116,9 @@ public class hot_main extends Activity implements OnScrollListener {
 					c.moveToPosition(i);
 					String text = c.getString(c.getColumnIndex("title"));
 					String heat = c.getString(c.getColumnIndex("heat"));
-					HashMap<String, Object> map = new HashMap<String, Object>();
+					HashMap<String, Object> map = new HashMap<String, 
+
+Object>();
 					map.put("ItemTitle", text);
 					map.put("ItemText", heat);
 					listItem0.add(map);
@@ -121,7 +129,9 @@ public class hot_main extends Activity implements OnScrollListener {
 					c.moveToPosition(i);
 					String text = c.getString(c.getColumnIndex("title"));
 					String heat = c.getString(c.getColumnIndex("heat"));
-					HashMap<String, Object> map = new HashMap<String, Object>();
+					HashMap<String, Object> map = new HashMap<String, 
+
+Object>();
 					map.put("ItemTitle", text);
 					map.put("ItemText", heat);
 					listItem0.add(map);
@@ -133,9 +143,15 @@ public class hot_main extends Activity implements OnScrollListener {
 			if (count + 5 < MaxDataNum) {
 				for (int i = count; i < count + 5 && c_place.moveToNext(); i++) {
 					c_place.moveToPosition(i);
-					String text = c_place.getString(c_place.getColumnIndex("title"));
-					String heat = c_place.getString(c_place.getColumnIndex("heat"));
-					HashMap<String, Object> map = new HashMap<String, Object>();
+					String text = c_place.getString(c_place.getColumnIndex
+
+("title"));
+					String heat = c_place.getString(c_place.getColumnIndex
+
+("heat"));
+					HashMap<String, Object> map = new HashMap<String, 
+
+Object>();
 					map.put("ItemTitle", text);
 					map.put("ItemText", heat);
 					listItem1.add(map);
@@ -144,9 +160,15 @@ public class hot_main extends Activity implements OnScrollListener {
 				// 数据已经不足5条
 				for (int i = count; i < MaxDataNum && c_place.moveToNext(); i++) {
 					c_place.moveToPosition(i);
-					String text = c_place.getString(c_place.getColumnIndex("title"));
-					String heat = c_place.getString(c_place.getColumnIndex("heat"));
-					HashMap<String, Object> map = new HashMap<String, Object>();
+					String text = c_place.getString(c_place.getColumnIndex
+
+("title"));
+					String heat = c_place.getString(c_place.getColumnIndex
+
+("heat"));
+					HashMap<String, Object> map = new HashMap<String, 
+
+Object>();
 					map.put("ItemTitle", text);
 					map.put("ItemText", heat);
 					listItem1.add(map);
@@ -158,20 +180,34 @@ public class hot_main extends Activity implements OnScrollListener {
 			if (count + 5 < MaxDataNum) {
 				for (int i = count; i < count + 5 && c_division.moveToNext(); i++) {
 					c_division.moveToPosition(i);
-					String text = c_division.getString(c_division.getColumnIndex("title"));
-					String heat = c_division.getString(c_division.getColumnIndex("heat"));
-					HashMap<String, Object> map = new HashMap<String, Object>();
+					String text = c_division.getString
+
+(c_division.getColumnIndex("title"));
+					String heat = c_division.getString
+
+(c_division.getColumnIndex("heat"));
+					HashMap<String, Object> map = new HashMap<String, 
+
+Object>();
 					map.put("ItemTitle", text);
 					map.put("ItemText", heat);
 					listItem2.add(map);
 				}
 			} else {
 				// 数据已经不足5条
-				for (int i = count; i < MaxDataNum && c_division.moveToNext(); i++) {
+				for (int i = count; i < MaxDataNum && c_division.moveToNext(); i
+
+++) {
 					c_division.moveToPosition(i);
-					String text = c_division.getString(c_division.getColumnIndex("title"));
-					String heat = c_division.getString(c_division.getColumnIndex("heat"));
-					HashMap<String, Object> map = new HashMap<String, Object>();
+					String text = c_division.getString
+
+(c_division.getColumnIndex("title"));
+					String heat = c_division.getString
+
+(c_division.getColumnIndex("heat"));
+					HashMap<String, Object> map = new HashMap<String, 
+
+Object>();
 					map.put("ItemTitle", text);
 					map.put("ItemText", heat);
 					listItem2.add(map);
@@ -186,7 +222,7 @@ public class hot_main extends Activity implements OnScrollListener {
 		switch (a) {
 		case 0: {
 			listItem0 = new ArrayList<HashMap<String, Object>>();
-			for (int i = 0; c.moveToNext(); i++) {
+			for (int i = 0; i < 10 && c.moveToNext(); i++) {
 				c.moveToPosition(i);
 				String text = c.getString(c.getColumnIndex("title"));
 				String heat = c.getString(c.getColumnIndex("heat"));
@@ -201,7 +237,9 @@ public class hot_main extends Activity implements OnScrollListener {
 			// 生成适配器的Item和动态数组对应的元素
 			listItemAdapter0 = new SimpleAdapter(this, listItem0,
 					R.layout.hot_item, new String[] { "ItemTitle",
-							"ItemText" }, new int[] { R.id.textView_name,
+							"ItemText" }, new int[] { 
+
+R.id.textView_name,
 							R.id.textView_heat });
 			// 添加并且显示
 			// mylistview= (PullToRefreshListView)
@@ -213,7 +251,7 @@ public class hot_main extends Activity implements OnScrollListener {
 		}
 		case 1: {
 			listItem1 = new ArrayList<HashMap<String, Object>>();
-			for (int i = 0; c_place.moveToNext(); i++) {
+			for (int i = 0; i < 10 &&c_place.moveToNext(); i++) {
 				c_place.moveToPosition(i);
 				String text = c_place.getString(c_place.getColumnIndex("title"));
 				String heat = c_place.getString(c_place.getColumnIndex("heat"));
@@ -228,7 +266,9 @@ public class hot_main extends Activity implements OnScrollListener {
 			// 生成适配器的Item和动态数组对应的元素
 			listItemAdapter1 = new SimpleAdapter(this, listItem1,
 					R.layout.hot_item, new String[] { "ItemTitle",
-							"ItemText" }, new int[] { R.id.textView_name,
+							"ItemText" }, new int[] { 
+
+R.id.textView_name,
 							R.id.textView_heat });
 			// 添加并且显示
 			// mylistview= (PullToRefreshListView)
@@ -240,10 +280,14 @@ public class hot_main extends Activity implements OnScrollListener {
 		}
 		case 2: {
 			listItem2 = new ArrayList<HashMap<String, Object>>();
-			for (int i = 0; c_division.moveToNext(); i++) {
+			for (int i = 0; i < 10 &&c_division.moveToNext(); i++) {
 				c_division.moveToPosition(i);
-				String text = c_division.getString(c_division.getColumnIndex("title"));
-				String heat = c_division.getString(c_division.getColumnIndex("heat"));
+				String text = c_division.getString(c_division.getColumnIndex
+
+("title"));
+				String heat = c_division.getString(c_division.getColumnIndex
+
+("heat"));
 
 				HashMap<String, Object> map = new HashMap<String, Object>();
 				map.put("ItemTitle", text);
@@ -255,7 +299,9 @@ public class hot_main extends Activity implements OnScrollListener {
 			// 生成适配器的Item和动态数组对应的元素
 			listItemAdapter2 = new SimpleAdapter(this, listItem2,
 					R.layout.hot_item, new String[] { "ItemTitle",
-							"ItemText" }, new int[] { R.id.textView_name,
+							"ItemText" }, new int[] { 
+
+R.id.textView_name,
 							R.id.textView_heat });
 			// 添加并且显示
 			// mylistview= (PullToRefreshListView)
@@ -288,13 +334,19 @@ public class hot_main extends Activity implements OnScrollListener {
 						pg.setVisibility(View.GONE);
 						switch (y) {
 						case 0:
-							listItemAdapter0.notifyDataSetChanged();
+							
+
+listItemAdapter0.notifyDataSetChanged();
 							break;
 						case 1:
-							listItemAdapter1.notifyDataSetChanged();
+							
+
+listItemAdapter1.notifyDataSetChanged();
 							break;
 						case 2:
-							listItemAdapter2.notifyDataSetChanged();
+							
+
+listItemAdapter2.notifyDataSetChanged();
 							break;
 						}
 
@@ -329,11 +381,15 @@ public class hot_main extends Activity implements OnScrollListener {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				HashMap<String, Object> map =(HashMap<String, Object>)mylistview.getItemAtPosition(arg2);			
+				HashMap<String, Object> map =(HashMap<String, Object>)
+
+mylistview.getItemAtPosition(arg2);			
 				String str_title =(String) map.get("ItemTitle");
 				Log.d("zjj",str_title);
 				Bundle bundle = new Bundle();
-				bundle.putSerializable("keyword", str_title);				
+				bundle.putSerializable("keyword", str_title);			
+
+	
 				Intent intent = new Intent(hot_main.this,search.class);
 				intent.putExtras(bundle);
 				startActivity(intent);
@@ -519,21 +575,115 @@ public class hot_main extends Activity implements OnScrollListener {
 			int visibleItemCount, int totalItemCount) {
 		// TODO Auto-generated method stub
 		// 计算最后可见条目的索引
-
 		// 所有的条目已经和最大条数相等，则移除底部的View
-		if (totalItemCount >= MaxDataNum && flag == 0) {
-			// 注意这里
+		lastVisibleIndex = firstVisibleItem + visibleItemCount - 1;
+		int curdix= mPager.getCurrentItem();
+		Log.d("curdix",String.valueOf(curdix));
+		if (totalItemCount >= MaxDataNum ) {
+			switch(curdix)
+			{
+				case 0:
+				if(flag_remove0==false)
+				{
+				PullToRefreshListView list_people = (PullToRefreshListView) 
 
-			// mylistview1.removeFooterView(moreView);//这里貌似还得进行switch的讨论
+findViewById(R.id.hot_people);
+				list_people.removeFooterView(moreView);
+				Toast.makeText(this, "数据全部加载完成，没有更多数据！", 
 
-			Toast.makeText(this, "数据全部加载完成，没有更多数据！", Toast.LENGTH_LONG).show();
-			flag = 1;
+Toast.LENGTH_LONG).show();
+				flag_remove0=true;
+				}
+				break;
+				case 1:
+					if(flag_remove1==false)
+					{
+					PullToRefreshListView list_place = 
+
+(PullToRefreshListView) findViewById(R.id.hot_place);
+					list_place.removeFooterView(moreView);
+					Toast.makeText(this, "数据全部加载完成，没有更多数据！", 
+
+Toast.LENGTH_LONG).show();
+					flag_remove1=true;
+					}
+					break;
+				case 2:
+					if(flag_remove2==false)
+					{
+					PullToRefreshListView list_division = 
+
+(PullToRefreshListView) findViewById(R.id.hot_division);
+					list_division.removeFooterView(moreView);
+					Toast.makeText(this, "数据全部加载完成，没有更多数据！", 
+
+Toast.LENGTH_LONG).show();
+					flag_remove2=true;
+					}
+					break;
+			}
+			
+
+			
 		}
 	}
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		// TODO Auto-generated method stub
+		int curdix1= mPager.getCurrentItem();
+		switch(curdix1)
+		{
+		case 0:
+			if(scrollState == OnScrollListener.SCROLL_STATE_IDLE
+					|| lastVisibleIndex ==listItemAdapter0.getCount())
+			{
+				pg.setVisibility(View.VISIBLE);
+				bt.setVisibility(View.GONE);
+				handler.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						loadMoreData(0);
+						bt.setVisibility(View.VISIBLE);
+						pg.setVisibility(View.GONE);
+						listItemAdapter0.notifyDataSetChanged();
+					}
+				}, 100);
+			}
+		case 1:
+			if(scrollState == OnScrollListener.SCROLL_STATE_IDLE
+					|| lastVisibleIndex ==listItemAdapter1.getCount())
+			{
+				pg.setVisibility(View.VISIBLE);
+				bt.setVisibility(View.GONE);
+				handler.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						loadMoreData(1);
+						bt.setVisibility(View.VISIBLE);
+						pg.setVisibility(View.GONE);
+						listItemAdapter1.notifyDataSetChanged();
+					}
+				}, 100);
+			}
+		case 2:
+			if(scrollState == OnScrollListener.SCROLL_STATE_IDLE
+					|| lastVisibleIndex ==listItemAdapter2.getCount())
+			{
+				pg.setVisibility(View.VISIBLE);
+				bt.setVisibility(View.GONE);
+				handler.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						loadMoreData(2);
+						bt.setVisibility(View.VISIBLE);
+						pg.setVisibility(View.GONE);
+						listItemAdapter2.notifyDataSetChanged();
+					}
+				}, 100);
+			}
+			
+		}
 
 	}
 
@@ -564,41 +714,57 @@ public class hot_main extends Activity implements OnScrollListener {
 				List<Map<String, Object>> list = conn.getpeoplesmore(dbadapter);
 				for (int j = 0; j < list.size(); j++) {
 					Map<String, Object> map1 = list.get(j);
-					HashMap<String, Object> map = new HashMap<String, Object>();
+					HashMap<String, Object> map = new HashMap<String, 
+
+Object>();
 					map.put("ItemTitle", (String) map1.get("title"));
 					map.put("ItemText", (String) map1.get("heat"));
 					listItem0.add(j, map);
 				}
 
-				PullToRefreshListView mylistview1 = (PullToRefreshListView) mPager
+				PullToRefreshListView mylistview1 = (PullToRefreshListView) 
+
+mPager
 						.findViewById(R.id.hot_people);
 				mylistview1.onRefreshComplete();
 				break;
 			case 1:
-				List<Map<String, Object>> list_place = conn.getpeoplesmore(dbadapter);
+				List<Map<String, Object>> list_place = conn.getpeoplesmore
+
+(dbadapter);
 				for (int j = 0; j < list_place.size(); j++) {
 					Map<String, Object> map1 = list_place.get(j);
-					HashMap<String, Object> map = new HashMap<String, Object>();
+					HashMap<String, Object> map = new HashMap<String, 
+
+Object>();
 					map.put("ItemTitle", (String) map1.get("title"));
 					map.put("ItemText", (String) map1.get("heat"));
 					listItem1.add(j, map);
 				}
 
-				PullToRefreshListView mylistview_place = (PullToRefreshListView) mPager
+				PullToRefreshListView mylistview_place = (PullToRefreshListView) 
+
+mPager
 						.findViewById(R.id.hot_place);
 				mylistview_place.onRefreshComplete();
 				break;
 			case 2:
-				List<Map<String, Object>> list_division = conn.getpeoplesmore(dbadapter);
+				List<Map<String, Object>> list_division = conn.getpeoplesmore
+
+(dbadapter);
 				for (int j = 0; j < list_division.size(); j++) {
 					Map<String, Object> map1 = list_division.get(j);
-					HashMap<String, Object> map = new HashMap<String, Object>();
+					HashMap<String, Object> map = new HashMap<String, 
+
+Object>();
 					map.put("ItemTitle", (String) map1.get("title"));
 					map.put("ItemText", (String) map1.get("heat"));
 					listItem2.add(j, map);
 				}
 
-				PullToRefreshListView mylistview_division = (PullToRefreshListView) mPager
+				PullToRefreshListView mylistview_division = 
+
+(PullToRefreshListView) mPager
 						.findViewById(R.id.hot_division);
 				mylistview_division.onRefreshComplete();
 				break;
@@ -612,6 +778,9 @@ public class hot_main extends Activity implements OnScrollListener {
 	protected void onDestroy() {
 		super.onDestroy();
 		c.close();
+		c_division.close();
+		c_place.close();
+		//dbadapter.close();
 	}
 
 	@Override
