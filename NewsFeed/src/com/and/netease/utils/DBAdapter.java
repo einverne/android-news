@@ -360,7 +360,6 @@ public class DBAdapter
 				null, usernewsKEY_ZhuantiId+"="+String.valueOf(userid),null, null, null, null, null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
-
 		}
 
 		db.close();
@@ -370,16 +369,15 @@ public class DBAdapter
 	
 	public Cursor dingzhizhuanti(String user,String jobname)
 	{
+		Cursor mCursor1=null;
 		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = getuser(user,jobname);
-		long userid=Integer.parseInt((String)mCursor.getString(mCursor.getColumnIndex("_id")));
+		if(mCursor.moveToFirst()!=false){
+			
+			long userid=Integer.parseInt((String)mCursor.getString(mCursor.getColumnIndex("_id")));
 		mCursor.close();
-		Cursor mCursor1 = getusernews(userid);
-		if (mCursor1 != null) {
-			mCursor1.moveToFirst();
-
+		mCursor1 = getusernews(userid);
 		}
-
 		db.close();
 		DBHelper.close();
 		return mCursor1;
