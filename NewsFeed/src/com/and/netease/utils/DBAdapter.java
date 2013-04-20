@@ -358,7 +358,6 @@ public class DBAdapter
 				zuijinxinwenKEY_Count+ " desc", null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
-
 		}
 		
 		db.close();
