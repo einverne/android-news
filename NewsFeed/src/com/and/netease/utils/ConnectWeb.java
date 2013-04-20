@@ -111,6 +111,8 @@ public class ConnectWeb {
 		boolean result= Boolean.valueOf(str).booleanValue();
 		return result;
 	}
+	
+	//http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getAllJobsOfUser&user=test
 	static public List<Map<String, Object>>getAllJobsOfUser(String name){
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map = null;
