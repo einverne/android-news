@@ -29,6 +29,8 @@ public class advanced_search extends Activity {
 	private int mYear;
 	private int mMonth;
 	private int mDay;
+	String datef;
+	String datet;
 	private int tag;
 	static final int DATE_DIALOG_ID = 0;
 	TextView startTextView;
@@ -70,6 +72,8 @@ public class advanced_search extends Activity {
 				
 				String startTime = startTextView.getText().toString();
 				String endTime = endTextView.getText().toString();
+				Log.d("wwwwdatef", datef);
+				Log.d("wwwweett", datet);
 				DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");    
 				DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd"); 
 				Date date1 = null; 
@@ -93,8 +97,8 @@ public class advanced_search extends Activity {
 				Intent intent = new Intent();
 				intent.setClass(advanced_search.this, search.class);
 				Bundle bundle = new Bundle();
-				bundle.putString("dateF", startTime);
-				bundle.putString("dateT", endTime);
+				bundle.putString("dateF", datef);
+				bundle.putString("dateT", datet);
 				bundle.putString("keyword", keyword);
 				intent.putExtras(bundle);
 				startActivity(intent);
@@ -149,12 +153,42 @@ public class advanced_search extends Activity {
 					// Month is 0 based so add 1
 					.append(mYear).append("-").append(mMonth + 1).append("-")
 					.append(mDay).append(" "));
-			
-			
+			String mon,day;
+			if((mMonth+1)<=9){
+				mMonth++;
+			mon="0"+mMonth;
+			}
+			else{
+				mMonth++;
+				mon=mMonth+"";
+			}
+			if(mDay<=9){
+				day="0"+mDay;
+				}
+				else{
+					day=""+mDay;
+				}
+			datef=mYear+mon+day;
 		} else if (t == 1) {
 			endTextView.setText(new StringBuilder().append(mYear)
 					.append("-").append(mMonth + 1).append("-").append(mDay)
 					.append(" "));
+			String mon,day;
+			if((mMonth+1)<=9){
+				mMonth++;
+			mon="0"+mMonth;
+			}
+			else{
+				mMonth++;
+				mon=mMonth+"";
+			}
+			if(mDay<=9){
+				day="0"+mDay;
+				}
+				else{
+					day=""+mDay;
+				}
+			datet=mYear+mon+day;
 			
 		}
 	}
