@@ -371,10 +371,10 @@ public class DBAdapter
 	public Cursor dingzhizhuanti(String user,String jobname)
 	{
 		db = DBHelper.getWritableDatabase();
-		Cursor mCursor = getuser(user,jobname)£»
+		Cursor mCursor = getuser(user,jobname);
+		long userid=Integer.parseInt((String)mCursor.getString(mCursor.getColumnIndex("_id")));
 		mCursor.close();
-		Cursor mCursor1 = db.query(DATABASE_TABLE_usernews,
-				null, usernewsKEY_ZhuantiId+"="+String.valueOf(userid),null, null, null, null, null);
+		Cursor mCursor1 = getusernews(userid);
 		if (mCursor1 != null) {
 			mCursor1.moveToFirst();
 
