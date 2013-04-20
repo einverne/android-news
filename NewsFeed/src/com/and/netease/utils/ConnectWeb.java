@@ -226,15 +226,16 @@ public class ConnectWeb {
 		return list;
 	}
 
-	static public int getzuijinxinwen(DBAdapter dbadapter,String date) {
+	static public int getzuijinxinwen(DBAdapter dbadapter) {
 		/*
 		 * 数据格式： result clusters others cluster words count source-distribution
 		 * doc title words source date url
 		 */
 		int count = 0;
+		String today=todaydate();
 		try {
 
-			String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetXML&t="+date;
+			String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetXML&t=fresh";
 			String str = HttpConn.getJsonFromUrlGet(theurl);
 			// 通过json 来解析收到的字符串
 			JSONObject jay = new JSONObject(str);
@@ -250,7 +251,6 @@ public class ConnectWeb {
 			// 取出专题数组
 			JSONArray cluster = clusters.getJSONArray("cluster");
 			// 循环从专题数取出每个专题进行解析
-			Log.d("test cluster.length()", String.valueOf(cluster.length()));// 0
 			for (int i = 0; i < cluster.length(); i += 1) {
 				// 挨个取出专题
 				JSONObject onecluster = (JSONObject) cluster.get(i);
@@ -265,7 +265,7 @@ public class ConnectWeb {
 				String title = getzhuantititle(doc);
 				// 此时将专题插入专题表
 				// 目标是：如果有重名 而 新闻个数不同 就将之前的覆盖掉；然后返回 id
-				long oneclusterid = insert(dbadapter, title, date, words,
+				long oneclusterid = insert(dbadapter, title, today, words,
 						oneclustercount);
 				// 将新闻插入新闻表
 				if (oneclusterid != -1) {// 当值为-1时，说明此时的专题数据库中已存在，不需要更新
@@ -387,6 +387,7 @@ public class ConnectWeb {
 				}
 			}
 			// 根据文本排序
+			
 			if (!list.isEmpty()) {
 				Collections.sort(list, new Comparator<Map<String, Object>>() {
 					public int compare(Map<String, Object> object1,
