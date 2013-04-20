@@ -280,6 +280,58 @@ public class ConnectWeb {
 		return count;
 	}
 
+	static public int getZhuantiFromDate(DBAdapter dbadapter,String date) {
+		/*
+		 * 数据格式： result clusters others cluster words count source-distribution
+		 * doc title words source date url
+		 */
+		int count = 0;
+		try {
+
+			String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetXML&t="+date;
+			String str = HttpConn.getJsonFromUrlGet(theurl);
+			// 通过json 来解析收到的字符串
+			JSONObject jay = new JSONObject(str);
+			Log.d("test", "get result");
+			JSONObject result = new JSONObject((String) jay.getString("result"));
+			// 解析key result所对应的值
+			// count是总共取到的专题条数
+			count = Integer.parseInt((String) result.getString("count"));
+			Log.d("test count", String.valueOf(count));
+			// clusters包括两部分,分别是 others 和 专题数组
+			JSONObject clusters = new JSONObject(
+					(String) result.getString("clusters"));
+			// 取出专题数组
+			JSONArray cluster = clusters.getJSONArray("cluster");
+			// 循环从专题数取出每个专题进行解析
+			for (int i = 0; i < cluster.length(); i += 1) {
+				// 挨个取出专题
+				JSONObject onecluster = (JSONObject) cluster.get(i);
+				// 取出专题的关键字word和 count和doc
+				String words = (String) onecluster.getString("words");
+				words = jiexiwords(words);
+				int oneclustercount = Integer.parseInt((String) onecluster
+						.getString("count"));
+				// 取出doc，doc是具体新闻名的数组
+				JSONArray doc = onecluster.getJSONArray("doc");
+				// 取出第一条新闻名作为专题的标题
+				String title = getzhuantititle(doc);
+				// 此时将专题插入专题表
+				// 目标是：如果有重名 而 新闻个数不同 就将之前的覆盖掉；然后返回 id
+				long oneclusterid = insert(dbadapter, title, date, words,
+						oneclustercount);
+				// 将新闻插入新闻表
+				if (oneclusterid != -1) {// 当值为-1时，说明此时的专题数据库中已存在，不需要更新
+					newsinsert(dbadapter, doc, oneclusterid);
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Log.d("test", String.valueOf(count));
+		return count;
+	}
 	/**
 	 * 插入News表
 	 * @param dbadapter
