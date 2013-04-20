@@ -222,6 +222,16 @@ public class ConnectWeb {
 				map.put("date", date);
 				list.add(map);
 			}
+			
+			if (!list.isEmpty()) {
+				Collections.sort(list, new Comparator<Map<String, Object>>() {
+					public int compare(Map<String, Object> object1,
+							Map<String, Object> object2) {
+						return ((String) object2.get("date"))
+								.compareTo((String) object1.get("date"));
+					}
+				});
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
