@@ -1,5 +1,6 @@
 package com.and.netease;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class search extends Activity  implements OnScrollListener {
@@ -39,7 +41,15 @@ public class search extends Activity  implements OnScrollListener {
 	private Button bt;
 	private ProgressBar pg;
 	private int MaxDataNum;
+	private int mYear; 
+	private int mMonth; 
+	private int mDay;
 	String keyword;
+	String dateF;
+	String dateT;
+	String month;
+	String day;
+	int flagLoadMoreData=0;
 	private DBAdapter dbadapter;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,30 +57,37 @@ public class search extends Activity  implements OnScrollListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_search_result);
 		Log.d(TAG, "search_result_start");
-		
-		MaxDataNum=60;
+		MaxItem=30;
+		getdate();
 //		// get Intent Bundle
 		Bundle bundle = this.getIntent().getExtras();
 //		// get data in Bundle
 		keyword = bundle.getString("keyword");
-		Toast.makeText(this, keyword, Toast.LENGTH_SHORT);
+		getMaxDataNum();
+		Log.d("wwww", "in");
+	//	Toast.makeText(this, keyword, Toast.LENGTH_SHORT);
 //		// 绑定Layout里面的ListView
 		 myListView = (ListView) findViewById(R.id.listView_searchresult);
-		 moreView = getLayoutInflater().inflate(R.layout.moredata, null);
-			bt = (Button) moreView.findViewById(R.id.bt_load);
-			pg = (ProgressBar) moreView.findViewById(R.id.pg);
+		
+		
+			
 			handler = new Handler();
 			// 生成动态数组，加入数据
-		listItem = new ArrayList<Map<String, Object>>();	
-
-	
-		
-		
+		listItem = new ArrayList<Map<String, Object>>();
+		//取数据
+		getData();
+		if(listItem.size()!=0){
 		// 生成适配器的Item和动态数组对应的元素
-		 listItemAdapter = new SimpleAdapter(this,getData(),
+		 listItemAdapter = new SimpleAdapter(this,listItem,
 				R.layout.zuijinxinwen_item, new String[] {  
 						"ItemTitle", "ItemText"}, new int[] {  
 						R.id.ItemTitle, R.id.ItemText });
+		 //load more data
+		 if(flagLoadMoreData!=5){
+			 moreView = getLayoutInflater().inflate(R.layout.moredata, null);
+			 	bt = (Button) moreView.findViewById(R.id.bt_load);
+				pg = (ProgressBar) moreView.findViewById(R.id.pg);
+		 }
 		// 添加并且显示
 		myListView.addFooterView(moreView);
 		myListView.setAdapter(listItemAdapter);
@@ -87,16 +104,24 @@ public class search extends Activity  implements OnScrollListener {
 					public void run() {
 						// TODO Auto-generated method stub
 						loadMoreData();
-						bt.setVisibility(View.VISIBLE);
-						pg.setVisibility(View.GONE);
+						//if(flagLoadMoreData!=5){
+							Log.d("wwwvvvvv","in");
+							bt.setVisibility(View.VISIBLE);
+							pg.setVisibility(View.GONE);
+					//	}	
 						listItemAdapter.notifyDataSetChanged();
 					}
 
 				}, 2000);
 			}
 		});
-
-		// 添加点击
+		}
+		else{
+			Toast.makeText(search.this, "NO DATA!",Toast.LENGTH_SHORT).show();
+			search.this.finish();
+		}
+	 
+		//添加点击
 		myListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -117,7 +142,7 @@ public class search extends Activity  implements OnScrollListener {
 			}
 		});
 
-		
+		// 跳转定制界面
 		Button btnButton = (Button)findViewById(R.id.button_dingzhi);
 		btnButton.setOnClickListener(new OnClickListener() {
 			
@@ -139,22 +164,81 @@ public class search extends Activity  implements OnScrollListener {
 		
 		
 	}
+	/**
+	 * 
+	 * 取日期
+	 * 
+	 */
+	public void getdate(){
+		
+	    final Calendar c = Calendar.getInstance(); 
+        mYear = c.get(Calendar.YEAR); //获取当前年份 
+        mMonth = c.get(Calendar.MONTH)+1;//获取当前月份 
+        mDay = c.get(Calendar.DAY_OF_MONTH);//获取当前月份的日期号码 
+        String year=mYear+"";
+        if(mMonth<9){
+        	   month="0"+mMonth;   
+        }
+        else{
+        	  month=""+mMonth;
+        	 
+        }
+	     if(mDay<9){
+	    	 day="0"+mDay;
+	     }
+	     else{
+	    	 day=mDay+"";	 
+	     }
+        
+        dateT =year+month+day;
+        dateF =year+"01"+day+""; 
+        Log.d("wwwwww", dateF+"aaaa"+dateT+"bbbb"+mMonth);
+		
+	}
+	
+	/**
+	 * 
+	 * 取最大条数
+	 * 
+	 */
+	
+	public void getMaxDataNum(){
+		
+//		ConnectWeb conn;
+//		conn = new ConnectWeb();
+		MaxDataNum=60;
+//		try {
+//			MaxDataNum = ConnectWeb.getsearchcount(keyword, dateF, dateT);
+//		} catch (UnsupportedEncodingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		TextView text;
+		text= (TextView)findViewById(R.id.textView_newstitle);
+		String te= "共有"+MaxDataNum+"条"; 
+		text.setText(te);
+		//text = "共有"+MaxDataNum+"条新闻";
+	}
 	
 	
 	
 	
-	//取搜索结果
+	/**
+	 * 
+	 * 取搜索结果
+	 * 
+	 */
 		public List<Map<String, Object>> getData()
 		{
+			Log.d("wwww", "in");
 			ConnectWeb conn;
 			conn=new ConnectWeb();
-			List<Map<String, Object>> list=conn.getsearch(keyword,"20130202","20130418","T",1,30);
+			List<Map<String, Object>> list=conn.getsearch(keyword,dateF,dateT,"T",1,30);
 			//search conn = new search();
 			//List<Map<String,Object>> list = conn.testData();
 			
-			if(list!=null)
+			if(list.size()!=0)
 			{
-				Log.d("wwwwwww",""+list.size());
 			
 				for(int i = 0; i < list.size(); i++)
 				{
@@ -164,15 +248,18 @@ public class search extends Activity  implements OnScrollListener {
 					map.put("ItemText", (String)map1.get("description")+i);
 					map.put("url", map1.get("url"));
 					listItem.add(map);
-					Log.d("wwwww",listItem.toString());
 				}
 				
+			if(list.size()<30){
+					flagLoadMoreData = 5;
+				}
 			}
 			else
 			{
-				Toast.makeText(search.this, "budui",Toast.LENGTH_SHORT).show();
+				Toast.makeText(search.this, "NO DATA!",Toast.LENGTH_SHORT).show();
 				
 			}
+			
 			
 			return listItem;
 			
@@ -181,40 +268,59 @@ public class search extends Activity  implements OnScrollListener {
 		
 		
 		
-		
+		/**
+		 * 
+		 * 
+		 * 加载更多
+		 * @return
+		 */
 		
 		public List<Map<String, Object>> loadMoreData() {
 		// TODO Auto-generated method stub
 		ConnectWeb conn;
 		conn=new ConnectWeb();
-		List<Map<String, Object>> list=conn.getsearch(keyword,"20130202","20130418","T",30,40);
+		List<Map<String, Object>> list=conn.getsearch(keyword,dateF,dateT,"T",MaxItem,MaxItem+20);
 	//	search conn = new search();
 	//	List<Map<String,Object>> list = conn.testData();
 		
 		int count = listItemAdapter.getCount();
 		
-		if (count+10<MaxDataNum) {
-			for(int i = count; i < count+5 ; i++){
+	//	if (count+20<MaxDataNum) {
+		if (list.size()==20) {
+			for(int i = count; i < count+20 ; i++){
+			
 				HashMap<String, Object> map = new HashMap<String, Object>();
+				Log.d("wwww",list.size()+"");
 				Map<String, Object> map1=list.get(i);
+				
 				map.put("ItemTitle", map1.get("title") );		
 				map.put("ItemText", (String)map1.get("description")+i);
 				map.put("url", map1.get("url"));
 				listItem.add(map);
 			}
 		} else {
-			// 数据已经不足10条
-            for (int i = count; i < MaxDataNum; i++) {
+			// 数据已经不足5条
+			
+            for (int i = count; i < list.size(); i++) {
             	HashMap<String, Object> map = new HashMap<String, Object>();
-                map.put("ItemTitle", "新闻标题    " + i);
-				map.put("ItemText", "新闻专题摘要");
+				Map<String, Object> map1=list.get(i);
+				map.put("ItemTitle", map1.get("title") );		
+				map.put("ItemText", (String)map1.get("description")+i);
+				map.put("url", map1.get("url"));
 				listItem.add(map);
+				flagLoadMoreData=5;
+				Log.d("wwwwflag",""+flagLoadMoreData);
             }
             
 		}
 		
 		return listItem;
 	}
+		
+		
+		
+		
+		
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
