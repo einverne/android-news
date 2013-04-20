@@ -338,6 +338,8 @@ public class DBAdapter
 		return mCursor;
 	}
 	
+
+
 	public Cursor getzuijinxinwenFromDate(String date) {
 		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = db.query(DATABASE_TABLE_zuijinxinwen, null, zuijinxinwenKEY_Date+"='"+date+"'", null, null, null,
@@ -351,6 +353,7 @@ public class DBAdapter
 		return mCursor;
 	}
 
+
 	public Cursor getusernews(long userid) {
 		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = db.query(DATABASE_TABLE_usernews,
@@ -363,6 +366,29 @@ public class DBAdapter
 		db.close();
 		DBHelper.close();
 		return mCursor;
+	}
+	
+	public Cursor dingzhizhuanti(String user,String jobname)
+	{
+		db = DBHelper.getWritableDatabase();
+		Cursor mCursor = db.query(DATABASE_TABLE_user,
+				 new String[] {userKEY_ROWID}, userKEY_user
+						+ " = '"+user+"'  and "+userKEY_jobname+" = '"+jobname+"'",null, null, null, null, null);
+		if (mCursor != null) {
+			mCursor.moveToFirst();
+		}
+		long userid=Integer.parseInt(mCursor.getString(0));
+		 mCursor = db.query(DATABASE_TABLE_usernews,
+				null, usernewsKEY_ZhuantiId+"="+String.valueOf(userid),null, null, null, null, null);
+		if (mCursor != null) {
+			mCursor.moveToFirst();
+
+		}
+
+		db.close();
+		DBHelper.close();
+		return mCursor;
+
 	}
 	
 	public Cursor getuser(String user,String jobname) {
