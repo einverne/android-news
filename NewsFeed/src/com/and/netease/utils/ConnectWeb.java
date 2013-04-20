@@ -112,9 +112,9 @@ public class ConnectWeb {
 	}
 	
 	//http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getAllJobsOfUser&user=test
-	static public List<Map<String, Object>>getAllJobsOfUser(String name){
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		Map<String, Object> map = null;
+	static public List<Map<String, String>>getAllJobsOfUser(String name){
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		Map<String, String> map = null;
 		String theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getAllJobsOfUser&user="+name;
 		try {
 			String str = HttpConn.getJsonFromUrlGet(theurl);
@@ -123,32 +123,30 @@ public class ConnectWeb {
 			for (int i = 0; i < jay.length(); i += 1) {
 				JSONObject inforMap =(JSONObject) jay.get(i);
 				String createtime = (String) inforMap.getString("createtime");
+				Log.d("test get AllJobsOfUser ", "getAllJobsOfUser "+createtime);
 				String aboutChina = (String) inforMap.getString("aboutChina");
+				Log.d("test get AllJobsOfUser ", "getAllJobsOfUser"+aboutChina);
 				String endtime = (String) inforMap.getString("endtime");
 				String description = (String) inforMap.getString("description");
 				String query = (String) inforMap.getString("query");
 				String name1 = (String) inforMap.getString("name");
 				String status = (String) inforMap.getString("status");
-				String result = (String) inforMap.getString("result");
 				String end = (String) inforMap.getString("end");
-				String type = (String) inforMap.getString("type");
+			
+					map = new HashMap<String, String>();
+					map.put("createtime", createtime);
+					map.put("aboutChina", aboutChina);
+					map.put("endtime", endtime);
+					map.put("description", description);
+					map.put("query", query);
+					map.put("name", name1);
+					map.put("status", status);
+					map.put("end", end);
+					// 2012-06-05 08:14:54
+					list.add(map);
 				
-				if(type=="hotmining")
-				{
-
-				map = new HashMap<String, Object>();
-				map.put("createtime", createtime);
-				map.put("aboutChina", aboutChina);
-				map.put("endtime", endtime);
-				map.put("description", description);
-				map.put("query", query);
-				map.put("name", name1);
-				map.put("status", status);
-				map.put("result", result);
-				map.put("end", end);
-				map.put("type", type);
-				// 2012-06-05 08:14:54
-				list.add(map);}
+			
+				
 			}
 
 		} catch (Exception e) {
