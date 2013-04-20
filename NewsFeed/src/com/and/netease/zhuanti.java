@@ -35,7 +35,6 @@ public class zhuanti extends ListActivity {
 		Bundle bundle = this.getIntent().getExtras();
 		String title = bundle.getString("title");
 		dbadapter = new DBAdapter(this);
-		dbadapter.open();
 		c = dbadapter.getnews(title);
 		Log.d("EV_DEBUG_size", String.valueOf(c.getCount()));
 
@@ -120,7 +119,6 @@ public class zhuanti extends ListActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 		c.close();
-		dbadapter.close();
 	}
 
 }

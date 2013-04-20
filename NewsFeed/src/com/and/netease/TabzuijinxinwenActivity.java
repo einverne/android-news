@@ -1,6 +1,8 @@
 package com.and.netease;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import android.app.ListActivity;
@@ -38,12 +40,12 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 	private int lastVisibleIndex;
 	private Button bt;
 	private ProgressBar pg;
-	private int flag = 0;
 
 	private DBAdapter dbadapter;
 	private Cursor c;
 
 	ArrayList<HashMap<String, String>> listItem;
+	private String yesterday_date; // yyyy-MM-dd
 
 	private static final String TAG = "EV_DEBUG";
 
@@ -59,7 +61,12 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		handler = new Handler();
 
 		dbadapter = new DBAdapter(this);
-		dbadapter.open();
+
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		Date yesterday = new Date(System.currentTimeMillis() - 2*24 * 60 * 60
+				* 1000);
+		yesterday_date = formatter.format(yesterday);
+		Log.d(TAG, "yesterday:" + yesterday_date);
 
 		c = dbadapter.getzuijinxinwen(0, MaxDataNum);
 		listItem = new ArrayList<HashMap<String, String>>();
@@ -115,9 +122,10 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 
 					@Override
 					public void onItemClick(AdapterView<?> arg0, View arg1,
-							int arg2, long arg3) {
+							int position, long arg3) {
 						// EV_BUG /这里的BUG在下拉刷新之后 数据库没有刷新，所以点击新生成的专题列表就会FC
-						String title = (String) listItem.get(arg2 - 1).get(
+						Log.d(TAG, "zuijinxinwen中点击Item序号:"+position);
+						String title = (String) listItem.get(position - 1).get(
 								"ItemTitle");
 						Bundle bundle = new Bundle();
 						Intent intent = new Intent(
@@ -138,7 +146,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 						CheckNetwork checknet = new CheckNetwork(
 								TabzuijinxinwenActivity.this);
 						if (checknet.check()) {
-							new GetDataTask().execute();
+							new GetDataTask().execute("fresh");
 						} else {
 							Toast.makeText(TabzuijinxinwenActivity.this,
 									"网络不可用,请检查联网状态", Toast.LENGTH_SHORT).show();
@@ -200,13 +208,11 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
 
-		lastVisibleIndex = firstVisibleItem + visibleItemCount - 1;
-		//所有的条目已经和最大条数相等，则移除底部的View
-		if ((totalItemCount >= MaxDataNum || (c.isAfterLast() == true))
-				&& flag == 0) {
-			((PullToRefreshListView) getListView()).removeFooterView(moreView);
-			Toast.makeText(this, "数据全部加载完成，没有更多数据！", Toast.LENGTH_LONG).show();
-			flag = 1;
+		lastVisibleIndex = firstVisibleItem + visibleItemCount;
+		// 所有的条目已经和最大条数相等，则移除底部的View
+		if ((totalItemCount >= MaxDataNum || (c.isAfterLast() == true))) {
+			new getOldData().execute(yesterday_date);
+			Toast.makeText(this, "最近专题以加载完，加载先前专题", Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -219,10 +225,12 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 	// 滑到底部后自动加载，判断listview已经停止滚动并且最后可视的条目等于adapter的条目
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
-		//OnScrollListener.SCROLL_STATE_IDLE 表示ListView不动
+		// OnScrollListener.SCROLL_STATE_IDLE 表示ListView不动
+		Log.d(TAG, "lastVisibleIndex:" + lastVisibleIndex + "getCount:"
+				+ listItemAdapter.getCount());
 		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
-				|| lastVisibleIndex == listItemAdapter.getCount()) {
-			//当滑到底部时自动加载
+				&& lastVisibleIndex >= listItemAdapter.getCount()) {
+			// 当滑到底部时自动加载
 			pg.setVisibility(View.VISIBLE);
 			bt.setVisibility(View.GONE);
 			handler.postDelayed(new Runnable() {
@@ -233,20 +241,56 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 					pg.setVisibility(View.GONE);
 					listItemAdapter.notifyDataSetChanged();
 				}
-			}, 100);
+			}, 500);
 		}
 	}
 
-	private class GetDataTask extends AsyncTask<Void, Void, String[]> {
+	private class getOldData extends AsyncTask<String, Void, Integer> {
+
 		@Override
-		protected String[] doInBackground(Void... params) {
-			ConnectWeb.getzuijinxinwen(dbadapter);
-			return null;
+		protected Integer doInBackground(String... params) {
+			return new Integer(ConnectWeb.getZhuantiFromDate(dbadapter,
+					params[0]));
 		}
 
 		@Override
-		protected void onPostExecute(String[] result) {
-			Log.d(TAG, "TabzuijinxinwenActivity PostExecute");
+		protected void onPostExecute(Integer result) {
+			Log.d(TAG, "TabzuijinxinwenActivity GetDataTask PostExecute");
+			Log.d(TAG, "yesterday:"+yesterday_date);
+			c = dbadapter.getzuijinxinwenFromDate(yesterday_date);
+			listItem = new ArrayList<HashMap<String, String>>();
+			for (int i = 0; i < 10 && c.moveToNext(); i++) {
+				c.moveToPosition(i);
+				String title = c.getString(c.getColumnIndex("title"));
+				String words = c.getString(c.getColumnIndex("words"));
+				String date = c.getString(c.getColumnIndex("date"));
+				String counts = c.getString(c.getColumnIndex("count"));
+
+				HashMap<String, String> map = new HashMap<String, String>();
+				map.put("date", date);
+				map.put("counts", counts);
+				map.put("ItemTitle", title);
+				map.put("ItemText", words);
+				listItem.add(map);
+			}
+
+			listItemAdapter.notifyDataSetChanged();
+
+			((PullToRefreshListView) getListView()).onRefreshComplete();
+		}
+
+	}
+
+	private class GetDataTask extends AsyncTask<String, Void, Integer> {
+
+		@Override
+		protected Integer doInBackground(String... params) {
+			return new Integer(ConnectWeb.getzuijinxinwen(dbadapter)); // 后台请求最近新闻
+		}
+
+		@Override
+		protected void onPostExecute(Integer result) {
+			Log.d(TAG, "TabzuijinxinwenActivity GetDataTask PostExecute");
 			c = dbadapter.getzuijinxinwen(0, MaxDataNum);
 			listItem = new ArrayList<HashMap<String, String>>();
 			for (int i = 0; i < 10 && c.moveToNext(); i++) {
@@ -267,14 +311,13 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 			listItemAdapter.notifyDataSetChanged();
 
 			((PullToRefreshListView) getListView()).onRefreshComplete();
-			super.onPostExecute(result);
 		}
+
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		c.close();
-		dbadapter.close();
 	}
 }

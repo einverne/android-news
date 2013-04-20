@@ -83,7 +83,6 @@ public class hot_main extends Activity implements OnScrollListener {
 
 		// 显示数据库数据
 		dbadapter = new DBAdapter(this);
-		dbadapter.open();
 		conn.getpeoples(dbadapter);
 		c = dbadapter.getpeople(0, MaxDataNum);
 		
@@ -613,7 +612,6 @@ public class hot_main extends Activity implements OnScrollListener {
 	protected void onDestroy() {
 		super.onDestroy();
 		c.close();
-		dbadapter.close();
 	}
 
 	@Override
