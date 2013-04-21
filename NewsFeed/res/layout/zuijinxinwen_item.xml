@@ -47,12 +47,12 @@
         <TextView
             android:id="@+id/ItemTitle"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:gravity="left"
             android:text="专题名字"
             android:textColor="@color/textView_color"
-            android:textSize="15sp"
+            android:textSize="17sp"
             android:textStyle="bold"
             android:typeface="sans" />
 
@@ -61,10 +61,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
+            android:layout_marginTop="3dp"
             android:gravity="left"
             android:text="专题关键字"
             android:textColor="@color/textView_color"
             android:textSize="12sp" />
+
     </LinearLayout>
 
 </LinearLayout>
