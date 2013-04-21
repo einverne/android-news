@@ -9,6 +9,7 @@
         android:id="@+id/bt_load"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="@color/list_item_background"
         android:text="加载更多" />
 
     <ProgressBar
@@ -16,6 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+       style="?android:attr/progressBarStyleSmallTitle"
         android:visibility="gone" />
 
 </LinearLayout>
