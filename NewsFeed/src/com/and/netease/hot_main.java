@@ -49,10 +49,8 @@ public class hot_main extends Activity implements OnScrollListener {
 	private List<View> listViews;
 	private ImageView cursor;
 	private TextView t1, t2, t3;
-	private int lastVisibleIndex;
 	private int offset = 0;
 	private int currIndex = 0;
-	private int curdex_scroll=0;
 	private int bmpW;
 
 	// me
@@ -63,14 +61,13 @@ public class hot_main extends Activity implements OnScrollListener {
 	private Button bt;
 	private ProgressBar pg;
 	SimpleAdapter listItemAdapter0, listItemAdapter1, listItemAdapter2;
-	int flag = 0;
-	boolean flag_remove0=false;
-	boolean flag_remove1=false;
-	boolean flag_remove2=false;
 	
+	List<Map<String, Object>> list_People,list_division,list_place;
+	int flag = 0;
+	// private PullToRefreshListView mylistview;//ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Òªï¿½ÃºÃ´ï¿½ï¿½ï¿½
 	int a;
 
-	// Êý¾ÝÏÔÊ¾
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
 	private DBAdapter dbadapter;
 	private Cursor c;
 	private Cursor c_place;
@@ -86,16 +83,14 @@ public class hot_main extends Activity implements OnScrollListener {
 		pg = (ProgressBar) moreView.findViewById(R.id.pg);
 		handler = new Handler();
 
-		// ÏÔÊ¾Êý¾Ý¿âÊý¾Ý
 		dbadapter = new DBAdapter(this);
-		//dbadapter.open();
-		conn.getpeoples(dbadapter);
+		ConnectWeb.getpeoples(dbadapter);
 		c = dbadapter.getpeople(0, MaxDataNum);
 		
-		conn.getplaces(dbadapter);
+		ConnectWeb.getplaces(dbadapter);
 		c_place = dbadapter.getplace(0, MaxDataNum);
 		
-		conn.getdivisions(dbadapter);
+		ConnectWeb.getdivisions(dbadapter);
 		c_division=dbadapter.getdivision(0, MaxDataNum);
 		
 		
@@ -116,22 +111,18 @@ public class hot_main extends Activity implements OnScrollListener {
 					c.moveToPosition(i);
 					String text = c.getString(c.getColumnIndex("title"));
 					String heat = c.getString(c.getColumnIndex("heat"));
-					HashMap<String, Object> map = new HashMap<String, 
-
-Object>();
+					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("ItemTitle", text);
 					map.put("ItemText", heat);
 					listItem0.add(map);
 				}
 			} else {
-				// Êý¾ÝÒÑ¾­²»×ã5Ìõ
+				// ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½5ï¿½ï¿½
 				for (int i = count; i < MaxDataNum && c.moveToNext(); i++) {
 					c.moveToPosition(i);
 					String text = c.getString(c.getColumnIndex("title"));
 					String heat = c.getString(c.getColumnIndex("heat"));
-					HashMap<String, Object> map = new HashMap<String, 
-
-Object>();
+					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("ItemTitle", text);
 					map.put("ItemText", heat);
 					listItem0.add(map);
@@ -143,32 +134,20 @@ Object>();
 			if (count + 5 < MaxDataNum) {
 				for (int i = count; i < count + 5 && c_place.moveToNext(); i++) {
 					c_place.moveToPosition(i);
-					String text = c_place.getString(c_place.getColumnIndex
-
-("title"));
-					String heat = c_place.getString(c_place.getColumnIndex
-
-("heat"));
-					HashMap<String, Object> map = new HashMap<String, 
-
-Object>();
+					String text = c_place.getString(c_place.getColumnIndex("title"));
+					String heat = c_place.getString(c_place.getColumnIndex("heat"));
+					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("ItemTitle", text);
 					map.put("ItemText", heat);
 					listItem1.add(map);
 				}
 			} else {
-				// Êý¾ÝÒÑ¾­²»×ã5Ìõ
+				// ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½5ï¿½ï¿½
 				for (int i = count; i < MaxDataNum && c_place.moveToNext(); i++) {
 					c_place.moveToPosition(i);
-					String text = c_place.getString(c_place.getColumnIndex
-
-("title"));
-					String heat = c_place.getString(c_place.getColumnIndex
-
-("heat"));
-					HashMap<String, Object> map = new HashMap<String, 
-
-Object>();
+					String text = c_place.getString(c_place.getColumnIndex("title"));
+					String heat = c_place.getString(c_place.getColumnIndex("heat"));
+					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("ItemTitle", text);
 					map.put("ItemText", heat);
 					listItem1.add(map);
@@ -180,34 +159,20 @@ Object>();
 			if (count + 5 < MaxDataNum) {
 				for (int i = count; i < count + 5 && c_division.moveToNext(); i++) {
 					c_division.moveToPosition(i);
-					String text = c_division.getString
-
-(c_division.getColumnIndex("title"));
-					String heat = c_division.getString
-
-(c_division.getColumnIndex("heat"));
-					HashMap<String, Object> map = new HashMap<String, 
-
-Object>();
+					String text = c_division.getString(c_division.getColumnIndex("title"));
+					String heat = c_division.getString(c_division.getColumnIndex("heat"));
+					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("ItemTitle", text);
 					map.put("ItemText", heat);
 					listItem2.add(map);
 				}
 			} else {
-				// Êý¾ÝÒÑ¾­²»×ã5Ìõ
-				for (int i = count; i < MaxDataNum && c_division.moveToNext(); i
-
-++) {
+				// ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½5ï¿½ï¿½
+				for (int i = count; i < MaxDataNum && c_division.moveToNext(); i++) {
 					c_division.moveToPosition(i);
-					String text = c_division.getString
-
-(c_division.getColumnIndex("title"));
-					String heat = c_division.getString
-
-(c_division.getColumnIndex("heat"));
-					HashMap<String, Object> map = new HashMap<String, 
-
-Object>();
+					String text = c_division.getString(c_division.getColumnIndex("title"));
+					String heat = c_division.getString(c_division.getColumnIndex("heat"));
+					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("ItemTitle", text);
 					map.put("ItemText", heat);
 					listItem2.add(map);
@@ -222,7 +187,7 @@ Object>();
 		switch (a) {
 		case 0: {
 			listItem0 = new ArrayList<HashMap<String, Object>>();
-			for (int i = 0; i < 10 && c.moveToNext(); i++) {
+			for (int i = 0; c.moveToNext(); i++) {
 				c.moveToPosition(i);
 				String text = c.getString(c.getColumnIndex("title"));
 				String heat = c.getString(c.getColumnIndex("heat"));
@@ -234,14 +199,10 @@ Object>();
 				listItem0.add(map);
 			}
 
-			// Éú³ÉÊÊÅäÆ÷µÄItemºÍ¶¯Ì¬Êý×é¶ÔÓ¦µÄÔªËØ
 			listItemAdapter0 = new SimpleAdapter(this, listItem0,
 					R.layout.hot_item, new String[] { "ItemTitle",
-							"ItemText" }, new int[] { 
-
-R.id.textView_name,
+							"ItemText" }, new int[] { R.id.textView_name,
 							R.id.textView_heat });
-			// Ìí¼Ó²¢ÇÒÏÔÊ¾
 			// mylistview= (PullToRefreshListView)
 			// mPager.findViewById(R.id.hot_people);
 			mylistview.addFooterView(moreView);
@@ -251,7 +212,7 @@ R.id.textView_name,
 		}
 		case 1: {
 			listItem1 = new ArrayList<HashMap<String, Object>>();
-			for (int i = 0; i < 10 &&c_place.moveToNext(); i++) {
+			for (int i = 0; c_place.moveToNext(); i++) {
 				c_place.moveToPosition(i);
 				String text = c_place.getString(c_place.getColumnIndex("title"));
 				String heat = c_place.getString(c_place.getColumnIndex("heat"));
@@ -263,14 +224,10 @@ R.id.textView_name,
 				listItem1.add(map);
 			}
 
-			// Éú³ÉÊÊÅäÆ÷µÄItemºÍ¶¯Ì¬Êý×é¶ÔÓ¦µÄÔªËØ
 			listItemAdapter1 = new SimpleAdapter(this, listItem1,
 					R.layout.hot_item, new String[] { "ItemTitle",
-							"ItemText" }, new int[] { 
-
-R.id.textView_name,
+							"ItemText" }, new int[] { R.id.textView_name,
 							R.id.textView_heat });
-			// Ìí¼Ó²¢ÇÒÏÔÊ¾
 			// mylistview= (PullToRefreshListView)
 			// mPager.findViewById(R.id.hot_people);
 			mylistview.addFooterView(moreView);
@@ -280,14 +237,10 @@ R.id.textView_name,
 		}
 		case 2: {
 			listItem2 = new ArrayList<HashMap<String, Object>>();
-			for (int i = 0; i < 10 &&c_division.moveToNext(); i++) {
+			for (int i = 0; c_division.moveToNext(); i++) {
 				c_division.moveToPosition(i);
-				String text = c_division.getString(c_division.getColumnIndex
-
-("title"));
-				String heat = c_division.getString(c_division.getColumnIndex
-
-("heat"));
+				String text = c_division.getString(c_division.getColumnIndex("title"));
+				String heat = c_division.getString(c_division.getColumnIndex("heat"));
 
 				HashMap<String, Object> map = new HashMap<String, Object>();
 				map.put("ItemTitle", text);
@@ -296,14 +249,12 @@ R.id.textView_name,
 				listItem2.add(map);
 			}
 
-			// Éú³ÉÊÊÅäÆ÷µÄItemºÍ¶¯Ì¬Êý×é¶ÔÓ¦µÄÔªËØ
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Itemï¿½Í¶ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½Ôªï¿½ï¿½
 			listItemAdapter2 = new SimpleAdapter(this, listItem2,
 					R.layout.hot_item, new String[] { "ItemTitle",
-							"ItemText" }, new int[] { 
-
-R.id.textView_name,
+							"ItemText" }, new int[] { R.id.textView_name,
 							R.id.textView_heat });
-			// Ìí¼Ó²¢ÇÒÏÔÊ¾
+			// ï¿½ï¿½Ó²ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
 			// mylistview= (PullToRefreshListView)
 			// mPager.findViewById(R.id.hot_people);
 			mylistview.addFooterView(moreView);
@@ -334,19 +285,13 @@ R.id.textView_name,
 						pg.setVisibility(View.GONE);
 						switch (y) {
 						case 0:
-							
-
-listItemAdapter0.notifyDataSetChanged();
+							listItemAdapter0.notifyDataSetChanged();
 							break;
 						case 1:
-							
-
-listItemAdapter1.notifyDataSetChanged();
+							listItemAdapter1.notifyDataSetChanged();
 							break;
 						case 2:
-							
-
-listItemAdapter2.notifyDataSetChanged();
+							listItemAdapter2.notifyDataSetChanged();
 							break;
 						}
 
@@ -381,15 +326,11 @@ listItemAdapter2.notifyDataSetChanged();
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				HashMap<String, Object> map =(HashMap<String, Object>)
-
-mylistview.getItemAtPosition(arg2);			
+				HashMap<String, Object> map =(HashMap<String, Object>)mylistview.getItemAtPosition(arg2);			
 				String str_title =(String) map.get("ItemTitle");
 				Log.d("zjj",str_title);
 				Bundle bundle = new Bundle();
-				bundle.putSerializable("keyword", str_title);			
-
-	
+				bundle.putSerializable("keyword", str_title);				
 				Intent intent = new Intent(hot_main.this,search.class);
 				intent.putExtras(bundle);
 				startActivity(intent);
@@ -574,116 +515,22 @@ mylistview.getItemAtPosition(arg2);
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
 		// TODO Auto-generated method stub
-		// ¼ÆËã×îºó¿É¼ûÌõÄ¿µÄË÷Òý
-		// ËùÓÐµÄÌõÄ¿ÒÑ¾­ºÍ×î´óÌõÊýÏàµÈ£¬ÔòÒÆ³ýµ×²¿µÄView
-		lastVisibleIndex = firstVisibleItem + visibleItemCount - 1;
-		int curdix= mPager.getCurrentItem();
-		Log.d("curdix",String.valueOf(curdix));
-		if (totalItemCount >= MaxDataNum ) {
-			switch(curdix)
-			{
-				case 0:
-				if(flag_remove0==false)
-				{
-				PullToRefreshListView list_people = (PullToRefreshListView) 
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¼ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-findViewById(R.id.hot_people);
-				list_people.removeFooterView(moreView);
-				Toast.makeText(this, "Êý¾ÝÈ«²¿¼ÓÔØÍê³É£¬Ã»ÓÐ¸ü¶àÊý¾Ý£¡", 
+		// ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½Ä¿ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½Æ³ï¿½×²ï¿½ï¿½ï¿½View
+		if (totalItemCount >= MaxDataNum && flag == 0) {
+			// ×¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-Toast.LENGTH_LONG).show();
-				flag_remove0=true;
-				}
-				break;
-				case 1:
-					if(flag_remove1==false)
-					{
-					PullToRefreshListView list_place = 
+			// mylistview1.removeFooterView(moreView);//ï¿½ï¿½ï¿½ï¿½Ã²ï¿½Æ»ï¿½ï¿½Ã½ï¿½ï¿½ï¿½switchï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-(PullToRefreshListView) findViewById(R.id.hot_place);
-					list_place.removeFooterView(moreView);
-					Toast.makeText(this, "Êý¾ÝÈ«²¿¼ÓÔØÍê³É£¬Ã»ÓÐ¸ü¶àÊý¾Ý£¡", 
-
-Toast.LENGTH_LONG).show();
-					flag_remove1=true;
-					}
-					break;
-				case 2:
-					if(flag_remove2==false)
-					{
-					PullToRefreshListView list_division = 
-
-(PullToRefreshListView) findViewById(R.id.hot_division);
-					list_division.removeFooterView(moreView);
-					Toast.makeText(this, "Êý¾ÝÈ«²¿¼ÓÔØÍê³É£¬Ã»ÓÐ¸ü¶àÊý¾Ý£¡", 
-
-Toast.LENGTH_LONG).show();
-					flag_remove2=true;
-					}
-					break;
-			}
-			
-
-			
+			Toast.makeText(this, "ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É£ï¿½Ã»ï¿½Ð¸ï¿½ï¿½ï¿½ï¿½Ý£ï¿½", Toast.LENGTH_LONG).show();
+			flag = 1;
 		}
 	}
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		// TODO Auto-generated method stub
-		int curdix1= mPager.getCurrentItem();
-		switch(curdix1)
-		{
-		case 0:
-			if(scrollState == OnScrollListener.SCROLL_STATE_IDLE
-					|| lastVisibleIndex ==listItemAdapter0.getCount())
-			{
-				pg.setVisibility(View.VISIBLE);
-				bt.setVisibility(View.GONE);
-				handler.postDelayed(new Runnable() {
-					@Override
-					public void run() {
-						loadMoreData(0);
-						bt.setVisibility(View.VISIBLE);
-						pg.setVisibility(View.GONE);
-						listItemAdapter0.notifyDataSetChanged();
-					}
-				}, 100);
-			}
-		case 1:
-			if(scrollState == OnScrollListener.SCROLL_STATE_IDLE
-					|| lastVisibleIndex ==listItemAdapter1.getCount())
-			{
-				pg.setVisibility(View.VISIBLE);
-				bt.setVisibility(View.GONE);
-				handler.postDelayed(new Runnable() {
-					@Override
-					public void run() {
-						loadMoreData(1);
-						bt.setVisibility(View.VISIBLE);
-						pg.setVisibility(View.GONE);
-						listItemAdapter1.notifyDataSetChanged();
-					}
-				}, 100);
-			}
-		case 2:
-			if(scrollState == OnScrollListener.SCROLL_STATE_IDLE
-					|| lastVisibleIndex ==listItemAdapter2.getCount())
-			{
-				pg.setVisibility(View.VISIBLE);
-				bt.setVisibility(View.GONE);
-				handler.postDelayed(new Runnable() {
-					@Override
-					public void run() {
-						loadMoreData(2);
-						bt.setVisibility(View.VISIBLE);
-						pg.setVisibility(View.GONE);
-						listItemAdapter2.notifyDataSetChanged();
-					}
-				}, 100);
-			}
-			
-		}
 
 	}
 
@@ -697,74 +544,54 @@ Toast.LENGTH_LONG).show();
 		}
 		@Override
 		protected String[] doInBackground(Void... params) {
-			// Simulates a background job.
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				;
-			}
+			list_People = ConnectWeb.getpeoplesmore(dbadapter);
+			list_place = ConnectWeb.getpeoplesmore(dbadapter);
+			list_division = ConnectWeb.getpeoplesmore(dbadapter);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(String[] result) {
-
 			switch (index) {
 			case 0:
-				List<Map<String, Object>> list = conn.getpeoplesmore(dbadapter);
-				for (int j = 0; j < list.size(); j++) {
-					Map<String, Object> map1 = list.get(j);
-					HashMap<String, Object> map = new HashMap<String, 
-
-Object>();
+				
+				for (int j = 0; j < list_People.size(); j++) {
+					Map<String, Object> map1 = list_People.get(j);
+					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("ItemTitle", (String) map1.get("title"));
 					map.put("ItemText", (String) map1.get("heat"));
 					listItem0.add(j, map);
 				}
 
-				PullToRefreshListView mylistview1 = (PullToRefreshListView) 
-
-mPager
+				PullToRefreshListView mylistview1 = (PullToRefreshListView) mPager
 						.findViewById(R.id.hot_people);
 				mylistview1.onRefreshComplete();
 				break;
 			case 1:
-				List<Map<String, Object>> list_place = conn.getpeoplesmore
-
-(dbadapter);
+			
 				for (int j = 0; j < list_place.size(); j++) {
 					Map<String, Object> map1 = list_place.get(j);
-					HashMap<String, Object> map = new HashMap<String, 
-
-Object>();
+					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("ItemTitle", (String) map1.get("title"));
 					map.put("ItemText", (String) map1.get("heat"));
 					listItem1.add(j, map);
 				}
 
-				PullToRefreshListView mylistview_place = (PullToRefreshListView) 
-
-mPager
+				PullToRefreshListView mylistview_place = (PullToRefreshListView) mPager
 						.findViewById(R.id.hot_place);
 				mylistview_place.onRefreshComplete();
 				break;
 			case 2:
-				List<Map<String, Object>> list_division = conn.getpeoplesmore
-
-(dbadapter);
+				
 				for (int j = 0; j < list_division.size(); j++) {
 					Map<String, Object> map1 = list_division.get(j);
-					HashMap<String, Object> map = new HashMap<String, 
-
-Object>();
+					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("ItemTitle", (String) map1.get("title"));
 					map.put("ItemText", (String) map1.get("heat"));
 					listItem2.add(j, map);
 				}
 
-				PullToRefreshListView mylistview_division = 
-
-(PullToRefreshListView) mPager
+				PullToRefreshListView mylistview_division = (PullToRefreshListView) mPager
 						.findViewById(R.id.hot_division);
 				mylistview_division.onRefreshComplete();
 				break;
@@ -778,9 +605,6 @@ Object>();
 	protected void onDestroy() {
 		super.onDestroy();
 		c.close();
-		c_division.close();
-		c_place.close();
-		//dbadapter.close();
 	}
 
 	@Override
