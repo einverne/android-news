@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dip"
-            android:src="@drawable/biaotizi" />
+            android:src="@drawable/biaotizi2" />
 
         <TextView
             android:layout_width="wrap_content"
