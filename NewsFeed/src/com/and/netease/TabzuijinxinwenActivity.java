@@ -117,13 +117,13 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 					@Override
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int position, long arg3) {
-						// EV_BUG /这里的BUG在下拉刷新之后 数据库没有刷新，所以点击新生成的专题列表就会FC
 						Log.d(TAG, "zuijinxinwen中点击Item序号:"+position);
 						String title = (String)listItem.get(position-1).get("ItemTitle");
 						Bundle bundle = new Bundle();
 						Intent intent = new Intent(
 								TabzuijinxinwenActivity.this, zhuanti.class);
-						Log.d(TAG, "传递到专题数据id:"  +"title:"+title);
+						title = title.replace("\'","\'\'");		//修复"传入的BUG
+						Log.d(TAG, "传递到专题数据title:"  +"title:"+title);
 						bundle.putString("title", title);
 						intent.putExtras(bundle);
 						startActivity(intent);
