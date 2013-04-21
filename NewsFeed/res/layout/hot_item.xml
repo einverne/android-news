@@ -18,10 +18,9 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:text="Large Text"
-         android:textStyle="bold"
-         
+        android:textColor="#be0703"
         android:textSize="25sp"
-        android:textColor="#CC0000" />
+        android:textStyle="bold" />
 
     <TextView
          android:gravity="center"
