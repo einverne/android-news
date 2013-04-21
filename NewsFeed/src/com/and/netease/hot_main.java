@@ -64,10 +64,8 @@ public class hot_main extends Activity implements OnScrollListener {
 	
 	List<Map<String, Object>> list_People,list_division,list_place;
 	int flag = 0;
-	// private PullToRefreshListView mylistview;//����һ��Ҫ�úô���
 	int a;
 
-	// �����ʾ
 	private DBAdapter dbadapter;
 	private Cursor c;
 	private Cursor c_place;
@@ -102,7 +100,6 @@ public class hot_main extends Activity implements OnScrollListener {
 
 	private void loadMoreData(int x) {
 		int count = 0;
-		// TODO Auto-generated method stub
 		switch (x) {
 		case 0:
 			count = listItemAdapter0.getCount();
@@ -117,7 +114,6 @@ public class hot_main extends Activity implements OnScrollListener {
 					listItem0.add(map);
 				}
 			} else {
-				// ����Ѿ�����5��
 				for (int i = count; i < MaxDataNum && c.moveToNext(); i++) {
 					c.moveToPosition(i);
 					String text = c.getString(c.getColumnIndex("title"));
@@ -142,7 +138,6 @@ public class hot_main extends Activity implements OnScrollListener {
 					listItem1.add(map);
 				}
 			} else {
-				// ����Ѿ�����5��
 				for (int i = count; i < MaxDataNum && c_place.moveToNext(); i++) {
 					c_place.moveToPosition(i);
 					String text = c_place.getString(c_place.getColumnIndex("title"));
@@ -167,7 +162,6 @@ public class hot_main extends Activity implements OnScrollListener {
 					listItem2.add(map);
 				}
 			} else {
-				// ����Ѿ�����5��
 				for (int i = count; i < MaxDataNum && c_division.moveToNext(); i++) {
 					c_division.moveToPosition(i);
 					String text = c_division.getString(c_division.getColumnIndex("title"));
@@ -203,8 +197,6 @@ public class hot_main extends Activity implements OnScrollListener {
 					R.layout.hot_item, new String[] { "ItemTitle",
 							"ItemText" }, new int[] { R.id.textView_name,
 							R.id.textView_heat });
-			// mylistview= (PullToRefreshListView)
-			// mPager.findViewById(R.id.hot_people);
 			mylistview.addFooterView(moreView);
 			mylistview.setAdapter(listItemAdapter0);
 
@@ -228,8 +220,6 @@ public class hot_main extends Activity implements OnScrollListener {
 					R.layout.hot_item, new String[] { "ItemTitle",
 							"ItemText" }, new int[] { R.id.textView_name,
 							R.id.textView_heat });
-			// mylistview= (PullToRefreshListView)
-			// mPager.findViewById(R.id.hot_people);
 			mylistview.addFooterView(moreView);
 			mylistview.setAdapter(listItemAdapter1);
 
@@ -249,14 +239,10 @@ public class hot_main extends Activity implements OnScrollListener {
 				listItem2.add(map);
 			}
 
-			// �����������Item�Ͷ�̬�����Ӧ��Ԫ��
 			listItemAdapter2 = new SimpleAdapter(this, listItem2,
 					R.layout.hot_item, new String[] { "ItemTitle",
 							"ItemText" }, new int[] { R.id.textView_name,
 							R.id.textView_heat });
-			// ��Ӳ�����ʾ
-			// mylistview= (PullToRefreshListView)
-			// mPager.findViewById(R.id.hot_people);
 			mylistview.addFooterView(moreView);
 			mylistview.setAdapter(listItemAdapter2);
 
@@ -271,7 +257,6 @@ public class hot_main extends Activity implements OnScrollListener {
 			public void onClick(View v) {
 				int w = mPager.getCurrentItem();
 				final int y = w;
-				// TODO Auto-generated method stub
 				pg.setVisibility(View.VISIBLE);
 				bt.setVisibility(View.GONE);
 				handler.postDelayed(new Runnable() {
@@ -297,7 +282,7 @@ public class hot_main extends Activity implements OnScrollListener {
 
 					}
 
-				}, 2000);
+				}, 1000);
 			}
 		});
 
@@ -514,16 +499,8 @@ public class hot_main extends Activity implements OnScrollListener {
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
-		// TODO Auto-generated method stub
-		// �������ɼ���Ŀ������
-
-		// ���е���Ŀ�Ѿ������������ȣ����Ƴ�ײ���View
 		if (totalItemCount >= MaxDataNum && flag == 0) {
-			// ע������
-
-			// mylistview1.removeFooterView(moreView);//����ò�ƻ��ý���switch������
-
-			Toast.makeText(this, "���ȫ��������ɣ�û�и����ݣ�", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "û��������", Toast.LENGTH_LONG).show();
 			flag = 1;
 		}
 	}
@@ -537,7 +514,6 @@ public class hot_main extends Activity implements OnScrollListener {
 	private class GetDataTask extends AsyncTask<Void, Void, String[]> {
 		private int index = 0;
 
-		// private PullToRefreshListView listview;
 
 		public GetDataTask(int i) {
 			index = i;
