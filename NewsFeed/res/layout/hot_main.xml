@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:background="@color/list_item_background"
         android:scaleType="matrix"
-        android:src="@drawable/a" />
+        android:src="@drawable/a2" />
 
     <android.support.v4.view.ViewPager
             android:footerDividersEnabled="false"
