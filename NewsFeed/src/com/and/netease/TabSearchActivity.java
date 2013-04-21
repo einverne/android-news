@@ -30,7 +30,6 @@ public class TabSearchActivity extends Activity {
 	protected String keyword;
 
 	ArrayList<HashMap<String, Object>> listItem;
-	// Êý¾ÝÏÔÊ¾
 		private DBAdapter dbadapter;
 		private Cursor c;
 		private Cursor cp;
@@ -42,9 +41,7 @@ public class TabSearchActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_search);
 		Log.d(TAG, "Search Start");
-		// ÏÔÊ¾Êý¾Ý¿âÊý¾Ý
 				dbadapter = new DBAdapter(this);
-				//dbadapter.open();
 				conn.getpeoples(dbadapter);
 				c = dbadapter.getpeople(0, 3);
 				conn.getplaces(dbadapter);
@@ -53,7 +50,6 @@ public class TabSearchActivity extends Activity {
 				conn.getdivisions(dbadapter);
 				cd=dbadapter.getdivision(0,3);
 			
-		//¸ß¼¶¼ìË÷°´Å¥
 		Button advanceSearchButton = (Button) findViewById(R.id.button_advanced_search);
 		advanceSearchButton.setOnClickListener(new Button.OnClickListener() {
 			@Override
@@ -63,7 +59,7 @@ public class TabSearchActivity extends Activity {
 				jumptoAdvancedSearch();
 			}
 		});
-		//ÆÕÍ¨¼ìË÷°´Å¥
+		//ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¥
 		Button searchButton = (Button) findViewById(R.id.search);
 		searchButton.setOnClickListener(new Button.OnClickListener() {
 
@@ -74,7 +70,7 @@ public class TabSearchActivity extends Activity {
 				if (TabSearchActivity.this.keyword.length() > 0) {
 					jumptoSearchResult();
 				} else {
-					Toast.makeText(TabSearchActivity.this, "ÇëÊäÈë¹Ø¼ü×Ö",
+					Toast.makeText(TabSearchActivity.this, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½ï¿½",
 							Toast.LENGTH_SHORT).show();
 				}
 
@@ -84,8 +80,8 @@ public class TabSearchActivity extends Activity {
 		/*
 		 * 
 		 * 
-		 * »ñÈ¡ÈÈµã¹Ø¼ü´Ê
-		 * 3¸öÈËÃû¡¢µØÃû¡¢»ú¹¹Ãû
+		 * ï¿½ï¿½È¡ï¿½Èµï¿½Ø¼ï¿½ï¿½
+		 * 3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		 * 
 		 * 
 		 */
@@ -111,7 +107,7 @@ public class TabSearchActivity extends Activity {
 				intent.putExtras(bundle);
 				startActivity(intent);
 			
-//				Toast.makeText(TabSearchActivity.this, "ŸáücµÄËÑË÷", Toast.LENGTH_LONG).show();
+//				Toast.makeText(TabSearchActivity.this, "ï¿½ï¿½ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", Toast.LENGTH_LONG).show();
 //				startActivity(intent);
 //				TabSearchActivity.this.finish();
 			}
@@ -122,7 +118,7 @@ public class TabSearchActivity extends Activity {
 	
 	/**
 	 * 
-	 * Ìø×ª¸ß¼¶¼ìË÷
+	 * ï¿½ï¿½×ªï¿½ß¼ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	public void jumptoAdvancedSearch() {
 		Intent intent = new Intent(TabSearchActivity.this, advanced_search.class);
@@ -133,7 +129,7 @@ public class TabSearchActivity extends Activity {
 	}
 	/**
 	 * 
-	 * Ìø×ªÆÕÍ¨¼ìË÷
+	 * ï¿½ï¿½×ªï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½
 	 */
 	public void jumptoSearchResult() {
 		Intent intent = new Intent(TabSearchActivity.this, search.class);
@@ -144,7 +140,7 @@ public class TabSearchActivity extends Activity {
 	}
 	/**
 	 * 
-	 * ´ÓÓÎ±êÖÐÈ¡hotÁÐ±íµÄÊý¾Ý
+	 * ï¿½ï¿½ï¿½Î±ï¿½ï¿½ï¿½È¡hotï¿½Ð±ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * 
 	 */
 		public void getdata(){
