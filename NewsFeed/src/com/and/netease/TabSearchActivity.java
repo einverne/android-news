@@ -44,7 +44,7 @@ public class TabSearchActivity extends Activity {
 		Log.d(TAG, "Search Start");
 		// 显示数据库数据
 				dbadapter = new DBAdapter(this);
-				dbadapter.open();
+				//dbadapter.open();
 				conn.getpeoples(dbadapter);
 				c = dbadapter.getpeople(0, 3);
 				conn.getplaces(dbadapter);
