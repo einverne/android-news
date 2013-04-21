@@ -45,14 +45,14 @@
 
         <Button
             android:id="@+id/button_dingzhi"
-            android:layout_width="wrap_content"
+            android:layout_width="35dp"
+           
             android:layout_height="match_parent"
-             android:layout_marginTop="2dp"
-              android:layout_marginBottom="2dp"
-               android:layout_marginRight="2dp"
             android:layout_alignParentRight="true"
+            android:layout_marginBottom="2dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="2dp"
             android:background="@color/button_background"
-            android:gravity="center_vertical"
             android:text="定制" />
 
     </RelativeLayout>
