@@ -76,8 +76,12 @@
   <com.markupartist.android.widget.PullToRefreshListView
         android:id="@+id/hot_division"
         android:layout_width="match_parent"
-       android:background="#fff600"
+      
       android:layout_height="wrap_content"
+      android:footerDividersEnabled="false"
+        android:divider="@color/white"  
+ 	    android:dividerHeight="1.5px"
+ 	    android:background="@color/list_item_background"
         />
   
 
