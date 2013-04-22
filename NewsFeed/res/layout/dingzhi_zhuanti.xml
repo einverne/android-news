@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="@color/list_item_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,13 +15,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="标题"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/textView_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="专题的具体描述" />
+            android:text="专题的具体描述"
+            android:textColor="#0F1113" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -31,13 +35,15 @@
             android:id="@+id/textView_shijianduan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="定制开始时间  :" />
+            android:text="定制开始时间  :"
+            android:textColor="#0F1113" />
 
         <TextView
             android:id="@+id/textView_startTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="开始时间" />
+            android:text="开始时间"
+            android:textColor="#0F1113" />
 
     </LinearLayout>
 
@@ -49,13 +55,15 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="定制结束时间  :  " />
+            android:text="定制结束时间  :  "
+            android:textColor="#0F1113" />
+
         <TextView
             android:id="@+id/textView_endTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="结束时间" />
-        
+            android:text="结束时间"
+            android:textColor="#0F1113" />
 
     </LinearLayout>
 
