@@ -13,6 +13,10 @@
     <com.markupartist.android.widget.PullToRefreshListView
         android:id="@+id/hot_people"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:footerDividersEnabled="false"
+        android:divider="@color/white"  
+ 	    android:dividerHeight="1.5px"
+ 	    android:background="@color/list_item_background" />
 
 </LinearLayout>
