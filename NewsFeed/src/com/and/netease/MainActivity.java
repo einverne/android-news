@@ -66,7 +66,7 @@ public class MainActivity extends TabActivity {
 				tabHost.setCurrentTabByTag("search");
 				RadioButton RB = (RadioButton) findViewById(R.id.radio_search);
 				RB.setChecked(true);
-
+				Log.d("wwwwwwwinnnn", "innnn");
 				CharSequence quanwenCharSequence = getText(R.string.biaoti_quanwen);
 				biaoti.setText(quanwenCharSequence);
 			}
@@ -151,7 +151,7 @@ public class MainActivity extends TabActivity {
 	protected void dialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 		builder.setTitle("警告");
-		builder.setIcon(R.drawable.ic_launcher); // EV_BUG
+		builder.setIcon(R.drawable.alert); // EV_BUG
 		builder.setMessage("确定要退出吗?");
 		builder.setPositiveButton("确认",
 				new android.content.DialogInterface.OnClickListener() {
