@@ -66,33 +66,42 @@ public class advanced_search extends Activity {
 					Toast.makeText(advanced_search.this, "请输入关键词", Toast.LENGTH_SHORT).show();
 					return;
 				}
-				
+				final Calendar c = Calendar.getInstance();
+				mYear = c.get(Calendar.YEAR);
+				mMonth = c.get(Calendar.MONTH);
+				mDay = c.get(Calendar.DAY_OF_MONTH);
 				
 				// Date 
 				
 				String startTime = startTextView.getText().toString();
 				String endTime = endTextView.getText().toString();
-				Log.d("wwwwdatef", datef);
-				Log.d("wwwweett", datet);
+				int mon= mMonth + 1;
+				String currentTime = mYear+"-"+mon+"-"+mDay;
+				Log.d("wwwcurTime", ""+currentTime);
 				DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");    
 				DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd"); 
+				DateFormat format3 = new SimpleDateFormat("yyyy-MM-dd"); 
 				Date date1 = null; 
 				Date date2 = null;
+				Date date3 = null;
+				
 				try {
 					date1 = format1.parse(startTime);
-					date2 = format1.parse(endTime);
-					Log.d("wwwwwwst", ""+date1);
-					Log.d("wwwwwwet", ""+date2);
+					date2 = format2.parse(endTime);
+					date3 = format3.parse(currentTime);
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
-				if (date1==null||date2==null||date1.compareTo(date2)>0) {
+				if (date1==null||date2==null||date1.compareTo(date2)>0||date1.compareTo(date3)>0||date2.compareTo(date3)>0) {
+					Log.d("wwwwwwst", ""+date1);
+					Log.d("wwwwwwet", ""+date2);
+					Log.d("wwwwwwcur", ""+date3);
 					Toast.makeText(advanced_search.this, "请输入合法日期", Toast.LENGTH_SHORT).show();
 					return;
 				}
-				
+				else{
 				//传参
 				Intent intent = new Intent();
 				intent.setClass(advanced_search.this, search.class);
@@ -103,6 +112,7 @@ public class advanced_search extends Activity {
 				intent.putExtras(bundle);
 				startActivity(intent);
 				advanced_search.this.finish();
+				}
 			}
 		});
 
@@ -213,7 +223,7 @@ public class advanced_search extends Activity {
 			Intent intent = new Intent();
 			intent.setClass(advanced_search.this, MainActivity.class);
 			startActivityForResult(intent, 1);
-			advanced_search.this.finish();
+			this.finish();
 		}
 		return true;
 	}
