@@ -275,14 +275,15 @@ public class search extends Activity {
 	 * 第一次取搜索结果
 	 */
 	public List<Map<String, Object>> getData() {
-		List<Map<String, Object>> list = ConnectWeb.getsearch(keyword, dateF,
+		Map<String, Object>searchmap=ConnectWeb.getsearch(keyword, dateF,
 				dateT, "F", 0, 30);
+		List<Map<String, Object>> list = (List<Map<String, Object>>)searchmap.get("first");
 		Log.d("wwwwddddddatef",dateF);
 		Log.d("wwwwddddddatet",dateT);
 		if (list.size() != 0) {
 			for (int i = 0; i < list.size(); i++) {
 				HashMap<String, Object> map = new HashMap<String, Object>();
-				Map<String, Object> map1 = list.get(i);
+				Map<String, Object> map1 = (Map<String, Object>) list.get(i);
 				String source = (String) map1.get("source");
 				map.put("Title", map1.get("title"));
 				map.put("source",source);
@@ -308,9 +309,9 @@ public class search extends Activity {
 	 * @return listItem
 	 */
 	public List<Map<String, Object>> loadMoreData() {
-		List<Map<String, Object>> list = ConnectWeb.getsearch(keyword, dateF,
-				dateT, "T", MaxItem, MaxItem + 20);
-
+		Map<String, Object>searchmap=ConnectWeb.getsearch(keyword, dateF,
+				dateT, "F", 0, 30);
+		List<Map<String, Object>> list = (List<Map<String, Object>>)searchmap.get("first");
 		int count = listItemAdapter.getCount();
 
 		// if (count+20<MaxDataNum) {
