@@ -13,16 +13,16 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	// 数据库名
-	private static final String DATABASE_NAME = "NewsFeed100"  ;
+	private static final String DATABASE_NAME = "NewsFeed102"  ;
 	// 版本名
 	private static final int DATABASE_VERSION = 3;
 	// 表名
 	
 	// 这个常量包括创建所需表的SQL语句
 	private static final String DATABASE_CREATE_news = "create table if not exists news (_id integer primary key autoincrement, "
-			+ "title text not null, source text,description text,date text,url text,zhuantiId integer);";
+			+ "title text not null, source text,description text,date text,url text,zhuantiId integer,read text);";
 	private static final String DATABASE_CREATE_zuijinxinwen = "create table if not exists zuijinxinwen(_id integer primary key autoincrement, "
-			+ "words text not null,date text,title text,count integer,UNIQUE (words));";
+			+ "words text not null,date text,title text,count integer,read text,UNIQUE (words));";
 	private static final String DATABASE_CREATE_peoples = "create table if not exists peoples (_id integer primary key autoincrement, "
 			+ "title text not null, heat integer,UNIQUE (title));";
 	private static final String DATABASE_CREATE_places = "create table if not exists places (_id integer primary key autoincrement, "
@@ -32,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_CREATE_userzhuanti = "create table if not exists user(_id integer primary key autoincrement, "
 			+ "user text not null,jobname text not null,from1 text,to1 text,days integer,count integer,UNIQUE (user,jobname));";
 	private static final String DATABASE_CREATE_usernews = "create table if not exists usernews (_id integer primary key autoincrement, "
-			+ "title text not null, source text,words text,description text,date text,url text,zhuantiId integer);";
+			+ "title text not null, source text,words text,description text,date text,url text,zhuantiId integer,read text);";
 	
 
 	private static final String TAG = "EV_Debug";
