@@ -8,7 +8,6 @@ import java.util.Map;
 
 import com.and.netease.utils.CheckNetwork;
 import com.and.netease.utils.ConnectWeb;
-import com.and.netease.utils.DBAdapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -52,8 +51,8 @@ public class search extends Activity {
 	String month;
 	String day;
 	int flagLoadMoreData = 0;
-	private DBAdapter dbadapter;
-
+	private int numberOfSearchResult=0;
+	TextView text;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -74,13 +73,16 @@ public class search extends Activity {
 			dateT=bundle.getString("dateT");
 			keyword = bundle.getString("keyword");
 		}
-		getMaxDataNum();
 		myListView = (ListView) findViewById(R.id.listView_searchresult);
 		handler = new Handler();
 		// 生成动态数组，加入数据
 		listItem = new ArrayList<Map<String, Object>>();
 		// 取数据
 		getData();
+
+		text = (TextView) findViewById(R.id.textView_newstitle);
+		String te = "共有" + numberOfSearchResult + "条";
+		text.setText(te);
 		if (listItem.size() != 0) {
 			// 生成适配器的Item和动态数组对应的元素
 //			listItemAdapter = new SimpleAdapter(this, listItem,
@@ -183,7 +185,7 @@ public class search extends Activity {
 							listItemAdapter.notifyDataSetChanged();
 						}
 
-					}, 2000);
+					}, 1000);
 				}
 			}
 		});
@@ -236,28 +238,6 @@ public class search extends Activity {
 	}
 
 	/**
-	 * 
-	 * 取最大条数
-	 * 
-	 */
-	public void getMaxDataNum() {
-		// ConnectWeb conn;
-		// conn = new ConnectWeb();
-		MaxDataNum = 50;
-		// try {
-		// MaxDataNum = ConnectWeb.getsearchcount(keyword, dateF, dateT);
-		// } catch (UnsupportedEncodingException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		TextView text;
-		text = (TextView) findViewById(R.id.textView_newstitle);
-		String te = "共有" + MaxDataNum + "条";
-		text.setText(te);
-		// text = "共有"+MaxDataNum+"条新闻";
-	}
-	
-	/**
 	 * 传入资源名字 返回资源id
 	 * @param name 资源名字
 	 * @return 资源的id
@@ -275,11 +255,12 @@ public class search extends Activity {
 	 * 第一次取搜索结果
 	 */
 	public List<Map<String, Object>> getData() {
-		Map<String, Object>searchmap=ConnectWeb.getsearch(keyword, dateF,
+		Map<String, Object> searchmap=ConnectWeb.getsearch(keyword, dateF,
 				dateT, "F", 0, 30);
 		List<Map<String, Object>> list = (List<Map<String, Object>>)searchmap.get("first");
 		Log.d("wwwwddddddatef",dateF);
 		Log.d("wwwwddddddatet",dateT);
+		numberOfSearchResult = (Integer) searchmap.get("second");
 		if (list.size() != 0) {
 			for (int i = 0; i < list.size(); i++) {
 				HashMap<String, Object> map = new HashMap<String, Object>();
