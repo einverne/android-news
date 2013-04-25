@@ -353,7 +353,20 @@ public class DBAdapter
 		return mCursor;
 	}
 
+//db.query(String distinct, String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit);
+	
+	public Cursor getloginuser()
+	{
+		db = DBHelper.getWritableDatabase();
+		boolean distinct=true;
+		Cursor mCursor = db.query(distinct, DATABASE_TABLE_usernews,null, null, null,null, null, null, null);
+	
+		db.close();
+		DBHelper.close();
+		return mCursor;
 
+	}
+	
 	public Cursor getusernews(long userid) {
 		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = db.query(DATABASE_TABLE_usernews,
