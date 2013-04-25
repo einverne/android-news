@@ -194,7 +194,7 @@ public class ConnectWeb {
 			String dateF, String dateT, String relateToChina, int start, int max) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map = null;
-		Map<String, Object> resultmap = null;
+		Map<String, Object> resultmap =  new HashMap<String, Object>();
 		int second=0;
 		try {
 			String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetDocs&s="+keyword+"&dateF="+dateF+"&dateT="+dateT+"&relate="+relateToChina+"&start="+Integer.toString(start)+"&max="+Integer.toString(max);
@@ -202,6 +202,7 @@ public class ConnectWeb {
 			JSONObject jay = new JSONObject(str);
 			JSONArray first=new JSONArray(jay.getString("first"));
 			String json_second=(String)jay.getString("second");
+			Log.d("search ",json_second);
 			second=Integer.parseInt(json_second);
 			for (int i = 0; i < first.length(); i += 1) {
 				JSONObject object = (JSONObject) first.get(i);
@@ -229,8 +230,8 @@ public class ConnectWeb {
 				Collections.sort(list, new Comparator<Map<String, Object>>() {
 					public int compare(Map<String, Object> object1,
 							Map<String, Object> object2) {
-						return ((String) object1.get("date"))
-								.compareTo((String) object2.get("date"));
+						return ((String) object2.get("date"))
+								.compareTo((String) object1.get("date"));
 					}
 				});
 			}
