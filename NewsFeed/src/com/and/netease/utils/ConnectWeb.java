@@ -69,7 +69,7 @@ public class ConnectWeb {
 					String description = (String) onenews.getString("description");
 					String date = (String) onenews.getString("date");
 					String url = (String) onenews.getString("url");
-					dbadapter.userinsertnews(title, source, description, date, url, words, jobid);
+					dbadapter.userinsertnews(title, source, description, date, url, words, jobid,false);
 					}
 				}
 			
@@ -190,18 +190,21 @@ public class ConnectWeb {
 	}
 	
 	
-	static public List<Map<String, Object>> getsearch(String keyword,
+	static public Map<String, Object> getsearch(String keyword,
 			String dateF, String dateT, String relateToChina, int start, int max) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map = null;
-
+		Map<String, Object> resultmap = null;
+		int second=0;
 		try {
 			String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetDocs&s="+keyword+"&dateF="+dateF+"&dateT="+dateT+"&relate="+relateToChina+"&start="+Integer.toString(start)+"&max="+Integer.toString(max);
 			String str = HttpConn.getJsonFromUrlGet(theurl);
-			JSONArray jay = new JSONArray(str);
-
-			for (int i = 0; i < jay.length(); i += 1) {
-				JSONObject object = (JSONObject) jay.get(i);
+			JSONObject jay = new JSONObject(str);
+			JSONArray first=new JSONArray(jay.getString("first"));
+			String json_second=(String)jay.getString("second");
+			second=Integer.parseInt(json_second);
+			for (int i = 0; i < first.length(); i += 1) {
+				JSONObject object = (JSONObject) first.get(i);
 				JSONObject inforMap = new JSONObject(
 						(String) object.getString("inforMap"));
 				String title = (String) inforMap.getString("title");
@@ -226,8 +229,8 @@ public class ConnectWeb {
 				Collections.sort(list, new Comparator<Map<String, Object>>() {
 					public int compare(Map<String, Object> object1,
 							Map<String, Object> object2) {
-						return ((String) object2.get("date"))
-								.compareTo((String) object1.get("date"));
+						return ((String) object1.get("date"))
+								.compareTo((String) object2.get("date"));
 					}
 				});
 			}
@@ -235,7 +238,9 @@ public class ConnectWeb {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return list;
+		resultmap.put("first", list);
+		resultmap.put("second", second);
+		return resultmap;
 	}
 
 	static public int getzuijinxinwen(DBAdapter dbadapter) {
@@ -364,7 +369,7 @@ public class ConnectWeb {
 			String url = (String) onexinwen.getString("url");
 			Log.d("test news title", title);
 			dbadapter.insert(title, source, description, date, url,
-					oneclusterid);
+					oneclusterid,false);
 		}
 	}
 
@@ -381,7 +386,7 @@ public class ConnectWeb {
 	static private long insert(DBAdapter dbadapter, String title,
 			String todaydate, String words, int oneclustercount) {
 
-		return dbadapter.insert(words, title, todaydate, oneclustercount);
+		return dbadapter.insert(words, title, todaydate, oneclustercount,false);
 	}
 
 	/**
