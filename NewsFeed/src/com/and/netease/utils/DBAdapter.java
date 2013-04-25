@@ -37,12 +37,14 @@ public class DBAdapter
 	public static final String newsKEY_Description = "description";
 	public static final String newsKEY_Url = "url";
 	public static final String newsKEY_ZhuantiId = "zhuantiId";
+	public static final String newsKEY_Read = "read";
 
 	public static final String zuijinxinwenKEY_ROWID = "_id";// 是最近新闻的专题们
 	public static final String zuijinxinwenKEY_Words = "words";		//专题关键字
 	public static final String zuijinxinwenKEY_Count = "count";		//
 	public static final String zuijinxinwenKEY_Title = "title";		//
 	public static final String zuijinxinwenKEY_Date = "date";		//专题日期
+	public static final String zuijinxinwenKEY_Read = "read";
 	
 	public static final String userKEY_ROWID = "_id";// 是最近新闻的专题们
 	public static final String userKEY_To = "to1";		//专题关键字
@@ -62,6 +64,7 @@ public class DBAdapter
 	public static final String usernewsKEY_Description = "description";
 	public static final String usernewsKEY_Url = "url";
 	public static final String usernewsKEY_ZhuantiId = "zhuantiId";
+	public static final String usernewsKEY_Read= "read";
 	
 	
 	public static final String peoplesKEY_ROWID = "_id";
@@ -125,13 +128,14 @@ public class DBAdapter
 	return result;
 	}
 	
-	public long insert(String words, String title ,String date,int count) {
+	public long insert(String words, String title ,String date,int count,boolean read) {
 		db = DBHelper.getWritableDatabase();
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(zuijinxinwenKEY_Title, title);
 		initialValues.put(zuijinxinwenKEY_Date, date);
 		initialValues.put(zuijinxinwenKEY_Words,words);
 		initialValues.put(zuijinxinwenKEY_Count, count);
+		initialValues.put(zuijinxinwenKEY_Read, String.valueOf(read));
 		Cursor mCursor =db.query(true, DATABASE_TABLE_zuijinxinwen,
 				new String[] { zuijinxinwenKEY_ROWID,
 						zuijinxinwenKEY_Count}, zuijinxinwenKEY_Words+ "=\""
@@ -174,7 +178,7 @@ public class DBAdapter
 	 * @return
 	 */
 	public long insert(String title, String source, String description,
-			String date, String url, long zhuantiId) {
+			String date, String url, long zhuantiId,boolean read) {
 		db = DBHelper.getWritableDatabase();
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(newsKEY_Title, title);
@@ -183,6 +187,7 @@ public class DBAdapter
 		initialValues.put(newsKEY_Description, description);
 		initialValues.put(newsKEY_Url, url);
 		initialValues.put(newsKEY_ZhuantiId, zhuantiId);
+		initialValues.put(newsKEY_Read, String.valueOf(read));
 		
 		long result= db.insert(DATABASE_TABLE_news, null, initialValues);
 		db.close();
@@ -201,7 +206,7 @@ public class DBAdapter
 	 * 
 	 */
 	public long userinsertnews(String title, String source, String description,
-			String date, String url, String words,long zhuantiId) {
+			String date, String url, String words,long zhuantiId,boolean read) {
 		db = DBHelper.getWritableDatabase();
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(usernewsKEY_Title, title);
@@ -211,13 +216,49 @@ public class DBAdapter
 		initialValues.put(usernewsKEY_Url, url);
 		initialValues.put(usernewsKEY_Words, words);
 		initialValues.put(usernewsKEY_ZhuantiId, zhuantiId);
-		
+		initialValues.put(usernewsKEY_Read, String.valueOf(read));
 		long result= db.insert(DATABASE_TABLE_usernews , null, initialValues);
 		db.close();
 		DBHelper.close();
 		return result;
 	}
 
+	public boolean setread_usernews(String _id,boolean read){
+		db = DBHelper.getWritableDatabase();
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(usernewsKEY_Read, String.valueOf(read));
+		int updateresult=db.update(DATABASE_TABLE_usernews, initialValues,usernewsKEY_ROWID+"="+_id , null);
+		boolean result=false;
+		if(updateresult>0)
+			result=true;
+		db.close();
+		DBHelper.close();
+		return result;
+	}
+	public boolean setread_zuijinxinwen(String _id,boolean read){
+		db = DBHelper.getWritableDatabase();
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(zuijinxinwenKEY_Read, String.valueOf(read));
+		int updateresult=db.update(DATABASE_TABLE_zuijinxinwen, initialValues,zuijinxinwenKEY_ROWID+"="+_id , null);
+		boolean result=false;
+		if(updateresult>0)
+			result=true;
+		db.close();
+		DBHelper.close();
+		return result;
+	}
+	public boolean setread_news(String _id,boolean read){
+		db = DBHelper.getWritableDatabase();
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(newsKEY_Read, String.valueOf(read));
+		int updateresult=db.update(DATABASE_TABLE_news, initialValues,newsKEY_ROWID+"="+_id , null);
+		boolean result=false;
+		if(updateresult>0)
+			result=true;
+		db.close();
+		DBHelper.close();
+		return result;
+	}
 
 
 
@@ -367,6 +408,9 @@ public class DBAdapter
 
 	}
 	
+
+	
+	
 	public Cursor getusernews(long userid) {
 		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = db.query(DATABASE_TABLE_usernews,
@@ -445,13 +489,6 @@ public class DBAdapter
 	public Cursor getnews(String words) throws SQLException {
 		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = null;
-		if (words.equals("others"))
-			mCursor = db.query(true, DATABASE_TABLE_news, new String[] {
-					newsKEY_ROWID, newsKEY_Title, newsKEY_Source,
-					newsKEY_Description, newsKEY_Date, newsKEY_Url,
-					newsKEY_ZhuantiId }, newsKEY_ZhuantiId + "=" + 0, null,
-					null, null, null, null);
-		else {
 			mCursor = db.query(true, DATABASE_TABLE_zuijinxinwen, null, zuijinxinwenKEY_Title + "=\'"
 					+ words + "\'", null, null, null, null, null);
 
@@ -460,13 +497,9 @@ public class DBAdapter
 			}
 			String id = (String) mCursor.getString(mCursor.getColumnIndex("_id"));
 			Log.d(TAG, "getString函数:"+id);
-			String[] news_columns = new String[] {
-					newsKEY_ROWID, newsKEY_Title, newsKEY_Source,
-					newsKEY_Description, newsKEY_Date, newsKEY_Url,
-					newsKEY_ZhuantiId };
-			mCursor = db.query(true, DATABASE_TABLE_news, news_columns, newsKEY_ZhuantiId + "=" + id, null,
+			mCursor = db.query(true, DATABASE_TABLE_news, null, newsKEY_ZhuantiId + "=" + id, null,
 					null, null, null, null);
-		}
+		
 		if (mCursor != null)
 			mCursor.moveToFirst();
 
@@ -541,34 +574,32 @@ public class DBAdapter
 	}
 
 	// ---删除一个指定标题---
+	//db.delete("person", "age < ?", new String[]{"35"});  
+	public boolean deleteuser(String user) {
+		db = DBHelper.getWritableDatabase();
+		boolean result=false;
+		int i = db.delete(DATABASE_TABLE_user, userKEY_user
+						+ " = '"+user+"'",null);
+		if(i>0)
+			result = true;
 
-
+		db.close();
+		DBHelper.close();
+		return result;
+	}
 	// ---删除---
-
+/*
 		//--按时间排序，删除到只剩前30条,如果本身不足30条，比如只有10条，就只剩10条
 		private void delete_news()
 		{
-			Cursor mCursor = db.query(DATABASE_TABLE_news, null, newsKEY_ZhuantiId+"<30", null,
-					null, null, null,null);
-			if (mCursor != null) 
-				mCursor.moveToFirst();
-			do{
-				ContentValues initialValues = new ContentValues();
-				initialValues.put(newsKEY_Source, mCursor.getString(1));
-				initialValues.put(newsKEY_Date, mCursor.getString(2));
-				initialValues.put(newsKEY_Description, mCursor.getString(3));
-				initialValues.put(newsKEY_Url, mCursor.getString(4));
-				initialValues.put(newsKEY_ZhuantiId, mCursor.getString(5));
-				
-
-				db.insert(DATABASE_TABLE_news, null, initialValues);			
-			}while(mCursor.moveToNext());
+			db.delete(DATABASE_TABLE_news, "_id >=0", null);  
 		}
 		private void delete_peoples()
 		{
-			Cursor mCursor = db.query(DATABASE_TABLE_peoples, new String[] {
-					peoplesKEY_ROWID, peoplesKEY_Title, peoplesKEY_Heat}, null, null,
+			
+			Cursor mCursor = db.query(DATABASE_TABLE_peoples, null, null, null,
 					null, null, peoplesKEY_Heat+ " desc","30");
+			db.delete(DATABASE_TABLE_peoples, "_id >=0", null);  
 			if (mCursor != null) 
 				mCursor.moveToFirst();
 			do{
@@ -582,9 +613,9 @@ public class DBAdapter
 		}
 		private void delete_divisions()
 		{
-			Cursor mCursor = db.query(DATABASE_TABLE_divisions, new String[] {
-					divisionsKEY_ROWID, divisionsKEY_Title, divisionsKEY_Heat}, null, null,
+			Cursor mCursor = db.query(DATABASE_TABLE_divisions,null, null, null,
 					null, null, divisionsKEY_Heat+ " desc","30");
+			db.delete(DATABASE_TABLE_divisions, "_id >=0", null);  
 			if (mCursor != null) 
 				mCursor.moveToFirst();
 			do{
@@ -598,9 +629,9 @@ public class DBAdapter
 		}
 		private void delete_places()
 		{
-			Cursor mCursor = db.query(DATABASE_TABLE_places, new String[] {
-					placesKEY_ROWID, placesKEY_Title, placesKEY_Heat}, null, null,
+			Cursor mCursor = db.query(DATABASE_TABLE_places, null, null, null,
 					null, null, placesKEY_Heat+ " desc","30");
+			db.delete(DATABASE_TABLE_places, "_id >=0", null);  
 			if (mCursor != null) 
 				mCursor.moveToFirst();
 			do{
@@ -615,9 +646,9 @@ public class DBAdapter
 		private void delete_zuijinxinwen()
 		{
 			
-			Cursor mCursor = db.query(DATABASE_TABLE_zuijinxinwen, new String[] {
-					zuijinxinwenKEY_ROWID, zuijinxinwenKEY_Words, zuijinxinwenKEY_Count}, null, null,
+			Cursor mCursor = db.query(DATABASE_TABLE_zuijinxinwen,null, null, null,
 					null, null, zuijinxinwenKEY_Count+ " desc","30");
+			db.delete(DATABASE_TABLE_zuijinxinwen, "_id >=0", null);  
 			if (mCursor != null) 
 				mCursor.moveToFirst();
 			do{
@@ -639,5 +670,5 @@ public class DBAdapter
 
 			db.close();
 			DBHelper.close();
-		}
+		}*/
 }
