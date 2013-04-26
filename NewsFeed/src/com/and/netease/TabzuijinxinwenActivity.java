@@ -22,6 +22,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
+import android.widget.SlidingDrawer;
 import android.widget.Toast;
 
 import com.and.netease.utils.CheckNetwork;
@@ -55,6 +56,9 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		setContentView(R.layout.layout_zuijinxinwen);
 		Log.d(TAG, "Tabzuijinxinwen onCreate");
 
+		ProgressBar progressBar = new ProgressBar(this);
+		
+		
 		moreView = getLayoutInflater().inflate(R.layout.moredata, null);
 		bt = (Button) moreView.findViewById(R.id.bt_load);
 		pg = (ProgressBar) moreView.findViewById(R.id.pg);
@@ -106,7 +110,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 						pg.setVisibility(View.GONE);
 						listItemAdapter.notifyDataSetChanged();
 					}
-				}, 100);
+				}, 200);
 			}
 		});
 
@@ -143,6 +147,8 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 						} else {
 							Toast.makeText(TabzuijinxinwenActivity.this,
 									"网络不可用,请检查联网状态", Toast.LENGTH_SHORT).show();
+							//这里将下拉状态变成正常状态
+							((PullToRefreshListView)TabzuijinxinwenActivity.this.getListView()).onRefreshComplete();
 						}
 					}
 				});
@@ -243,12 +249,19 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 	private class GetDataTask extends AsyncTask<String, Void, Integer> {
 
 		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+		}
+
+		@Override
 		protected Integer doInBackground(String... params) {
-			return new Integer(ConnectWeb.getzuijinxinwen(dbadapter)); // 后台请求最近新闻
+			return new Integer(ConnectWeb.getzuijinxinwen(dbadapter)); //后台请求最近新闻
 		}
 
 		@Override
 		protected void onPostExecute(Integer result) {
+			super.onPostExecute(result);
 			Log.d(TAG, "TabzuijinxinwenActivity GetDataTask PostExecute");
 			c = dbadapter.getzuijinxinwen(0, MaxDataNum);
 			listItem = new ArrayList<HashMap<String, String>>();
