@@ -499,10 +499,10 @@ public class hot_main extends Activity implements OnScrollListener {
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
-		if (totalItemCount >= MaxDataNum && flag == 0) {
-			Toast.makeText(this, "没有数据了", Toast.LENGTH_LONG).show();
-			flag = 1;
-		}
+//		if (totalItemCount >= MaxDataNum && flag == 0) {
+//			Toast.makeText(this, "没有数据了", Toast.LENGTH_LONG).show();
+//			flag = 1;
+//		}
 	}
 
 	@Override
