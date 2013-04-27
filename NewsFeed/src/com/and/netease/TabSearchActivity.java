@@ -59,7 +59,7 @@ public class TabSearchActivity extends Activity {
 				jumptoAdvancedSearch();
 			}
 		});
-		//��ͨ������ť
+		//锟斤拷通锟斤拷锟斤拷锟斤拷钮
 		Button searchButton = (Button) findViewById(R.id.search);
 		searchButton.setOnClickListener(new Button.OnClickListener() {
 
@@ -70,8 +70,7 @@ public class TabSearchActivity extends Activity {
 				if (TabSearchActivity.this.keyword.length() > 0) {
 					jumptoSearchResult();
 				} else {
-					Toast.makeText(TabSearchActivity.this, "������ؼ���",
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(TabSearchActivity.this, "请输入关键字",Toast.LENGTH_SHORT).show();
 				}
 
 			}
@@ -80,8 +79,8 @@ public class TabSearchActivity extends Activity {
 		/*
 		 * 
 		 * 
-		 * ��ȡ�ȵ�ؼ��
-		 * 3������������
+		 * 锟斤拷取锟饺碉拷丶锟斤拷
+		 * 3锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
 		 * 
 		 * 
 		 */
@@ -107,7 +106,7 @@ public class TabSearchActivity extends Activity {
 				intent.putExtras(bundle);
 				startActivity(intent);
 			
-//				Toast.makeText(TabSearchActivity.this, "���c������", Toast.LENGTH_LONG).show();
+//				Toast.makeText(TabSearchActivity.this, "锟斤拷锟絚锟斤拷锟斤拷锟斤拷", Toast.LENGTH_LONG).show();
 //				startActivity(intent);
 //				TabSearchActivity.this.finish();
 			}
@@ -118,7 +117,7 @@ public class TabSearchActivity extends Activity {
 	
 	/**
 	 * 
-	 * ��ת�߼�����
+	 * 锟斤拷转锟竭硷拷锟斤拷锟斤拷
 	 */
 	public void jumptoAdvancedSearch() {
 		Intent intent = new Intent(TabSearchActivity.this, advanced_search.class);
@@ -129,7 +128,7 @@ public class TabSearchActivity extends Activity {
 	}
 	/**
 	 * 
-	 * ��ת��ͨ����
+	 * 锟斤拷转锟斤拷通锟斤拷锟斤拷
 	 */
 	public void jumptoSearchResult() {
 		Intent intent = new Intent(TabSearchActivity.this, search.class);
@@ -140,7 +139,7 @@ public class TabSearchActivity extends Activity {
 	}
 	/**
 	 * 
-	 * ���α���ȡhot�б�����
+	 * 锟斤拷锟轿憋拷锟斤拷取hot锟叫憋拷锟斤拷锟斤拷
 	 * 
 	 */
 		public void getdata(){
