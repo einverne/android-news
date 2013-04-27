@@ -1,6 +1,8 @@
 package com.and.netease.utils;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,12 +14,19 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
+import android.util.Log;
 import android.widget.SlidingDrawer;
 
 public class HttpConn {
 
 	public static String getJsonFromUrlGet(String url) {
+		Log.d("EV_DEBUG", "getJsonFromUrlGet");
 		String str = null;
+		//将url格式化
+		Log.d("EV_DEBUG", url);
+		url = url.replace(" ", "%20");
+		url = url.replace("\"", "%22");
+		Log.d("EV_DEBUG", url);
 		//创建HTTPGET连接
 		HttpGet httpRequest = new HttpGet(url);
 		try {
