@@ -9,18 +9,22 @@ import java.util.Map;
 import com.and.netease.utils.CheckNetwork;
 import com.and.netease.utils.ConnectWeb;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
@@ -29,10 +33,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class search extends Activity {
-	String url;// ��ȡ�����URL
+	String url;
 	private static final String TAG = "EV_DEBUG";
 	private ArrayList<Map<String, Object>> listItem;// ������ʾlistview
-	private List<Map<String, Object>> list;// ȡ���
+	private List<Map<String, Object>> list;
 	private ListView myListView;
 	private int MaxItem;
 	private View moreView;
@@ -77,18 +81,11 @@ public class search extends Activity {
 		handler = new Handler();
 		// ��ɶ�̬���飬�������
 		listItem = new ArrayList<Map<String, Object>>();
-		// ȡ���
 		getData();
 
 		text = (TextView) findViewById(R.id.textView_newstitle);
-		String te = "共有" + numberOfSearchResult + "条";
+		String te = "����" + numberOfSearchResult + "��";
 		text.setText(te);
-//		if (listItem.size() != 0) {
-			// �����������Item�Ͷ�̬�����Ӧ��Ԫ��
-//			listItemAdapter = new SimpleAdapter(this, listItem,
-//					R.layout.zuijinxinwen_item, new String[] { "ItemTitle",
-//							"ItemText" }, new int[] { R.id.ItemTitle,
-//							R.id.ItemText });
 			listItemAdapter = new SimpleAdapter(this, listItem,
 					R.layout.zhuanti_item, new String[] { "icon","source","ItemTime", "Title",
 							"description"}, new int[] {R.id.imageView_icon,R.id.textView_source,
@@ -99,8 +96,6 @@ public class search extends Activity {
 				bt = (Button) moreView.findViewById(R.id.bt_load);
 				pg = (ProgressBar) moreView.findViewById(R.id.pg);
 			}
-			// ��Ӳ�����ʾ
-			myListView.addFooterView(moreView);
 			myListView.setAdapter(listItemAdapter);
 			bt.setOnClickListener(new OnClickListener() {
 
@@ -123,12 +118,7 @@ public class search extends Activity {
 					}, 1000);
 				}
 			});
-//		} else {
-//			Toast.makeText(search.this, "NO DATA!", Toast.LENGTH_SHORT).show();
-//			search.this.finish();
-//		}
 
-		// ��ӵ��
 		myListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -153,11 +143,7 @@ public class search extends Activity {
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) {
-				// �������ɼ���Ŀ������
-				// Log.d(TAG,
-				// "firstVisi"+firstVisibleItem+" visibleItemCount:"+visibleItemCount+" total:"+totalItemCount);
 				lastVisibleIndex = firstVisibleItem + visibleItemCount - 1;
-				// ���е���Ŀ�Ѿ������������ȣ����Ƴ�ײ���View
 				Log.d(TAG, "totalItemCount:" + totalItemCount + " MaxDataNum"
 						+ MaxDataNum);
 				if (totalItemCount >= MaxDataNum) {
@@ -167,10 +153,8 @@ public class search extends Activity {
 
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				// �����ײ����Զ����أ��ж�listview�Ѿ�ֹͣ�������������ӵ���Ŀ����adapter����Ŀ
 				if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
 						&& lastVisibleIndex == listItemAdapter.getCount()) {
-					// �������ײ�ʱ�Զ�����
 					pg.setVisibility(View.VISIBLE);
 					bt.setVisibility(View.GONE);
 					handler.postDelayed(new Runnable() {
@@ -196,25 +180,78 @@ public class search extends Activity {
 			public void onClick(View v) {
 				// �����Ƶă��݂��͵����ƽ���,���g߀Ҫ���^�߼��O�ý���
 
-				Intent intent = new Intent();
-				intent.setClass(search.this, dingzhi.class);
-				Bundle bundle = new Bundle();
-				bundle.putString("keyword", keyword);
-				intent.putExtras(bundle);
-				startActivity(intent);
-				search.this.finish();
+				
+				Person person;
+				person = (Person)getApplicationContext();
+				int zhuangtai=person.getFlag();
+				
+				if(zhuangtai ==0){
+					
+					
+					Login();
+				}
+				
+				else
+				{
+					Bundle bundle = new Bundle();
+					bundle.putString("date_start", dateF);
+					bundle.putString("date_end", dateT);
+					bundle.putString("keyword", keyword);
+					Intent intent = new Intent();
+					intent.putExtras(bundle);
+					intent.setClass(search.this, Dingzhi_detail.class);
+					startActivity(intent);
+					search.this.finish();
+					
+				}
+				
 			}
 		});
-		}
 
-	
+	}
 
+	public void Login() {
+		LayoutInflater factory = LayoutInflater.from(this);
+		final View textEntryView = factory.inflate(R.layout.alert,null);
+		final EditText edit_username = (EditText) textEntryView.findViewById(R.id.et_username);
+		final EditText edit_psw = (EditText) textEntryView.findViewById(R.id.et_psw);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		 builder.setTitle("input_username_and_password").setIcon(android.R.drawable.ic_dialog_info).setView(textEntryView)
+       .setNegativeButton("Cancel", null);
+builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+   public void onClick(DialogInterface dialog, int which) {
+	  String username = edit_username.getText().toString();
+	  String psw = edit_psw.getText().toString();
+	  Boolean boo = ConnectWeb.getlogin(username,psw);
+	  if (boo){
+		  Person person = (Person)getApplication();
+		  person.setFlag(1);
+		  Bundle bundle = new Bundle();
+		  bundle.putString("keyword", keyword);
+		  bundle.putString("date_start", dateF);
+		  bundle.putString("date_end", dateT);
+		  Intent intent = new Intent();
+		  intent.putExtras(bundle);
+		  intent.setClass(search.this, Dingzhi_detail.class);
+		  startActivity(intent);
+	  }
+	  else{
+		     
+		  new AlertDialog.Builder(search.this).setTitle("提示").setMessage("用户名或密码错误").setPositiveButton("确定", null).show();  
+
+	  }
+    }
+});
+builder.show();
+		 
+	}
 	/**
 	 * ȡ����
 	 */
 	public void getdate() {
 		final Calendar c = Calendar.getInstance();
-		mYear = c.get(Calendar.YEAR); // ��ȡ��ǰ���
+		mYear = c.get(Calendar.YEAR); 
 		mMonth = c.get(Calendar.MONTH) + 1;// ��ȡ��ǰ�·�
 		mDay = c.get(Calendar.DAY_OF_MONTH);// ��ȡ��ǰ�·ݵ����ں���
 		String year = mYear + "";
@@ -237,7 +274,7 @@ public class search extends Activity {
 	}
 
 	/**
-	 * ������Դ���� ������Դid
+sss	 * ������Դ���� ������Դid
 	 * @param name ��Դ����
 	 * @return ��Դ��id
 	 */
@@ -251,7 +288,7 @@ public class search extends Activity {
 		}
 	}
 	/**
-	 * 获取数据
+	 * ��һ��ȡ������
 	 */
 	public List<Map<String, Object>> getData() {
 		Map<String, Object> searchmap=ConnectWeb.getsearch(keyword, dateF,
@@ -269,7 +306,7 @@ public class search extends Activity {
 				map.put("source",source);
 				map.put("icon", getIcon(source));
 				map.put("ItemTime", map1.get("date"));
-				map.put("description", (String) map1.get("description"));
+				map.put("description", (String) map1.get("description") + i);
 				map.put("url", map1.get("url"));
 				listItem.add(map);
 
@@ -284,7 +321,6 @@ public class search extends Activity {
 	}
 
 	/**
-	 * ���ظ��
 	 * 
 	 * @return listItem
 	 */
@@ -309,7 +345,6 @@ public class search extends Activity {
 				listItem.add(map);
 			}
 		} else {
-			// ����Ѿ�����5��
 			for (int i = count; i < list.size(); i++) {
 				HashMap<String, Object> map = new HashMap<String, Object>();
 				Map<String, Object> map1 = list.get(i);
