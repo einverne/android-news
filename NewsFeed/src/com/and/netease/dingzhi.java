@@ -1,44 +1,36 @@
 package com.and.netease;
 
-import java.util.ArrayList;
+
 import java.util.HashMap;
-import java.util.Iterator;
+
 import java.util.List;
 import java.util.Map;
 
 import com.and.netease.utils.ConnectWeb;
 import com.and.netease.utils.DBAdapter;
 
-import android.R.string;
-import android.app.Activity;
+
 import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.content.Context;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.ContextMenu;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.Menu;
+
+
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
-import android.view.View.OnLongClickListener;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
+
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
+
 
 public class dingzhi extends ListActivity {
 	private static final String List = null;
@@ -58,21 +50,29 @@ public class dingzhi extends ListActivity {
 		//
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_dingzhi);
-		user_name = (String) this.getIntent().getStringExtra("name");
+		Person person = (Person)getApplication();
+		user_name = person.getUsername();
+		show_data();
 		list = ConnectWeb.getAllJobsOfUser(dbAdapter,
 				user_name);
 		show_data();
 		lv.setScrollBarStyle(1);
+		
+		findViewById(R.id.button_adddingzhi).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				submit_job();
+			}
+		});
 
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				HashMap<String, String> map = (HashMap<String, String>) lv
-						.getItemAtPosition(position);
-				
+						.getItemAtPosition(position);				
 				String task_dingzhi = map.get("name");
-
 				Intent intent = new Intent();
 				intent.putExtra("username", user_name);
 				intent.putExtra("task", task_dingzhi);
@@ -85,7 +85,7 @@ public class dingzhi extends ListActivity {
 		ItemOnLongClick();
 	}
 
-	// ³¤°´Ä³Ò»¸öItem
+	// ï¿½ï¿½ï¿½ï¿½Ä³Ò»ï¿½ï¿½Item
 	public void ItemOnLongClick() {
 
 		lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
@@ -94,9 +94,8 @@ public class dingzhi extends ListActivity {
 					ContextMenuInfo menuInfo) {
 				// TODO Auto-generated method stub
 
-				menu.add(0, 0, 0, "Ìí¼Ó");
-				menu.add(0, 1, 0, "É¾³ı");
-				menu.add(0, 2, 0, "È¡Ïû");
+				menu.add(0, 0, 0, "åˆ é™¤");
+				menu.add(0, 1, 0, "å–æ¶ˆ");
 
 			}
 		});
@@ -108,22 +107,18 @@ public class dingzhi extends ListActivity {
 
 		ContextMenuInfo info = item.getMenuInfo();
 		   AdapterView.AdapterContextMenuInfo contextMenuInfo = (AdapterView.AdapterContextMenuInfo) info;
-		   // »ñÈ¡Ñ¡ÖĞĞĞÎ»ÖÃ
+		   // ï¿½ï¿½È¡Ñ¡ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
 		   int position = contextMenuInfo.position;
 		   job_delete=list.get(position).get("name");
 		 
 		
 		switch (item.getItemId()) {
-		case 0:
-		{
-			submit_job();
-		}
-			break;
-		case 1: {
+	
+		case 0: {
 			delete_Data();
 			break;
 		}
-		case 2: {
+		case 1: {
 			
 			break;
 		}
@@ -138,16 +133,16 @@ public class dingzhi extends ListActivity {
 	public void delete_Data() {
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(dingzhi.this);
-		builder.setTitle("É¾³ıÄÚÈİ").setMessage("È·¶¨É¾³ıÂğ£¿")
-				.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener() {
+		builder.setTitle("æç¤º").setMessage("ç¡®å®šåˆ é™¤")
+				.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						// É¾³ıÊı¾İ
+						// É¾ï¿½ï¿½ï¿½ï¿½ï¿½
 						ConnectWeb.deleteJob(user_name, job_delete);
-						// ÏÔÊ¾Êı¾İ
+						// ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½
 						show_data();
 					}
-				}).setNegativeButton("È¡Ïû", null).create();
+				}).setNegativeButton("No", null).create();
 		builder.show();
 	}
 
@@ -169,9 +164,11 @@ public class dingzhi extends ListActivity {
 
 	public void submit_job() {
 
+		Bundle bundle = new Bundle();
 		Intent intent = new Intent();
-		intent.putExtra("username", user_name);
-		intent.setClass(dingzhi.this, TabSearchActivity.class);
+		bundle.putString("keyword", "news");
+		intent.putExtras(bundle);
+		intent.setClass(dingzhi.this, advanced_search.class);
 		startActivity(intent);
 		this.finish();
 
