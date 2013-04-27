@@ -29,10 +29,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class search extends Activity {
-	String url;// »ñÈ¡ÇëÇóµÄURL
+	String url;// ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½URL
 	private static final String TAG = "EV_DEBUG";
-	private ArrayList<Map<String, Object>> listItem;// ÓÃÀ´ÏÔÊ¾listview
-	private List<Map<String, Object>> list;// È¡Êı¾İ
+	private ArrayList<Map<String, Object>> listItem;// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾listview
+	private List<Map<String, Object>> list;// È¡ï¿½ï¿½ï¿½
 	private ListView myListView;
 	private int MaxItem;
 	private View moreView;
@@ -60,38 +60,38 @@ public class search extends Activity {
 		setContentView(R.layout.layout_search_result);
 		Log.d(TAG, "search_result_Activity_start");
 		MaxItem = 30;
-		//È¡¸÷¸ö²ÎÊı
+		//È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		Bundle bundle = this.getIntent().getExtras();
 		if(bundle.getString("dateF")==null){
-			//ÆÕÍ¨¼ìË÷
+			//ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½
 			getdate();
 			keyword = bundle.getString("keyword");
 		}
 		else{
-			//¸ß¼¶¼ìË÷
+			//ï¿½ß¼ï¿½ï¿½ï¿½ï¿½ï¿½
 			dateF=bundle.getString("dateF");
 			dateT=bundle.getString("dateT");
 			keyword = bundle.getString("keyword");
 		}
 		myListView = (ListView) findViewById(R.id.listView_searchresult);
 		handler = new Handler();
-		// Éú³É¶¯Ì¬Êı×é£¬¼ÓÈëÊı¾İ
+		// ï¿½ï¿½É¶ï¿½Ì¬ï¿½ï¿½ï¿½é£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		listItem = new ArrayList<Map<String, Object>>();
-		// È¡Êı¾İ
+		// È¡ï¿½ï¿½ï¿½
 		getData();
 
 		text = (TextView) findViewById(R.id.textView_newstitle);
-		String te = "¹²ÓĞ" + numberOfSearchResult + "Ìõ";
+		String te = "å…±æœ‰" + numberOfSearchResult + "æ¡";
 		text.setText(te);
-		if (listItem.size() != 0) {
-			// Éú³ÉÊÊÅäÆ÷µÄItemºÍ¶¯Ì¬Êı×é¶ÔÓ¦µÄÔªËØ
+//		if (listItem.size() != 0) {
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Itemï¿½Í¶ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½Ôªï¿½ï¿½
 //			listItemAdapter = new SimpleAdapter(this, listItem,
 //					R.layout.zuijinxinwen_item, new String[] { "ItemTitle",
 //							"ItemText" }, new int[] { R.id.ItemTitle,
 //							R.id.ItemText });
 			listItemAdapter = new SimpleAdapter(this, listItem,
 					R.layout.zhuanti_item, new String[] { "icon","source","ItemTime", "Title",
-							"description", "ItemMedio" }, new int[] {R.id.imageView_icon,R.id.textView_source,
+							"description"}, new int[] {R.id.imageView_icon,R.id.textView_source,
 							R.id.textView_ItemTime, R.id.Title, R.id.ItemDes });
 			// load more data
 			if (flagLoadMoreData != 5) {
@@ -99,7 +99,7 @@ public class search extends Activity {
 				bt = (Button) moreView.findViewById(R.id.bt_load);
 				pg = (ProgressBar) moreView.findViewById(R.id.pg);
 			}
-			// Ìí¼Ó²¢ÇÒÏÔÊ¾
+			// ï¿½ï¿½Ó²ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
 			myListView.addFooterView(moreView);
 			myListView.setAdapter(listItemAdapter);
 			bt.setOnClickListener(new OnClickListener() {
@@ -123,12 +123,12 @@ public class search extends Activity {
 					}, 1000);
 				}
 			});
-		} else {
-			Toast.makeText(search.this, "NO DATA!", Toast.LENGTH_SHORT).show();
-			search.this.finish();
-		}
+//		} else {
+//			Toast.makeText(search.this, "NO DATA!", Toast.LENGTH_SHORT).show();
+//			search.this.finish();
+//		}
 
-		// Ìí¼Óµã»÷
+		// ï¿½ï¿½Óµï¿½ï¿½
 		myListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -153,26 +153,26 @@ public class search extends Activity {
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) {
-				// ¼ÆËã×îºó¿É¼ûÌõÄ¿µÄË÷Òı
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¼ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				// Log.d(TAG,
 				// "firstVisi"+firstVisibleItem+" visibleItemCount:"+visibleItemCount+" total:"+totalItemCount);
 				lastVisibleIndex = firstVisibleItem + visibleItemCount - 1;
-				// ËùÓĞµÄÌõÄ¿ÒÑ¾­ºÍ×î´óÌõÊıÏàµÈ£¬ÔòÒÆ³ıµ×²¿µÄView
+				// ï¿½ï¿½ï¿½Ğµï¿½ï¿½ï¿½Ä¿ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½Æ³ï¿½×²ï¿½ï¿½ï¿½View
 				Log.d(TAG, "totalItemCount:" + totalItemCount + " MaxDataNum"
 						+ MaxDataNum);
 				if (totalItemCount >= MaxDataNum) {
 					myListView.removeFooterView(moreView);
-					Toast.makeText(search.this, "Êı¾İÈ«²¿¼ÓÔØÍê³É£¬Ã»ÓĞ¸ü¶àÊı¾İ£¡",
+					Toast.makeText(search.this, "nodata",
 							Toast.LENGTH_LONG).show();
 				}
 			}
 
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				// »¬µ½µ×²¿ºó×Ô¶¯¼ÓÔØ£¬ÅĞ¶ÏlistviewÒÑ¾­Í£Ö¹¹ö¶¯²¢ÇÒ×îºó¿ÉÊÓµÄÌõÄ¿µÈÓÚadapterµÄÌõÄ¿
+				// ï¿½ï¿½ï¿½ï¿½ï¿½×²ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Ø£ï¿½ï¿½Ğ¶ï¿½listviewï¿½Ñ¾ï¿½Í£Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½adapterï¿½ï¿½ï¿½ï¿½Ä¿
 				if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
 						&& lastVisibleIndex == listItemAdapter.getCount()) {
-					// µ±»¬µ½µ×²¿Ê±×Ô¶¯¼ÓÔØ
+					// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×²ï¿½Ê±ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½
 					pg.setVisibility(View.VISIBLE);
 					bt.setVisibility(View.GONE);
 					handler.postDelayed(new Runnable() {
@@ -190,13 +190,13 @@ public class search extends Activity {
 			}
 		});
 
-		// Ìø×ª¶¨ÖÆ½çÃæ
+		// ï¿½ï¿½×ªï¿½ï¿½ï¿½Æ½ï¿½ï¿½ï¿½
 		Button btnButton = (Button) findViewById(R.id.button_dingzhi);
 		btnButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// Œ¢¶¨ÖÆµÄƒÈÈİ‚÷ËÍµ½¶¨ÖÆ½çÃæ,ÖĞégß€Òª½›ß^¸ß¼‰ÔOÖÃ½çÃæ
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ÆµÄƒï¿½ï¿½İ‚ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½Æ½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½gß€Òªï¿½ï¿½ï¿½^ï¿½ß¼ï¿½ï¿½Oï¿½Ã½ï¿½ï¿½ï¿½
 
 				Intent intent = new Intent();
 				intent.setClass(search.this, dingzhi.class);
@@ -207,17 +207,18 @@ public class search extends Activity {
 				search.this.finish();
 			}
 		});
+		}
 
-	}
+	
 
 	/**
-	 * È¡ÈÕÆÚ
+	 * È¡ï¿½ï¿½ï¿½ï¿½
 	 */
 	public void getdate() {
 		final Calendar c = Calendar.getInstance();
-		mYear = c.get(Calendar.YEAR); // »ñÈ¡µ±Ç°Äê·İ
-		mMonth = c.get(Calendar.MONTH) + 1;// »ñÈ¡µ±Ç°ÔÂ·İ
-		mDay = c.get(Calendar.DAY_OF_MONTH);// »ñÈ¡µ±Ç°ÔÂ·İµÄÈÕÆÚºÅÂë
+		mYear = c.get(Calendar.YEAR); // ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½ï¿½ï¿½
+		mMonth = c.get(Calendar.MONTH) + 1;// ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½Â·ï¿½
+		mDay = c.get(Calendar.DAY_OF_MONTH);// ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½Â·İµï¿½ï¿½ï¿½ï¿½Úºï¿½ï¿½ï¿½
 		String year = mYear + "";
 		int year1 = mYear-1;
 		String yearf= year1 + "";
@@ -238,21 +239,21 @@ public class search extends Activity {
 	}
 
 	/**
-	 * ´«Èë×ÊÔ´Ãû×Ö ·µ»Ø×ÊÔ´id
-	 * @param name ×ÊÔ´Ãû×Ö
-	 * @return ×ÊÔ´µÄid
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´id
+	 * @param name ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½
+	 * @return ï¿½ï¿½Ô´ï¿½ï¿½id
 	 */
 	protected int getIcon(String name){
 		Resources res = getResources();
 		int id =res.getIdentifier(name, "drawable", getPackageName());
 		if (id == 0) {
-			return R.drawable.icon;		//EV_BUG Ä¬ÈÏICONÍ¼Æ¬
+			return R.drawable.icon;		//EV_BUG Ä¬ï¿½ï¿½ICONÍ¼Æ¬
 		}else{
 			return id;
 		}
 	}
 	/**
-	 * µÚÒ»´ÎÈ¡ËÑË÷½á¹û
+	 * è·å–æ•°æ®
 	 */
 	public List<Map<String, Object>> getData() {
 		Map<String, Object> searchmap=ConnectWeb.getsearch(keyword, dateF,
@@ -270,7 +271,7 @@ public class search extends Activity {
 				map.put("source",source);
 				map.put("icon", getIcon(source));
 				map.put("ItemTime", map1.get("date"));
-				map.put("description", (String) map1.get("description") + i);
+				map.put("description", (String) map1.get("description"));
 				map.put("url", map1.get("url"));
 				listItem.add(map);
 
@@ -285,7 +286,7 @@ public class search extends Activity {
 	}
 
 	/**
-	 * ¼ÓÔØ¸ü¶à
+	 * ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½
 	 * 
 	 * @return listItem
 	 */
@@ -310,7 +311,7 @@ public class search extends Activity {
 				listItem.add(map);
 			}
 		} else {
-			// Êı¾İÒÑ¾­²»×ã5Ìõ
+			// ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½5ï¿½ï¿½
 			for (int i = count; i < list.size(); i++) {
 				HashMap<String, Object> map = new HashMap<String, Object>();
 				Map<String, Object> map1 = list.get(i);
