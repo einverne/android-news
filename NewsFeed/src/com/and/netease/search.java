@@ -162,8 +162,6 @@ public class search extends Activity {
 						+ MaxDataNum);
 				if (totalItemCount >= MaxDataNum) {
 					myListView.removeFooterView(moreView);
-					Toast.makeText(search.this, "nodata",
-							Toast.LENGTH_LONG).show();
 				}
 			}
 
