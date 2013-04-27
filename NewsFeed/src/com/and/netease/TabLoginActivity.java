@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import com.and.netease.utils.ConnectWeb;
 
@@ -22,8 +23,9 @@ import android.widget.Toast;
 public class TabLoginActivity extends Activity {
 	private static final String TAG = "Demo";
 
-	ConnectWeb cnn;
+	
 	String str_name;
+	public Person person;
 
 	List info_list = new ArrayList();
 	ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
@@ -41,12 +43,11 @@ public class TabLoginActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				
-				if (Check_login()) {
+				if ( Get_login_info()) {
 					 str_name =user_info();
+					 person.setFlag(1);
 						Log.d(TAG,str_name);
-
 					
-					if (Check_login() == true) {
 						Intent intent = new Intent();
 						intent.setClass(TabLoginActivity.this, dingzhi.class);						
 						Bundle data = new Bundle();
@@ -54,7 +55,7 @@ public class TabLoginActivity extends Activity {
 						intent.putExtras(data);
 						String str = (String)intent.getStringExtra("name");
 						startActivity(intent);
-					}
+				
 				} else {
 					// 提示用户名或密码错误
 					Toast.makeText(TabLoginActivity.this, "用户名或密码错误",
@@ -89,41 +90,24 @@ public class TabLoginActivity extends Activity {
 		
 	}
 
-	// 获得用户输入的用户名和密码
-	public Person Get_login_info() {
+	// 获得用户输入的用户名和密码,判断是否存在该用户名和密码
+	public Boolean Get_login_info() {
 		EditText UserName = (EditText) findViewById(R.id.editText_username);
 		EditText psw = (EditText) findViewById(R.id.editText_psw);
-		Person person = new Person(UserName.getText().toString(), psw.getText()
-				.toString());
-		return person;
-	}
-
-	// 判断是否存在该用户名
-	public Boolean Check_login() {
-		Person p = this.Get_login_info();
-		Boolean boo = cnn.getlogin(p.userName, p.passWord);
+		String str_username = UserName.getText().toString();
+		String str_password = psw.getText().toString();
+		person = (Person) getApplication();
+		person.setContent(str_username, str_password);
+		Boolean boo = ConnectWeb.getlogin(str_username,str_password);
 		return boo;
+	
 	}
 
 	public String user_info() {
-
-		Person p1 = this.Get_login_info();
-		String usrname = p1.userName;
-		return usrname;
+		return person.getUsername().toString();
 
 	}
 
-	/*
-	 * 传递该用户名对应的定制内容 public List dingzhi_list(){ List dingzhi_list = new
-	 * ArrayList(); if(Check_login()){ HashMap<String, String> map_title=new
-	 * HashMap<String, String>(); HashMap<String, String> map_time=new
-	 * HashMap<String, String>(); HashMap<String, String> map_about=new
-	 * HashMap<String, String>();
-	 * 
-	 * 
-	 * 
-	 * } }
-	 */
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
