@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 @SuppressWarnings("deprecation")
 public class MainActivity extends TabActivity {
-	public TabHost tabHost;
+	public static TabHost tabHost;
 	TabHost.TabSpec tabSpec;
 	RadioGroup radioGroup;
 	RelativeLayout bottom_layout;
@@ -27,6 +27,8 @@ public class MainActivity extends TabActivity {
 
 	TextView biaoti;
 	ImageButton imgButton;
+	
+	
 
 	static int screenwidth;
 	private static final String TAG = "EV_Debug";
@@ -36,6 +38,9 @@ public class MainActivity extends TabActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		Log.d(TAG, "MainAct create");
+		
+		
+		
 
 		bottom_layout = (RelativeLayout) findViewById(R.id.layout_bottom);
 		tabHost = getTabHost();
@@ -89,7 +94,7 @@ public class MainActivity extends TabActivity {
 
 	}
 
-	public void ChangeTab(int i) {
+	static public void ChangeTab(int i) {
 		switch (i) {
 		case 0:
 			tabHost.setCurrentTab(0);
@@ -134,7 +139,7 @@ public class MainActivity extends TabActivity {
 				biaoti.setText(dengluCharSequence);
 				break;
 			default:
-				break;
+				break ;
 			}
 		}
 	};
@@ -157,6 +162,9 @@ public class MainActivity extends TabActivity {
 				new android.content.DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
+						Person person = new Person();
+						person = (Person)getApplication();
+						person.setFlag(0);
 						finish();
 					}
 				});
