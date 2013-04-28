@@ -1,5 +1,6 @@
 package com.and.netease;
 
+import com.and.netease.utils.CheckNetwork;
 import com.and.netease.utils.ConnectWeb;
 import com.and.netease.utils.DBAdapter;
 
@@ -27,10 +28,13 @@ public class SplashActivity extends Activity {
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				ConnectWeb.getzuijinxinwen(dbadapter);
-				ConnectWeb.getpeoples(dbadapter);
-				ConnectWeb.getplaces(dbadapter);
-				ConnectWeb.getdivisions(dbadapter);
+				CheckNetwork cn = new CheckNetwork(SplashActivity.this);
+				if (cn.check()) {
+					ConnectWeb.getzuijinxinwen(dbadapter);
+					ConnectWeb.getpeoples(dbadapter);
+					ConnectWeb.getplaces(dbadapter);
+					ConnectWeb.getdivisions(dbadapter);
+				}
 				/* Create an Intent that will start the Menu-Activity. */
 				Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
 				SplashActivity.this.startActivity(mainIntent);
