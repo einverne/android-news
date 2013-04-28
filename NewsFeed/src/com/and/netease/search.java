@@ -38,7 +38,6 @@ public class search extends Activity {
 	private ListView myListView;
 	private int resultOnceQuery = 30;
 	private View moreView;
-	private Handler handler;
 	private SimpleAdapter listItemAdapter;
 	private int lastVisibleIndex;
 	private Button bt;
@@ -54,16 +53,17 @@ public class search extends Activity {
 	int flagLoadMoreData = 0;
 	private int numberOfSearchResult = 0;
 	TextView text;
+	boolean aboutChina = false;
+	String china = "F";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_search_result);
 		Log.d(TAG, "search_result_Activity_start");
-		
+
 		text = (TextView) findViewById(R.id.textView_newstitle);
 		myListView = (ListView) findViewById(R.id.listView_searchresult);
-		handler = new Handler();
 		listItem = new ArrayList<Map<String, Object>>();
 
 		Bundle bundle = this.getIntent().getExtras();
@@ -75,7 +75,14 @@ public class search extends Activity {
 			dateT = bundle.getString("dateT");
 			keyword = bundle.getString("keyword");
 		}
-		new getData(keyword, dateF, dateT, "F", 0, resultOnceQuery).execute();
+		if (bundle.getBoolean("aboutChina") != false) {
+			aboutChina = bundle.getBoolean("aboutChina");
+			Log.d(TAG, "search aboutChina:" + aboutChina);
+		}
+		if (aboutChina) {
+			china = "T";
+		}
+		new getData(keyword, dateF, dateT, china, 0, resultOnceQuery).execute();
 
 		listItemAdapter = new SimpleAdapter(this, listItem,
 				R.layout.zhuanti_item, new String[] { "icon", "source",
@@ -99,7 +106,8 @@ public class search extends Activity {
 			public void onClick(View v) {
 				pg.setVisibility(View.VISIBLE);
 				bt.setVisibility(View.GONE);
-				new getData(keyword, dateF, dateT, "F", lastVisibleIndex, resultOnceQuery).execute();
+				new getData(keyword, dateF, dateT, china, lastVisibleIndex,
+						resultOnceQuery).execute();
 			}
 		});
 
@@ -131,7 +139,9 @@ public class search extends Activity {
 			public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) {
 				lastVisibleIndex = firstVisibleItem + visibleItemCount;
-				Log.d(TAG, "totalItemCount:" + totalItemCount + " lastVisibleIndex:"+lastVisibleIndex+"listItemApdater:"+listItemAdapter.getCount());
+				Log.d(TAG, "totalItemCount:" + totalItemCount
+						+ " lastVisibleIndex:" + lastVisibleIndex
+						+ "listItemApdater:" + listItemAdapter.getCount());
 				if (totalItemCount >= numberOfSearchResult) {
 					myListView.removeFooterView(moreView);
 				}
@@ -144,10 +154,13 @@ public class search extends Activity {
 						&& lastVisibleIndex < numberOfSearchResult) {
 					pg.setVisibility(View.VISIBLE);
 					bt.setVisibility(View.GONE);
-					new getData(keyword, dateF, dateT, "F", lastVisibleIndex, resultOnceQuery).execute();
+					new getData(keyword, dateF, dateT, china, lastVisibleIndex,
+							resultOnceQuery).execute();
 				}
-				if (scrollState == OnScrollListener.SCROLL_STATE_IDLE && lastVisibleIndex >= numberOfSearchResult) {
-					Toast.makeText(search.this, "已经是最后一条了", Toast.LENGTH_SHORT).show();
+				if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
+						&& lastVisibleIndex >= numberOfSearchResult) {
+					Toast.makeText(search.this, "已经是最后一条了", Toast.LENGTH_SHORT)
+							.show();
 				}
 			}
 		});
@@ -209,14 +222,17 @@ public class search extends Activity {
 	/**
 	 * Data
 	 */
-	public class getData extends AsyncTask<Void, Void, ArrayList<HashMap<String, Object>>> {
+	public class getData extends
+			AsyncTask<Void, Void, ArrayList<HashMap<String, Object>>> {
 		private String keyword;
 		private String dateF;
 		private String dateT;
 		private String aboutChina;
 		private int start;
 		private int max;
-		public getData(String keyword,String dateF,String dateT,String aboutChina,int start,int max){
+
+		public getData(String keyword, String dateF, String dateT,
+				String aboutChina, int start, int max) {
 			this.keyword = keyword;
 			this.dateF = dateF;
 			this.dateT = dateT;
@@ -224,17 +240,19 @@ public class search extends Activity {
 			this.start = start;
 			this.max = max;
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
-			Toast.makeText(search.this, "正在后台加载数据,请稍等", Toast.LENGTH_SHORT).show();
+			Toast.makeText(search.this, "正在后台加载数据,请稍等", Toast.LENGTH_SHORT)
+					.show();
 			super.onPreExecute();
 		}
+
 		@Override
 		protected ArrayList<HashMap<String, Object>> doInBackground(
 				Void... params) {
-			Map<String, Object> searchmap = ConnectWeb.getsearch(keyword, dateF,
-					dateT, "F", start, max);
+			Map<String, Object> searchmap = ConnectWeb.getsearch(keyword,
+					dateF, dateT, aboutChina, start, max);
 			List<Map<String, Object>> list = (List<Map<String, Object>>) searchmap
 					.get("first");
 			Log.d("dateF", dateF);
@@ -243,7 +261,8 @@ public class search extends Activity {
 			if (list.size() != 0) {
 				for (int i = 0; i < list.size(); i++) {
 					HashMap<String, Object> map = new HashMap<String, Object>();
-					Map<String, Object> map1 = (Map<String, Object>) list.get(i);
+					Map<String, Object> map1 = (Map<String, Object>) list
+							.get(i);
 					String source = (String) map1.get("source");
 					map.put("Title", map1.get("title"));
 					map.put("source", source);
@@ -257,10 +276,12 @@ public class search extends Activity {
 					flagLoadMoreData = 5;
 				}
 			} else {
-//				Toast.makeText(search.this, "NO DATA!", Toast.LENGTH_SHORT).show();
+				// Toast.makeText(search.this, "NO DATA!",
+				// Toast.LENGTH_SHORT).show();
 			}
 			return null;
 		}
+
 		@Override
 		protected void onPostExecute(ArrayList<HashMap<String, Object>> result) {
 			String te = "共有" + numberOfSearchResult + "条";
@@ -268,52 +289,52 @@ public class search extends Activity {
 			listItemAdapter.notifyDataSetChanged();
 			super.onPostExecute(result);
 		}
-	
+
 	}
 
 	/**
 	 * 
 	 * @return listItem
 	 */
-//	public List<Map<String, Object>> loadMoreData() {
-//		Map<String, Object> searchmap = ConnectWeb.getsearch(keyword, dateF,
-//				dateT, "F", 30, resultOnceQuery);
-//		List<Map<String, Object>> list = (List<Map<String, Object>>) searchmap
-//				.get("first");
-//		int count = listItemAdapter.getCount();
-//
-//		// if (count+20<MaxDataNum) {
-//		if (list.size() == 20) {
-//			for (int i = count; i < count + 20; i++) {
-//				HashMap<String, Object> map = new HashMap<String, Object>();
-//				Map<String, Object> map1 = list.get(i);
-//				String source = (String) map1.get("source");
-//				map.put("Title", map1.get("title"));
-//				map.put("source", source);
-//				map.put("icon", getIcon(source));
-//				map.put("ItemTime", map1.get("date"));
-//				map.put("description", (String) map1.get("description") + i);
-//				map.put("url", map1.get("url"));
-//				listItem.add(map);
-//			}
-//		} else {
-//			for (int i = count; i < list.size(); i++) {
-//				HashMap<String, Object> map = new HashMap<String, Object>();
-//				Map<String, Object> map1 = list.get(i);
-//				String source = (String) map1.get("source");
-//				map.put("Title", map1.get("title"));
-//				map.put("source", source);
-//				map.put("icon", getIcon(source));
-//				map.put("ItemTime", map1.get("date"));
-//				map.put("description", (String) map1.get("description") + i);
-//				map.put("url", map1.get("url"));
-//				listItem.add(map);
-//				flagLoadMoreData = 5;
-//			}
-//
-//		}
-//		return listItem;
-//	}
+	// public List<Map<String, Object>> loadMoreData() {
+	// Map<String, Object> searchmap = ConnectWeb.getsearch(keyword, dateF,
+	// dateT, "F", 30, resultOnceQuery);
+	// List<Map<String, Object>> list = (List<Map<String, Object>>) searchmap
+	// .get("first");
+	// int count = listItemAdapter.getCount();
+	//
+	// // if (count+20<MaxDataNum) {
+	// if (list.size() == 20) {
+	// for (int i = count; i < count + 20; i++) {
+	// HashMap<String, Object> map = new HashMap<String, Object>();
+	// Map<String, Object> map1 = list.get(i);
+	// String source = (String) map1.get("source");
+	// map.put("Title", map1.get("title"));
+	// map.put("source", source);
+	// map.put("icon", getIcon(source));
+	// map.put("ItemTime", map1.get("date"));
+	// map.put("description", (String) map1.get("description") + i);
+	// map.put("url", map1.get("url"));
+	// listItem.add(map);
+	// }
+	// } else {
+	// for (int i = count; i < list.size(); i++) {
+	// HashMap<String, Object> map = new HashMap<String, Object>();
+	// Map<String, Object> map1 = list.get(i);
+	// String source = (String) map1.get("source");
+	// map.put("Title", map1.get("title"));
+	// map.put("source", source);
+	// map.put("icon", getIcon(source));
+	// map.put("ItemTime", map1.get("date"));
+	// map.put("description", (String) map1.get("description") + i);
+	// map.put("url", map1.get("url"));
+	// listItem.add(map);
+	// flagLoadMoreData = 5;
+	// }
+	//
+	// }
+	// return listItem;
+	// }
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
