@@ -330,7 +330,7 @@ public class ConnectWeb {
 	 * 数据格式： result clusters others cluster words count source-distribution doc
 	 * title words source date url
 	 */
-	static public int getZhuantiFromDate(DBAdapter dbadapter, String date) {
+	static synchronized public int getZhuantiFromDate(DBAdapter dbadapter, String date) {
 
 		int count = 0;
 		try {
@@ -437,13 +437,18 @@ public class ConnectWeb {
 		int index2 = -1;
 		String keyword = "";
 		int tmp = 0;
+//		Log.d("EV_DEBUG_WORDS", words);
 		while ((index1 = words.indexOf("(", index1)) > -1
-				&& (index2 = words.indexOf("&", index2)) > -1 && (tmp < 5)) {
+				&& (index2 = words.indexOf(",", index2)) > -1 && (tmp < 5)) {	//有的数据中包含&字符,坑死我了..
+//			Log.d("EV_DEBUG", "index1:"+index1+"2:"+index2);
+			if (index1 > words.length() || index2>words.length()) {
+				break;
+			}
 			keyword = keyword + words.substring(index1 + 1, index2) + " ";
 			index1 += 1;
 			index2 += 1;
 			tmp++;
-
+			
 		}
 		return keyword;
 	}

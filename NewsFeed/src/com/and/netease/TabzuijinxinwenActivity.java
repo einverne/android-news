@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.and.netease.utils.CheckNetwork;
 import com.and.netease.utils.ConnectWeb;
 import com.and.netease.utils.DBAdapter;
+import com.and.netease.utils.DateTool;
 import com.markupartist.android.widget.PullToRefreshListView;
 import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
 
@@ -46,6 +47,8 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 	private Cursor c;
 
 	ArrayList<HashMap<String, String>> listItem;
+	private String queryDate;
+	private int days = 1;
 
 	private static final String TAG = "EV_DEBUG";
 
@@ -59,9 +62,11 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		bt = (Button) moreView.findViewById(R.id.bt_load);
 		pg = (ProgressBar) moreView.findViewById(R.id.pg);
 		handler = new Handler();
-
+		queryDate = DateTool.getDateTodayMinusDay(days);
+		
 		dbadapter = new DBAdapter(this);
-		c = dbadapter.getzuijinxinwen(0, 50);
+		Log.d(TAG, "Today:"+DateTool.getTodayDate());
+		c = dbadapter.getzuijinxinwenFromDate(DateTool.getTodayDate());
 		listItem = new ArrayList<HashMap<String, String>>();
 		for (int i = 0; c.moveToNext(); i++) {
 			c.moveToPosition(i);
@@ -94,19 +99,19 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		bt.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
-//				pg.setVisibility(View.VISIBLE);
-//				bt.setVisibility(View.GONE);
-//				handler.postDelayed(new Runnable() {
-//
-//					@Override
-//					public void run() {
-//						loadMoreData();
-//						bt.setVisibility(View.VISIBLE);
-//						pg.setVisibility(View.GONE);
-//						listItemAdapter.notifyDataSetChanged();
-//					}
-//				}, 200);
+
+				// pg.setVisibility(View.VISIBLE);
+				// bt.setVisibility(View.GONE);
+				// handler.postDelayed(new Runnable() {
+				//
+				// @Override
+				// public void run() {
+				// loadMoreData();
+				// bt.setVisibility(View.VISIBLE);
+				// pg.setVisibility(View.GONE);
+				// listItemAdapter.notifyDataSetChanged();
+				// }
+				// }, 200);
 			}
 		});
 
@@ -140,7 +145,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 						CheckNetwork checknet = new CheckNetwork(
 								TabzuijinxinwenActivity.this);
 						if (checknet.check()) {
-//							new GetDataTask().execute("fresh");
+							new GetDataTask("fresh").execute();
 						} else {
 							Toast.makeText(TabzuijinxinwenActivity.this,
 									"网络不可用,请检查联网状态", Toast.LENGTH_SHORT).show();
@@ -214,13 +219,14 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 
 		lastVisibleIndex = firstVisibleItem + visibleItemCount - 1;
 		// 所有的条目已经和最大条数相等，则移除底部的View
-		Log.d(TAG, "totalItemCount:"+totalItemCount+" ");
-//		if ((totalItemCount >= 50 || (c.isAfterLast() == true))
-//				&& flag == 0) {
-//			((PullToRefreshListView) getListView()).removeFooterView(moreView);
-//			Toast.makeText(this, "数据全部加载完成，没有更多数据！", Toast.LENGTH_LONG).show();
-//			flag = 1;
-//		}
+		Log.d(TAG, "totalItemCount:" + totalItemCount + " lastVisibleIndex"
+				+ lastVisibleIndex);
+		// if ((totalItemCount >= 50 || (c.isAfterLast() == true))
+		// && flag == 0) {
+		// ((PullToRefreshListView) getListView()).removeFooterView(moreView);
+		// Toast.makeText(this, "数据全部加载完成，没有更多数据！", Toast.LENGTH_LONG).show();
+		// flag = 1;
+		// }
 	}
 
 	// view 报告滑动状态的视图
@@ -233,37 +239,29 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		// OnScrollListener.SCROLL_STATE_IDLE 表示ListView不动
-		Log.d(TAG, "lastVisibleIndex:" + lastVisibleIndex + "ItemAdapter getCount:"
-				+ listItemAdapter.getCount());
+		Log.d(TAG, "lastVisibleIndex:" + lastVisibleIndex
+				+ "ItemAdapter getCount:" + listItemAdapter.getCount());
 		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
 				&& lastVisibleIndex >= listItemAdapter.getCount()) {
 			// 当滑到底部时自动加载
 			pg.setVisibility(View.VISIBLE);
 			bt.setVisibility(View.GONE);
-			handler.postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					loadMoreData();
-					bt.setVisibility(View.VISIBLE);
-					pg.setVisibility(View.GONE);
-					listItemAdapter.notifyDataSetChanged();
-				}
-			}, 500);
+			new GetDataTask(queryDate).execute();
+			queryDate = DateTool.getDateTodayMinusDay(++days );
 		}
 	}
 
-	private class GetDataTask extends AsyncTask<String, Void, Integer> {
-		
-		private String date;
+	private class GetDataTask extends AsyncTask<Void, Void, Integer> {
+		String date;
 
-		public GetDataTask(){
-			
+		public GetDataTask() {
+
 		}
-		
-		public GetDataTask(String date){
+
+		public GetDataTask(String date) {
 			this.date = date;
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
 			Log.d(TAG, "GetDataTask pre");
@@ -271,16 +269,20 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		}
 
 		@Override
-		protected Integer doInBackground(String... params) {
-			ConnectWeb.getZhuantiFromDate(dbadapter, date);
-			return new Integer(ConnectWeb.getzuijinxinwen(dbadapter)); // 后台请求最近新闻
+		protected Integer doInBackground(Void... params) {
+			int count;
+			if (date != "fresh") {
+				count = ConnectWeb.getZhuantiFromDate(dbadapter, date);
+			} else {
+				count = ConnectWeb.getzuijinxinwen(dbadapter);
+			}
+			return count;// 后台请求最近新闻
 		}
 
 		@Override
 		protected void onPostExecute(Integer result) {
 			Log.d(TAG, "TabzuijinxinwenActivity GetDataTask PostExecute");
-			c = dbadapter.getzuijinxinwen(50, 100);
-			listItem = new ArrayList<HashMap<String, String>>();
+			c = dbadapter.getzuijinxinwenFromDate(date);
 			for (int i = 0; c.moveToNext(); i++) {
 				c.moveToPosition(i);
 				String title = c.getString(c.getColumnIndex("title"));
