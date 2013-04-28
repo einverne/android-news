@@ -258,26 +258,20 @@ public class search extends Activity {
 			Log.d("dateF", dateF);
 			Log.d("dateT", dateT);
 			numberOfSearchResult = (Integer) searchmap.get("second");
-			if (list.size() != 0) {
-				for (int i = 0; i < list.size(); i++) {
-					HashMap<String, Object> map = new HashMap<String, Object>();
-					Map<String, Object> map1 = (Map<String, Object>) list
-							.get(i);
-					String source = (String) map1.get("source");
-					map.put("Title", map1.get("title"));
-					map.put("source", source);
-					map.put("icon", getIcon(source));
-					map.put("ItemTime", map1.get("date"));
-					map.put("description", (String) map1.get("description"));
-					map.put("url", map1.get("url"));
-					listItem.add(map);
-				}
-				if (list.size() < 30) {
-					flagLoadMoreData = 5;
-				}
-			} else {
-				// Toast.makeText(search.this, "NO DATA!",
-				// Toast.LENGTH_SHORT).show();
+			for (int i = 0; i < list.size(); i++) {
+				HashMap<String, Object> map = new HashMap<String, Object>();
+				Map<String, Object> map1 = (Map<String, Object>) list.get(i);
+				String source = (String) map1.get("source");
+				map.put("Title", map1.get("title"));
+				map.put("source", source);
+				map.put("icon", getIcon(source));
+				map.put("ItemTime", map1.get("date"));
+				map.put("description", (String) map1.get("description"));
+				map.put("url", map1.get("url"));
+				listItem.add(map);
+			}
+			if (list.size() < 30) {
+				flagLoadMoreData = 5;
 			}
 			return null;
 		}
@@ -286,6 +280,10 @@ public class search extends Activity {
 		protected void onPostExecute(ArrayList<HashMap<String, Object>> result) {
 			String te = "共有" + numberOfSearchResult + "条";
 			text.setText(te);
+			if (numberOfSearchResult == 0) {
+				Toast.makeText(search.this, "没有符合关键词的结果,请调整关键词",
+						Toast.LENGTH_SHORT).show();
+			}
 			listItemAdapter.notifyDataSetChanged();
 			super.onPostExecute(result);
 		}
