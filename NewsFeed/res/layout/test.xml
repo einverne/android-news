@@ -33,7 +33,7 @@
 
 
             <CheckBox
-                android:id="@+id/checkBox1"
+                android:id="@+id/checkBox_aboutChina"
                 android:layout_width="400px"
                 android:layout_height="wrap_content"
                 android:text="定制内容一" />
