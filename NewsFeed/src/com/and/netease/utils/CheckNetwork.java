@@ -22,6 +22,12 @@ public class CheckNetwork {
 		Log.d(TAG,"CheckNetwork");
 	}
 
+	/**
+	 * 
+	 * @return
+	 * 		true
+	 * 		false
+	 */
 	public boolean check() {
 		ConnectivityManager CM = (ConnectivityManager) activity
 				.getApplicationContext().getSystemService(

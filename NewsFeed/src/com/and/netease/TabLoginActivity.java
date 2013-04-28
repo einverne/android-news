@@ -12,7 +12,9 @@ import com.and.netease.utils.ConnectWeb;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -22,8 +24,11 @@ import android.widget.Toast;
 
 public class TabLoginActivity extends Activity {
 	private static final String TAG = "Demo";
-
-	
+	private EditText username;
+	private EditText psw;
+	private SharedPreferences sharedPreferences;
+	private SharedPreferences.Editor editor;
+	Boolean boo;
 	String str_name;
 	public Person person;
 
@@ -32,49 +37,66 @@ public class TabLoginActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_login);
-
 		Log.d(TAG, "Login start");
+		username = (EditText)findViewById(R.id.editText_username);
+		psw = (EditText)findViewById(R.id.editText_psw);
+		
+		this.sharedPreferences = this.getSharedPreferences("userinfo", MODE_PRIVATE);
+		editor = sharedPreferences.edit();
+		
+		String store_name = sharedPreferences.getString("name", "t");
+		String store_psw = sharedPreferences.getString("psw", "t");
+		if (store_name != "t") {
+			Intent intent = new Intent();
+			intent.setClass(TabLoginActivity.this, dingzhi.class);						
+			Bundle data = new Bundle();
+			data.putString("name",store_name);
+			intent.putExtras(data);
+			String str = (String)intent.getStringExtra("name");
+			startActivity(intent);
+		}
 		
 		Button loginButton = (Button) findViewById(R.id.button_denglu);
 		loginButton.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
-				if ( Get_login_info()) {
-					 str_name =user_info();
-					 person.setFlag(1);
-						Log.d(TAG,str_name);
-					
-						Intent intent = new Intent();
-						intent.setClass(TabLoginActivity.this, dingzhi.class);						
+				final String str_name = username.getText().toString();
+				final String str_psw = psw.getText().toString();
+				if (str_name!= "" && !str_psw.equals(null)) {
+					boo = ConnectWeb.getlogin(str_name,str_psw);
+					if (boo) {
+						Log.d(TAG,"str_name"+str_name+"str_psw"+str_psw);
+						editor.putString("name", str_name);
+						editor.putString("psw", str_psw);
+						editor.commit();
+						Intent intent = new Intent(TabLoginActivity.this, dingzhi.class);
 						Bundle data = new Bundle();
 						data.putString("name",str_name);
 						intent.putExtras(data);
 						String str = (String)intent.getStringExtra("name");
 						startActivity(intent);
-				
-				} else {
-					// 提示用户名或密码错误
-					Toast.makeText(TabLoginActivity.this, "用户名或密码错误",
+					}else{
+						//提示用户名或密码错误
+						Toast.makeText(TabLoginActivity.this, "用户名或密码错误",
+								Toast.LENGTH_SHORT).show();
+						setNull();
+					}
+				}else{
+					Toast.makeText(TabLoginActivity.this, "用户名或密码不能为空",
 							Toast.LENGTH_SHORT).show();
-					setNull();
 				}
-
+//				str_name =user_info();
+//				person.setFlag(1);
 			}
 		});
 
 		Button quxiaoButton = (Button) findViewById(R.id.button_quxiao);
 		quxiaoButton.setOnClickListener(new Button.OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
 				setNull();
-
 			}
 		});
 
@@ -82,31 +104,14 @@ public class TabLoginActivity extends Activity {
 	
 	//清空填入的数据
 	public void setNull(){
-		EditText edit_name,edit_psw;
-		edit_name = (EditText)findViewById(R.id.editText_username);
-		edit_name.setText("");
-		edit_psw = (EditText)findViewById(R.id.editText_psw);
-		edit_psw.setText("");
-		
+		username.setText("");
+		psw.setText("");
 	}
 
-	// 获得用户输入的用户名和密码,判断是否存在该用户名和密码
-	public Boolean Get_login_info() {
-		EditText UserName = (EditText) findViewById(R.id.editText_username);
-		EditText psw = (EditText) findViewById(R.id.editText_psw);
-		String str_username = UserName.getText().toString();
-		String str_password = psw.getText().toString();
-		person = (Person) getApplication();
-		person.setContent(str_username, str_password);
-		Boolean boo = ConnectWeb.getlogin(str_username,str_password);
-		return boo;
-	
-	}
 
-	public String user_info() {
-		return person.getUsername().toString();
-
-	}
+//	public String user_info() {
+//		return person.getUsername().toString();
+//	}
 
 
 	@Override

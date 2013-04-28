@@ -78,8 +78,8 @@ public class MainActivity extends TabActivity {
 		});
 
 		// 响应标题栏登陆ImageButton
-		ImageButton imagebutton_search = (ImageButton) findViewById(R.id.imageButton_login);
-		imagebutton_search.setOnClickListener(new OnClickListener() {
+		ImageButton imagebutton_login = (ImageButton) findViewById(R.id.imageButton_login);
+		imagebutton_login.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				tabHost.setCurrentTab(3);
@@ -156,15 +156,12 @@ public class MainActivity extends TabActivity {
 	protected void dialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 		builder.setTitle("警告");
-		builder.setIcon(R.drawable.alert); // EV_BUG
+		builder.setIcon(R.drawable.alert);
 		builder.setMessage("确定要退出吗?");
 		builder.setPositiveButton("确认",
 				new android.content.DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
-						Person person = new Person();
-						person = (Person)getApplication();
-						person.setFlag(0);
 						finish();
 					}
 				});
@@ -175,6 +172,24 @@ public class MainActivity extends TabActivity {
 					}
 				});
 		builder.create().show();
+	}
+
+	@Override
+	protected void onDestroy() {
+		Log.d(TAG, "MainActivity OnDestroy");
+		super.onDestroy();
+	}
+
+	@Override
+	protected void onResume() {
+		Log.d(TAG, "MainActivity onResume");
+		super.onResume();
+	}
+
+	@Override
+	protected void onStop() {
+		Log.d(TAG, "MainActivity onStop");
+		super.onStop();
 	}
 
 }

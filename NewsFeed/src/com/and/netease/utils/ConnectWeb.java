@@ -15,142 +15,156 @@ import org.json.JSONObject;
 import android.util.Log;
 
 public class ConnectWeb {
-	
+
 	/**
 	 * 获取用户定制内容的某一项,需呀参数user和jobname
-	 * http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getJobOfUser&user=gaojinping&jobname=20111226095814434
-	 * @param  aboutchina 传true 或 false
-	 * @param 
-	 * @return 
+	 * http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi
+	 * ?r=getJobOfUser&user=gaojinping&jobname=20111226095814434
+	 * 
+	 * @param aboutchina
+	 *            传true 或 false
+	 * @param
+	 * @return
 	 */
-	static public boolean getJobOfUser(DBAdapter dbadapter,String username,String jobname)
-	{
-		boolean returnresult=true;
-		String theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getJobOfUser&user="+username+"&jobname="+jobname;
+	static public boolean getJobOfUser(DBAdapter dbadapter, String username,
+			String jobname) {
+		boolean returnresult = true;
+		// String
+		// theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getJobOfUser&user="+username+"&jobname="+jobname;
+		String theurl = "http://10.0.2.2:8080/RMI_WEB/rmi?r=getJobOfUser&user="
+				+ username + "&jobname=" + jobname;
 		try {
 			String str = HttpConn.getJsonFromUrlGet(theurl);
+			Log.d("EV_DEBUG", str);
 			// 通过json 来解析收到的字符串
-			JSONObject jay = new JSONObject(str);
-			
-			JSONObject result = new JSONObject((String) jay.getString("result"));
-			// 解析key result所对应的值
+			JSONObject result = new JSONObject(str);
+
 			// count是总共取到的专题条数
-			int count = Integer.parseInt((String) result.getString("count"));
-			String to= (String) result.getString("to");
-			String from=(String) result.getString("from");
-			int days= Integer.parseInt((String) result.getString("days"));
-			long jobid=dbadapter.userinsert(username, jobname, days, from, to, count);
-			if(jobid<0)
+			int count = result.getInt("count");
+			String to = result.getString("to");
+			String from = result.getString("from");
+			int days = result.getInt("days");
+			long jobid = dbadapter.userinsert(username, jobname, days, from,
+					to, count);
+			if (jobid < 0)
 				return returnresult;
-			Log.d("test getJobOfUser count", String.valueOf(count));
-			// clusters包括两部分,分别是 others 和 专题数组
-			JSONObject clusters = new JSONObject(
-					(String) result.getString("clusters"));
-			// 取出专题数组
-			JSONArray cluster = clusters.getJSONArray("cluster");
+			Log.d("test getJobOfUser count,all news", String.valueOf(count));
+			JSONArray docs = result.getJSONArray("docs");
 			// 循环从专题数取出每个专题进行解析
-			Log.d("test getJobOfUser cluster.length()", String.valueOf(cluster.length()));// 0
-			for (int i = 0; i < cluster.length(); i += 1) {
+			Log.d("test getJobOfUser cluster.length",
+					String.valueOf(docs.length()));// 0
+			for (int i = 0; i < docs.length(); i += 1) {
 				// 挨个取出专题
-				JSONObject onecluster = (JSONObject) cluster.get(i);
-				
+				JSONObject onecluster = (JSONObject) docs.get(i);
+
 				// 取出doc，doc是具体新闻名的数组
 				JSONArray doc = onecluster.getJSONArray("doc");
 				// 取出第一条新闻名作为专题的标题
 				// 此时将专题插入专题表
 				// 目标是：如果有重名 而 新闻个数不同 就将之前的覆盖掉；然后返回 id
 				// 将新闻插入新闻表
-				for (int j= 0; j < doc.length(); j += 1) {
+				for (int j = 0; j < doc.length(); j += 1) {
 					JSONObject onenews = (JSONObject) doc.get(i);
 					String title = (String) onenews.getString("title");
 					String words = (String) onenews.getString("words");
 					words = jiexiwords(words);
 					String source = (String) onenews.getString("source");
-					String description = (String) onenews.getString("description");
+					String description = (String) onenews
+							.getString("description");
 					String date = (String) onenews.getString("date");
 					String url = (String) onenews.getString("url");
-					dbadapter.userinsertnews(title, source, description, date, url, words, jobid,false);
-					}
+					dbadapter.userinsertnews(title, source, description, date,
+							url, words, jobid, false);
 				}
-			
-
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			returnresult=false;
+			returnresult = false;
 		}
 		return returnresult;
-		
+
 	}
+
 	/**
 	 * 提交一个任务
-	 *  http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=submitJob&query=date:[20110101x TO x] AND (title:China Customs"20OR description:"China Customs" OR text:"China Customs")&aboutChina=true&user=test&desc=chania
-	 * @param request
-	 * @param response
-	 * @return
-	 * @throws IOException
-	 */
-	static public boolean submitJob(String username,String query,String aboutchina,String description)
-	{
-		String theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=submitJob&query="+query+"&aboutChina="+aboutchina+"&user="+username+"&desc="+description;
-		String str = HttpConn.getJsonFromUrlGet(theurl);
-		boolean result= Boolean.valueOf(str).booleanValue();
-		return result;
-		
-	}
-	/**
-	 * http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=deleteJob&username=gaojinping&jobname=20111222194809870
-	 * 20120523191938669 删除指定用户的指定定制任务
+	 * http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=submitJob&query=date
+	 * :[20110101x TO x] AND (title:China Customs"20OR description:"China
+	 * Customs" OR text:"China Customs")&aboutChina=true&user=test&desc=chania
 	 * 
 	 * @param request
 	 * @param response
 	 * @return
 	 * @throws IOException
 	 */
-	static public boolean deleteJob(String name,String jobname)
-	{
-		String theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=deleteJob&username="+name+"&jobname="+jobname;
+	static public boolean submitJob(String username, String query,
+			String aboutchina, String description) {
+		String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=submitJob&query="
+				+ query
+				+ "&aboutChina="
+				+ aboutchina
+				+ "&user="
+				+ username
+				+ "&desc=" + description;
 		String str = HttpConn.getJsonFromUrlGet(theurl);
-		boolean result= Boolean.valueOf(str).booleanValue();
+		boolean result = Boolean.valueOf(str).booleanValue();
+		return result;
+
+	}
+
+	/**
+	 * http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=deleteJob&username=
+	 * gaojinping&jobname=20111222194809870 20120523191938669 删除指定用户的指定定制任务
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 */
+	static public boolean deleteJob(String name, String jobname) {
+		String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=deleteJob&username="
+				+ name + "&jobname=" + jobname;
+		String str = HttpConn.getJsonFromUrlGet(theurl);
+		boolean result = Boolean.valueOf(str).booleanValue();
 		return result;
 	}
-	
-	//http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getAllJobsOfUser&user=test
-	static public List<Map<String, String>>getAllJobsOfUser(DBAdapter dbadapter,String name){
+
+	// http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getAllJobsOfUser&user=test
+	static public List<Map<String, String>> getAllJobsOfUser(
+			DBAdapter dbadapter, String name) {
+		Log.d("EV_DEBUG", "getAllJobsOfUser");
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		Map<String, String> map = null;
-		String theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getAllJobsOfUser&user="+name;
+		String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getAllJobsOfUser&user="
+				+ name;
 		try {
 			String str = HttpConn.getJsonFromUrlGet(theurl);
 			JSONArray jay = new JSONArray(str);
 
 			for (int i = 0; i < jay.length(); i += 1) {
-				JSONObject inforMap =(JSONObject) jay.get(i);
-				//20130419170938025   
-				//2013-04-19 17:09:38
+				JSONObject inforMap = (JSONObject) jay.get(i);
+				// 20130419170938025
+				// 2013-04-19 17:09:38
 				String createtime = (String) inforMap.getString("createtime");
-				createtime=jiexidate(createtime);
+				createtime = jiexidate(createtime);
 				String aboutChina = (String) inforMap.getString("aboutChina");
 				String endtime = (String) inforMap.getString("endtime");
-				endtime=jiexidate(endtime);
+				endtime = jiexidate(endtime);
 				String description = (String) inforMap.getString("description");
 				String query = (String) inforMap.getString("query");
 				String name1 = (String) inforMap.getString("name");
 				String status = (String) inforMap.getString("status");
 				String end = (String) inforMap.getString("end");
-					map = new HashMap<String, String>();
-					map.put("createtime", createtime);
-					map.put("aboutChina", aboutChina);
-					map.put("endtime", endtime);
-					map.put("description", description);
-					map.put("query", query);
-					map.put("name", name1);
-					map.put("status", status);
-					map.put("end", end);
-					// 2012-06-05 08:14:54
-					list.add(map);
-				
-			
-				
+				map = new HashMap<String, String>();
+				map.put("createtime", createtime);
+				map.put("aboutChina", aboutChina);
+				map.put("endtime", endtime);
+				map.put("description", description);
+				map.put("query", query);
+				map.put("name", name1);
+				map.put("status", status);
+				map.put("end", end);
+				// 2012-06-05 08:14:54
+				list.add(map);
 			}
 
 		} catch (Exception e) {
@@ -158,52 +172,66 @@ public class ConnectWeb {
 		}
 		return list;
 	}
-	static public boolean getlogin(String name,String psw)
-	{
-		boolean result=false;
-		String theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=VerifyUser&name="+name+"&pwd="+psw;
+
+	static public boolean getlogin(String name, String psw) {
+		boolean result = false;
+		String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=VerifyUser&name="
+				+ name + "&pwd=" + psw;
 		String str = HttpConn.getJsonFromUrlGet(theurl);
-		result= Boolean.valueOf(str).booleanValue();
+		result = Boolean.valueOf(str).booleanValue();
 		return result;
 	}
-	static public boolean CheckUsed(String name)
-	{
-		boolean result=false;
-		String theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=CheckUsed&name="+name;
+
+	static public boolean CheckUsed(String name) {
+		boolean result = false;
+		String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=CheckUsed&name="
+				+ name;
 		String str = HttpConn.getJsonFromUrlGet(theurl);
-		result= Boolean.valueOf(str).booleanValue();
+		result = Boolean.valueOf(str).booleanValue();
 		return result;
-		
+
 	}
+
 	/**
 	 * 
 	 * @param keyword
-	 * @param dateF 2020121106
-	 * @param dateT 2020121106x x表示其余不计 2020121106 20201211
+	 * @param dateF
+	 *            2020121106
+	 * @param dateT
+	 *            2020121106x x表示其余不计 2020121106 20201211
 	 * @return 符合搜索语句的条数
 	 */
-	static public int  getsearchcount(String keyword,String dateF, String dateT) {
-	String theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetNewsHit&s=title:\""+keyword+"\"ANDdate:["+dateF+" TO "+dateT+"]";
-	String str = HttpConn.getJsonFromUrlGet(theurl);
-	return  Integer.parseInt(str);
+	static public int getsearchcount(String keyword, String dateF, String dateT) {
+		String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetNewsHit&s=title:\""
+				+ keyword + "\"ANDdate:[" + dateF + " TO " + dateT + "]";
+		String str = HttpConn.getJsonFromUrlGet(theurl);
+		return Integer.parseInt(str);
 
 	}
-	
-	
-	static public Map<String, Object> getsearch(String keyword,
-			String dateF, String dateT, String relateToChina, int start, int max) {
+
+	static public Map<String, Object> getsearch(String keyword, String dateF,
+			String dateT, String relateToChina, int start, int max) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map = null;
-		Map<String, Object> resultmap =  new HashMap<String, Object>();
-		int second=0;
+		Map<String, Object> resultmap = new HashMap<String, Object>();
+		int second = 0;
 		try {
-			String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetDocs&s="+keyword+"&dateF="+dateF+"&dateT="+dateT+"&relate="+relateToChina+"&start="+Integer.toString(start)+"&max="+Integer.toString(max);
+			String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetDocs&s="
+					+ keyword
+					+ "&dateF="
+					+ dateF
+					+ "&dateT="
+					+ dateT
+					+ "&relate="
+					+ relateToChina
+					+ "&start="
+					+ Integer.toString(start) + "&max=" + Integer.toString(max);
 			String str = HttpConn.getJsonFromUrlGet(theurl);
 			JSONObject jay = new JSONObject(str);
-			JSONArray first=new JSONArray(jay.getString("first"));
-			String json_second=(String)jay.getString("second");
-			Log.d("search ",json_second);
-			second=Integer.parseInt(json_second);
+			JSONArray first = new JSONArray(jay.getString("first"));
+			String json_second = (String) jay.getString("second");
+			Log.d("search ", json_second);
+			second = Integer.parseInt(json_second);
 			for (int i = 0; i < first.length(); i += 1) {
 				JSONObject object = (JSONObject) first.get(i);
 				JSONObject inforMap = new JSONObject(
@@ -225,7 +253,7 @@ public class ConnectWeb {
 				map.put("date", date);
 				list.add(map);
 			}
-			
+
 			if (!list.isEmpty()) {
 				Collections.sort(list, new Comparator<Map<String, Object>>() {
 					public int compare(Map<String, Object> object1,
@@ -250,7 +278,7 @@ public class ConnectWeb {
 		 * doc title words source date url
 		 */
 		int count = 0;
-		String today=todaydate();
+		String today = todaydate();
 		try {
 
 			String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetXML&t=fresh";
@@ -298,24 +326,23 @@ public class ConnectWeb {
 		return count;
 	}
 
-	static public int getZhuantiFromDate(DBAdapter dbadapter,String date) {
-		/*
-		 * 数据格式： result clusters others cluster words count source-distribution
-		 * doc title words source date url
-		 */
+	/*
+	 * 数据格式： result clusters others cluster words count source-distribution doc
+	 * title words source date url
+	 */
+	static public int getZhuantiFromDate(DBAdapter dbadapter, String date) {
+
 		int count = 0;
 		try {
-
-			String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetXML&t="+date;
+			String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetXML&t="
+					+ date;
 			String str = HttpConn.getJsonFromUrlGet(theurl);
 			// 通过json 来解析收到的字符串
 			JSONObject jay = new JSONObject(str);
-			Log.d("test", "get result");
 			JSONObject result = new JSONObject((String) jay.getString("result"));
 			// 解析key result所对应的值
 			// count是总共取到的专题条数
-			count = Integer.parseInt((String) result.getString("count"));
-			Log.d("test count", String.valueOf(count));
+			count = result.getInt("count");
 			// clusters包括两部分,分别是 others 和 专题数组
 			JSONObject clusters = new JSONObject(
 					(String) result.getString("clusters"));
@@ -350,8 +377,10 @@ public class ConnectWeb {
 		Log.d("test", String.valueOf(count));
 		return count;
 	}
+
 	/**
 	 * 插入News表
+	 * 
 	 * @param dbadapter
 	 * @param doc
 	 * @param oneclusterid
@@ -370,7 +399,7 @@ public class ConnectWeb {
 			String url = (String) onexinwen.getString("url");
 			Log.d("test news title", title);
 			dbadapter.insert(title, source, description, date, url,
-					oneclusterid,false);
+					oneclusterid, false);
 		}
 	}
 
@@ -387,7 +416,8 @@ public class ConnectWeb {
 	static private long insert(DBAdapter dbadapter, String title,
 			String todaydate, String words, int oneclustercount) {
 
-		return dbadapter.insert(words, title, todaydate, oneclustercount,false);
+		return dbadapter
+				.insert(words, title, todaydate, oneclustercount, false);
 	}
 
 	/**
@@ -457,7 +487,7 @@ public class ConnectWeb {
 				}
 			}
 			// 根据文本排序
-			
+
 			if (!list.isEmpty()) {
 				Collections.sort(list, new Comparator<Map<String, Object>>() {
 					public int compare(Map<String, Object> object1,
@@ -673,6 +703,9 @@ public class ConnectWeb {
 			String str = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetDoc&url=";
 			theurl = str + theurl;
 			String string = HttpConn.getJsonFromUrlGet(theurl);
+			if (string != null) {
+				Log.d("EV_DEBUG", "每一条新闻" + string);
+			}
 			JSONObject jay = new JSONObject(string);
 			JSONObject inforMap = new JSONObject(
 					(String) jay.getString("inforMap"));

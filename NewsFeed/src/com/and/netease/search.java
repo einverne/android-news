@@ -177,7 +177,6 @@ public class search extends Activity {
 				bundle.putString("keyword", keyword);
 				intent.putExtras(bundle);
 				startActivity(intent);
-				search.this.finish();
 			}
 		});
 	}
