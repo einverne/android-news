@@ -36,8 +36,9 @@ public class zhuanti extends ListActivity {
 		String title = bundle.getString("title");
 		dbadapter = new DBAdapter(this);
 		c = dbadapter.getnews(title);
-		Log.d("EV_DEBUG_size", String.valueOf(c.getCount()));
 
+		Toast.makeText(this, "该专题共"+c.getCount()+"条新闻", Toast.LENGTH_SHORT).show();
+		
 		listItem = new ArrayList<HashMap<String, Object>>();
 		for (int i = 0; c.moveToNext(); i++) {
 			c.moveToPosition(i);
@@ -98,7 +99,7 @@ public class zhuanti extends ListActivity {
 		Resources res = getResources();
 		int id =res.getIdentifier(name, "drawable", getPackageName());
 		if (id == 0) {
-			return R.drawable.icon;		//EV_BUG 默认ICON图片
+			return R.drawable.icon;
 		}else{
 			return id;
 		}

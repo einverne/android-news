@@ -371,9 +371,7 @@ public class DBAdapter
 						+ String.valueOf(num2));
 		if (mCursor != null) {
 			mCursor.moveToFirst();
-
 		}
-		
 		db.close();
 		DBHelper.close();
 		return mCursor;

@@ -34,7 +34,6 @@ import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
 public class TabzuijinxinwenActivity extends ListActivity implements
 		OnScrollListener {
 
-	private final int MaxDataNum = 50;
 	private View moreView;
 	private Handler handler;
 	private SimpleAdapter listItemAdapter;
@@ -56,19 +55,15 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		setContentView(R.layout.layout_zuijinxinwen);
 		Log.d(TAG, "Tabzuijinxinwen onCreate");
 
-		ProgressBar progressBar = new ProgressBar(this);
-		
-		
 		moreView = getLayoutInflater().inflate(R.layout.moredata, null);
 		bt = (Button) moreView.findViewById(R.id.bt_load);
 		pg = (ProgressBar) moreView.findViewById(R.id.pg);
 		handler = new Handler();
 
 		dbadapter = new DBAdapter(this);
-
-		c = dbadapter.getzuijinxinwen(0, MaxDataNum);
+		c = dbadapter.getzuijinxinwen(0, 50);
 		listItem = new ArrayList<HashMap<String, String>>();
-		for (int i = 0; i < 10 && c.moveToNext(); i++) {
+		for (int i = 0; c.moveToNext(); i++) {
 			c.moveToPosition(i);
 			String title = c.getString(c.getColumnIndex("title"));
 			String words = c.getString(c.getColumnIndex("words"));
@@ -82,6 +77,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 			map.put("ItemText", words);
 			listItem.add(map);
 		}
+		Log.d(TAG, "listItem oncreate" + listItem.size());
 
 		listItemAdapter = new SimpleAdapter(this, listItem,
 				R.layout.zuijinxinwen_item, new String[] { "date", "counts",
@@ -98,19 +94,19 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		bt.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				pg.setVisibility(View.VISIBLE);
-				bt.setVisibility(View.GONE);
-				handler.postDelayed(new Runnable() {
-
-					@Override
-					public void run() {
-						loadMoreData();
-						bt.setVisibility(View.VISIBLE);
-						pg.setVisibility(View.GONE);
-						listItemAdapter.notifyDataSetChanged();
-					}
-				}, 200);
+				
+//				pg.setVisibility(View.VISIBLE);
+//				bt.setVisibility(View.GONE);
+//				handler.postDelayed(new Runnable() {
+//
+//					@Override
+//					public void run() {
+//						loadMoreData();
+//						bt.setVisibility(View.VISIBLE);
+//						pg.setVisibility(View.GONE);
+//						listItemAdapter.notifyDataSetChanged();
+//					}
+//				}, 200);
 			}
 		});
 
@@ -121,13 +117,14 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 					@Override
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int position, long arg3) {
-						Log.d(TAG, "zuijinxinwen中点击Item序号:"+position);
-						String title = (String)listItem.get(position-1).get("ItemTitle");
+						Log.d(TAG, "zuijinxinwen中点击Item序号:" + position);
+						String title = (String) listItem.get(position - 1).get(
+								"ItemTitle");
 						Bundle bundle = new Bundle();
 						Intent intent = new Intent(
 								TabzuijinxinwenActivity.this, zhuanti.class);
-						title = title.replace("\'","\'\'");		//修复"传入的BUG
-						Log.d(TAG, "传递到专题数据title:"  +"title:"+title);
+						title = title.replace("\'", "\'\'"); // 修复"传入的BUG
+						Log.d(TAG, "传递到专题数据title:" + "title:" + title);
 						bundle.putString("title", title);
 						intent.putExtras(bundle);
 						startActivity(intent);
@@ -143,20 +140,28 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 						CheckNetwork checknet = new CheckNetwork(
 								TabzuijinxinwenActivity.this);
 						if (checknet.check()) {
-							new GetDataTask().execute("fresh");
+//							new GetDataTask().execute("fresh");
 						} else {
 							Toast.makeText(TabzuijinxinwenActivity.this,
 									"网络不可用,请检查联网状态", Toast.LENGTH_SHORT).show();
-							//这里将下拉状态变成正常状态
-							((PullToRefreshListView)TabzuijinxinwenActivity.this.getListView()).onRefreshComplete();
+							// 这里将下拉状态变成正常状态
+							((PullToRefreshListView) TabzuijinxinwenActivity.this
+									.getListView()).onRefreshComplete();
 						}
 					}
 				});
+
+	}
+
+	@Override
+	protected void onStart() {
+		Log.d(TAG, "TabzuijinxinwenActivity onStart");
+		super.onStart();
 	}
 
 	private void loadMoreData() {
 		int count = listItemAdapter.getCount();
-		if (count + 10 < MaxDataNum) {
+		if (count + 10 < 50) {
 			{
 				for (int i = count; i < count + 10 && c.moveToNext(); i++) {
 					c.moveToPosition(i);
@@ -175,7 +180,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 			}
 		} else {
 			// 数据已经不足10条
-			for (int i = count; i < MaxDataNum && c.moveToNext(); i++) {
+			for (int i = count; i < 50 && c.moveToNext(); i++) {
 				c.moveToPosition(i);
 				String title = c.getString(c.getColumnIndex("title"));
 				String words = c.getString(c.getColumnIndex("words"));
@@ -194,7 +199,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
+		Log.d(TAG, "Tabzuijinxinwen Activity onKeydown");
 		return false;
 	}
 
@@ -208,13 +213,14 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 			int visibleItemCount, int totalItemCount) {
 
 		lastVisibleIndex = firstVisibleItem + visibleItemCount - 1;
-		//所有的条目已经和最大条数相等，则移除底部的View
-		if ((totalItemCount >= MaxDataNum || (c.isAfterLast() == true))
-				&& flag == 0) {
-			((PullToRefreshListView) getListView()).removeFooterView(moreView);
-			Toast.makeText(this, "数据全部加载完成，没有更多数据！", Toast.LENGTH_LONG).show();
-			flag = 1;
-		}
+		// 所有的条目已经和最大条数相等，则移除底部的View
+		Log.d(TAG, "totalItemCount:"+totalItemCount+" ");
+//		if ((totalItemCount >= 50 || (c.isAfterLast() == true))
+//				&& flag == 0) {
+//			((PullToRefreshListView) getListView()).removeFooterView(moreView);
+//			Toast.makeText(this, "数据全部加载完成，没有更多数据！", Toast.LENGTH_LONG).show();
+//			flag = 1;
+//		}
 	}
 
 	// view 报告滑动状态的视图
@@ -227,7 +233,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		// OnScrollListener.SCROLL_STATE_IDLE 表示ListView不动
-		Log.d(TAG, "lastVisibleIndex:" + lastVisibleIndex + "getCount:"
+		Log.d(TAG, "lastVisibleIndex:" + lastVisibleIndex + "ItemAdapter getCount:"
 				+ listItemAdapter.getCount());
 		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
 				&& lastVisibleIndex >= listItemAdapter.getCount()) {
@@ -247,25 +253,35 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 	}
 
 	private class GetDataTask extends AsyncTask<String, Void, Integer> {
+		
+		private String date;
 
+		public GetDataTask(){
+			
+		}
+		
+		public GetDataTask(String date){
+			this.date = date;
+		}
+		
 		@Override
 		protected void onPreExecute() {
-			// TODO Auto-generated method stub
+			Log.d(TAG, "GetDataTask pre");
 			super.onPreExecute();
 		}
 
 		@Override
 		protected Integer doInBackground(String... params) {
-			return new Integer(ConnectWeb.getzuijinxinwen(dbadapter)); //后台请求最近新闻
+			ConnectWeb.getZhuantiFromDate(dbadapter, date);
+			return new Integer(ConnectWeb.getzuijinxinwen(dbadapter)); // 后台请求最近新闻
 		}
 
 		@Override
 		protected void onPostExecute(Integer result) {
-			super.onPostExecute(result);
 			Log.d(TAG, "TabzuijinxinwenActivity GetDataTask PostExecute");
-			c = dbadapter.getzuijinxinwen(0, MaxDataNum);
+			c = dbadapter.getzuijinxinwen(50, 100);
 			listItem = new ArrayList<HashMap<String, String>>();
-			for (int i = 0; i < 10 && c.moveToNext(); i++) {
+			for (int i = 0; c.moveToNext(); i++) {
 				c.moveToPosition(i);
 				String title = c.getString(c.getColumnIndex("title"));
 				String words = c.getString(c.getColumnIndex("words"));
@@ -279,17 +295,19 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 				map.put("ItemText", words);
 				listItem.add(map);
 			}
-
 			listItemAdapter.notifyDataSetChanged();
-
+			Log.d(TAG, "listItem size" + listItem.size());
 			((PullToRefreshListView) getListView()).onRefreshComplete();
-			Toast.makeText(TabzuijinxinwenActivity.this, "更新了"+result.toString()+"条", Toast.LENGTH_SHORT).show();
+			Toast.makeText(TabzuijinxinwenActivity.this,
+					"更新了" + result.toString() + "条", Toast.LENGTH_SHORT).show();
+			super.onPostExecute(result);
 		}
 
 	}
 
 	@Override
 	protected void onDestroy() {
+		Log.d(TAG, "Tabzuijinxinwen Destroy");
 		super.onDestroy();
 		c.close();
 	}
