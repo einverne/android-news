@@ -1,24 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/AbsoluteLayout1"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:layout_height="fill_parent" >
 
-    <LinearLayout
+    <com.markupartist.android.widget.PullToRefreshListView
+        android:id="@+id/android:list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical" >
+        android:background="@color/list_item_background"
+        android:divider="@color/white"
+        android:dividerHeight="1.5px"
+        android:footerDividersEnabled="false" >
+    </com.markupartist.android.widget.PullToRefreshListView>
 
-        <com.markupartist.android.widget.PullToRefreshListView
-            android:id="@+id/android:list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="@color/list_item_background"
-            android:footerDividersEnabled="false"
-     	  	 android:divider="@color/white"
- 	 		  android:dividerHeight="1.5px"
-             />
-
-    </LinearLayout>
-
-</LinearLayout>
+</AbsoluteLayout>
