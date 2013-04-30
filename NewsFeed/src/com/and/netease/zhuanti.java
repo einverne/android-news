@@ -109,8 +109,8 @@ public class zhuanti extends ListActivity {
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// 如果是返回键,直接返回到桌面
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			Log.d(TAG, "zhuanti OnkeyDown");
 			finish();
 		}
 		return true;

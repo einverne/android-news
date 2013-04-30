@@ -48,7 +48,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 
 	ArrayList<HashMap<String, String>> listItem;
 	private String queryDate;
-	private int days = 1;
+	private int days = 3;
 
 	private static final String TAG = "EV_DEBUG";
 
@@ -66,7 +66,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		
 		dbadapter = new DBAdapter(this);
 		Log.d(TAG, "Today:"+DateTool.getTodayDate());
-		c = dbadapter.getzuijinxinwenFromDate(DateTool.getTodayDate());
+		c = dbadapter.getzuijinxinwen(0, 50);
 		listItem = new ArrayList<HashMap<String, String>>();
 		for (int i = 0; c.moveToNext(); i++) {
 			c.moveToPosition(i);
@@ -299,7 +299,9 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 			}
 			listItemAdapter.notifyDataSetChanged();
 			Log.d(TAG, "listItem size" + listItem.size());
-			((PullToRefreshListView) getListView()).onRefreshComplete();
+			if (date == "fresh") {
+				((PullToRefreshListView) getListView()).onRefreshComplete();
+			}
 			Toast.makeText(TabzuijinxinwenActivity.this,
 					"更新了" + result.toString() + "条", Toast.LENGTH_SHORT).show();
 			super.onPostExecute(result);
