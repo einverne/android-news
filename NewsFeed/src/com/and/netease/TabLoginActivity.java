@@ -49,14 +49,17 @@ public class TabLoginActivity extends Activity {
 		String store_name = sharedPreferences.getString("name", "t");
 		String store_psw = sharedPreferences.getString("psw", "t");
 		if (store_name != "t") {
-			Intent intent = new Intent();
-			intent.setClass(TabLoginActivity.this, dingzhi.class);						
-			Bundle data = new Bundle();
-			data.putString("name",store_name);
-			intent.putExtras(data);
-			String str = (String)intent.getStringExtra("name");
-			startActivity(intent);
+			username.setText(store_name);
+			psw.setText(store_psw);
 		}
+//			Intent intent = new Intent();
+//			intent.setClass(TabLoginActivity.this, dingzhi.class);						
+//			Bundle data = new Bundle();
+//			data.putString("name",store_name);
+//			intent.putExtras(data);
+//			String str = (String)intent.getStringExtra("name");
+//			startActivity(intent);
+//		}
 		
 		Button loginButton = (Button) findViewById(R.id.button_denglu);
 		loginButton.setOnClickListener(new Button.OnClickListener() {

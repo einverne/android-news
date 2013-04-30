@@ -29,10 +29,9 @@ public class ConnectWeb {
 	static public boolean getJobOfUser(DBAdapter dbadapter, String username,
 			String jobname) {
 		boolean returnresult = true;
-		// String
-		// theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getJobOfUser&user="+username+"&jobname="+jobname;
-		String theurl = "http://10.0.2.2:8080/RMI_WEB/rmi?r=getJobOfUser&user="
-				+ username + "&jobname=" + jobname;
+		 String theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getJobOfUser&user="+username+"&jobname="+jobname;
+//		String theurl = "http://10.0.2.2:8080/RMI_WEB/rmi?r=getJobOfUser&user="
+//				+ username + "&jobname=" + jobname;
 		try {
 			String str = HttpConn.getJsonFromUrlGet(theurl);
 			Log.d("EV_DEBUG", str);

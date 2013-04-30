@@ -47,8 +47,6 @@ public class dingzhi extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_dingzhi);
-		// Person person = (Person)getApplication();
-		// user_name = person.getUsername();
 		sharedPreferences = this.getSharedPreferences("userinfo", MODE_PRIVATE);
 		
 		Bundle bundle = this.getIntent().getExtras();
@@ -168,8 +166,8 @@ public class dingzhi extends ListActivity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			Intent intent = new Intent(this,MainActivity.class);
-			startActivity(intent);
+//			Intent intent = new Intent(this,MainActivity.class);
+//			startActivity(intent);
 			this.finish();
 		}
 		return super.onKeyDown(keyCode, event);

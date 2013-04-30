@@ -228,9 +228,6 @@ public class advanced_search extends Activity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			Intent intent = new Intent();
-			intent.setClass(advanced_search.this, MainActivity.class);
-			startActivityForResult(intent, 1);
 			this.finish();
 		}
 		return true;
