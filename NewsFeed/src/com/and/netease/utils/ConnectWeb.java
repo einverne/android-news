@@ -432,11 +432,12 @@ public class ConnectWeb {
 	}
 
 	static private String jiexiwords(String words) {
-		int index1 = -1;
+		//(Obama&obama,10.736268009190807)(Syria&syria,7.543050279718943)(Republican&republican,7.265170719317765)(column&column,6.95013685662713)(headline&headlin,6.3865253967639495)(Hagel&hagel,6.156314922267465)(synonym&synonym,6.156314922267465)(Noonan&noonan,5.629863624761026)(excuse&excus,5.629863624761026)(rebels&rebel,5.618906849791507)
+/*		int index1 = -1;
 		int index2 = -1;
 		String keyword = "";
 		int tmp = 0;
-//		Log.d("EV_DEBUG_WORDS", words);
+		Log.d("EV_DEBUG_WORDS", words);
 		while ((index1 = words.indexOf("(", index1)) > -1
 				&& (index2 = words.indexOf(",", index2)) > -1 && (tmp < 5)) {	//有的数据中包含&字符,坑死我了..
 //			Log.d("EV_DEBUG", "index1:"+index1+"2:"+index2);
@@ -448,6 +449,15 @@ public class ConnectWeb {
 			index2 += 1;
 			tmp++;
 			
+		}
+		*/
+		String keyword = "";
+		String[] keywords = words.split("\\)");
+		for (int i = 0; i < keywords.length; i++) {
+			int a =keywords[i].indexOf("(");
+			int b = keywords[i].indexOf("&");
+			keyword = keyword + keywords[i].substring(a+1, b)+" ";
+//			Log.d("EV_DEBUG_WORDS", keyword);
 		}
 		return keyword;
 	}
