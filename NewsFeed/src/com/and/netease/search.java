@@ -6,14 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.and.netease.utils.CheckNetwork;
-import com.and.netease.utils.ConnectWeb;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -21,40 +18,149 @@ import android.view.View.OnClickListener;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.and.netease.utils.CheckNetwork;
+import com.and.netease.utils.ConnectWeb;
+
 public class search extends Activity {
-	String url;
+	/**
+	 * Data
+	 */
+	public class getData extends
+			AsyncTask<Void, Void, ArrayList<HashMap<String, Object>>> {
+		private String aboutChina;
+		private String dateF;
+		private String dateT;
+		private String keyword;
+		private int max;
+		private int start;
+
+		public getData(String keyword, String dateF, String dateT,
+				String aboutChina, int start, int max) {
+			this.keyword = keyword;
+			this.dateF = dateF;
+			this.dateT = dateT;
+			this.aboutChina = aboutChina;
+			this.start = start;
+			this.max = max;
+		}
+
+		@Override
+		protected ArrayList<HashMap<String, Object>> doInBackground(
+				Void... params) {
+			Map<String, Object> searchmap = ConnectWeb.getsearch(keyword,
+					dateF, dateT, aboutChina, start, max);
+			List<Map<String, Object>> list = (List<Map<String, Object>>) searchmap
+					.get("first");
+			Log.d("dateF", dateF);
+			Log.d("dateT", dateT);
+			numberOfSearchResult = (Integer) searchmap.get("second");
+			for (int i = 0; i < list.size(); i++) {
+				HashMap<String, Object> map = new HashMap<String, Object>();
+				Map<String, Object> map1 = (Map<String, Object>) list.get(i);
+				String source = (String) map1.get("source");
+				map.put("Title", map1.get("title"));
+				map.put("source", source);
+				map.put("icon", getIcon(source));
+				map.put("ItemTime", map1.get("date"));
+				map.put("description", (String) map1.get("description"));
+				map.put("url", map1.get("url"));
+				listItem.add(map);
+			}
+			if (list.size() < 30) {
+				flagLoadMoreData = 5;
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(ArrayList<HashMap<String, Object>> result) {
+			String te = "共有" + numberOfSearchResult + "条";
+			text.setText(te);
+			if (numberOfSearchResult == 0) {
+				Toast.makeText(search.this, "没有符合关键词的结果,请调整关键词",
+						Toast.LENGTH_SHORT).show();
+			}
+			listItemAdapter.notifyDataSetChanged();
+			super.onPostExecute(result);
+		}
+
+		@Override
+		protected void onPreExecute() {
+			Toast.makeText(search.this, "正在后台加载数据,请稍等", Toast.LENGTH_SHORT)
+					.show();
+			super.onPreExecute();
+		}
+
+	}
 	private static final String TAG = "EV_DEBUG";
-	private ArrayList<Map<String, Object>> listItem;
-	private List<Map<String, Object>> list;
-	private ListView myListView;
-	private int resultOnceQuery = 30;
-	private View moreView;
-	private SimpleAdapter listItemAdapter;
-	private int lastVisibleIndex;
+	boolean aboutChina = false;
 	private Button bt;
-	private ProgressBar pg;
-	private int mYear;
-	private int mMonth;
-	private int mDay;
-	String keyword;
+	String china = "F";
 	String dateF;
 	String dateT;
-	String month;
 	String day;
 	int flagLoadMoreData = 0;
+	String keyword;
+	private int lastVisibleIndex;
+	private ArrayList<Map<String, Object>> listItem;
+	private SimpleAdapter listItemAdapter;
+	private int mDay;
+	private int mMonth;
+	String month;
+	private View moreView;
+	private int mYear;
+	private ListView myListView;
 	private int numberOfSearchResult = 0;
+	private ProgressBar pg;
+	private int resultOnceQuery = 30;
 	TextView text;
-	boolean aboutChina = false;
-	String china = "F";
+
+	String url;
+
+	/**
+	 * get date for search
+	 */
+	public void getdate() {
+		final Calendar c = Calendar.getInstance();
+		mYear = c.get(Calendar.YEAR);
+		mMonth = c.get(Calendar.MONTH) + 1;// 锟斤拷取锟斤拷前锟铰凤拷
+		mDay = c.get(Calendar.DAY_OF_MONTH);// 锟斤拷取锟斤拷前锟铰份碉拷锟斤拷锟节猴拷锟斤拷
+		String year = mYear + "";
+		int year1 = mYear - 1;
+		String yearf = year1 + "";
+		if (mMonth <= 9) {
+			month = "0" + mMonth;
+		} else {
+			month = "" + mMonth;
+
+		}
+		if (mDay <= 9) {
+			day = "0" + mDay;
+		} else {
+			day = mDay + "";
+		}
+		dateT = year + month + day;
+		dateF = yearf + month + day;
+		Log.d("Date", dateF + ":" + dateT + ":" + mMonth);
+	}
+
+	protected int getIcon(String name) {
+		Resources res = getResources();
+		int id = res.getIdentifier(name, "drawable", getPackageName());
+		if (id == 0) {
+			return R.drawable.icon;
+		} else {
+			return id;
+		}
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +197,11 @@ public class search extends Activity {
 						R.id.textView_ItemTime, R.id.Title, R.id.ItemDes });
 		// load more data
 		if (flagLoadMoreData != 5) {
-			moreView = getLayoutInflater().inflate(R.layout.moredata, null);
-			bt = (Button) moreView.findViewById(R.id.bt_load);
-			pg = (ProgressBar) moreView.findViewById(R.id.pg);
+
 		}
+		moreView = getLayoutInflater().inflate(R.layout.moredata, null);
+		bt = (Button) moreView.findViewById(R.id.bt_load);
+		pg = (ProgressBar) moreView.findViewById(R.id.pg);
 		myListView.addFooterView(moreView);
 		myListView.setAdapter(listItemAdapter);
 		/**
@@ -141,16 +248,17 @@ public class search extends Activity {
 				lastVisibleIndex = firstVisibleItem + visibleItemCount;
 				Log.d(TAG, "totalItemCount:" + totalItemCount
 						+ " lastVisibleIndex:" + lastVisibleIndex
-						+ "listItemApdater:" + listItemAdapter.getCount());
-				if (totalItemCount >= numberOfSearchResult) {
-					myListView.removeFooterView(moreView);
-				}
+						+ "listItemApdater:" + listItemAdapter.getCount()
+						+ "numberOfSearchResult" + numberOfSearchResult);
+				// if (totalItemCount >= numberOfSearchResult) {
+				// myListView.removeFooterView(moreView);
+				// }
 			}
 
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
 				if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
-						&& lastVisibleIndex == listItemAdapter.getCount()
+						&& lastVisibleIndex == listItemAdapter.getCount() + 1
 						&& lastVisibleIndex < numberOfSearchResult) {
 					pg.setVisibility(View.VISIBLE);
 					bt.setVisibility(View.GONE);
@@ -179,114 +287,6 @@ public class search extends Activity {
 				startActivity(intent);
 			}
 		});
-	}
-
-	/**
-	 * get date for search
-	 */
-	public void getdate() {
-		final Calendar c = Calendar.getInstance();
-		mYear = c.get(Calendar.YEAR);
-		mMonth = c.get(Calendar.MONTH) + 1;// 锟斤拷取锟斤拷前锟铰凤拷
-		mDay = c.get(Calendar.DAY_OF_MONTH);// 锟斤拷取锟斤拷前锟铰份碉拷锟斤拷锟节猴拷锟斤拷
-		String year = mYear + "";
-		int year1 = mYear - 1;
-		String yearf = year1 + "";
-		if (mMonth <= 9) {
-			month = "0" + mMonth;
-		} else {
-			month = "" + mMonth;
-
-		}
-		if (mDay <= 9) {
-			day = "0" + mDay;
-		} else {
-			day = mDay + "";
-		}
-		dateT = year + month + day;
-		dateF = yearf + month + day;
-		Log.d("Date", dateF + ":" + dateT + ":" + mMonth);
-	}
-
-	protected int getIcon(String name) {
-		Resources res = getResources();
-		int id = res.getIdentifier(name, "drawable", getPackageName());
-		if (id == 0) {
-			return R.drawable.icon;
-		} else {
-			return id;
-		}
-	}
-
-	/**
-	 * Data
-	 */
-	public class getData extends
-			AsyncTask<Void, Void, ArrayList<HashMap<String, Object>>> {
-		private String keyword;
-		private String dateF;
-		private String dateT;
-		private String aboutChina;
-		private int start;
-		private int max;
-
-		public getData(String keyword, String dateF, String dateT,
-				String aboutChina, int start, int max) {
-			this.keyword = keyword;
-			this.dateF = dateF;
-			this.dateT = dateT;
-			this.aboutChina = aboutChina;
-			this.start = start;
-			this.max = max;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			Toast.makeText(search.this, "正在后台加载数据,请稍等", Toast.LENGTH_SHORT)
-					.show();
-			super.onPreExecute();
-		}
-
-		@Override
-		protected ArrayList<HashMap<String, Object>> doInBackground(
-				Void... params) {
-			Map<String, Object> searchmap = ConnectWeb.getsearch(keyword,
-					dateF, dateT, aboutChina, start, max);
-			List<Map<String, Object>> list = (List<Map<String, Object>>) searchmap
-					.get("first");
-			Log.d("dateF", dateF);
-			Log.d("dateT", dateT);
-			numberOfSearchResult = (Integer) searchmap.get("second");
-			for (int i = 0; i < list.size(); i++) {
-				HashMap<String, Object> map = new HashMap<String, Object>();
-				Map<String, Object> map1 = (Map<String, Object>) list.get(i);
-				String source = (String) map1.get("source");
-				map.put("Title", map1.get("title"));
-				map.put("source", source);
-				map.put("icon", getIcon(source));
-				map.put("ItemTime", map1.get("date"));
-				map.put("description", (String) map1.get("description"));
-				map.put("url", map1.get("url"));
-				listItem.add(map);
-			}
-			if (list.size() < 30) {
-				flagLoadMoreData = 5;
-			}
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(ArrayList<HashMap<String, Object>> result) {
-			String te = "共有" + numberOfSearchResult + "条";
-			text.setText(te);
-			if (numberOfSearchResult == 0) {
-				Toast.makeText(search.this, "没有符合关键词的结果,请调整关键词",
-						Toast.LENGTH_SHORT).show();
-			}
-			listItemAdapter.notifyDataSetChanged();
-			super.onPostExecute(result);
-		}
-
 	}
 
 	/**
