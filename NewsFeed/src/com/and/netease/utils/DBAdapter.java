@@ -48,10 +48,8 @@ public class DBAdapter
 	public static final String zuijinxinwenKEY_Read = "read";
 
 	public static final String userKEY_ROWID = "_id";// 是最近新闻的专题们
-	public static final String userKEY_To = "to1"; // 专题关键字
 	public static final String userKEY_Count = "count"; //
-	public static final String userKEY_From = "from1"; //
-	public static final String userKEY_Days = "days"; // 专题日期
+	private static final String userKEY_words = "words";
 	public static final String userKEY_user = "user";
 	public static final String userKEY_jobname = "jobname";
 
@@ -77,10 +75,7 @@ public class DBAdapter
 	public static final String divisionsKEY_Title = "title";
 	public static final String divisionsKEY_Heat = "heat";
 	
-	private static final String userzhuanti_Jobname = "jobname";
-	private static final String userzhuanti_zhuantiid = "id";
-	private static final String userzhuanti_zhuanticount = "count";
-	private static final String userzhuanti_zhuantiwords = "words";
+
 
 	// 数据库管理工具 ：扩展SQLiteOpenHelper类，它是一个Android辅助类，主要用于数据库创建和版本管理。
 	private DatabaseHelper DBHelper;
@@ -102,15 +97,14 @@ public class DBAdapter
 	 * @param count
 	 * @return
 	 */
-	public long userInsert(String user, String jobname, String from, String to,
+	public long userInsert(String user, String jobname, String words,
 			int count) {
 		db = DBHelper.getWritableDatabase();
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(userKEY_user, user);
 		initialValues.put(userKEY_Count, count);
 		initialValues.put(userKEY_jobname, jobname);
-		initialValues.put(userKEY_To, to);
-		initialValues.put(userKEY_From, from);
+		initialValues.put(userKEY_words, words);
 		Cursor mCursor = db.query(DATABASE_TABLE_user,
 				new String[] { userKEY_ROWID }, userKEY_user + " = '" + user
 						+ "'  and " + userKEY_jobname + " = '" + jobname + "'",
@@ -227,19 +221,8 @@ public class DBAdapter
 		return result;
 	}
 
-	public void userInsertZhuanti(String jobname,int zhuanti_id,int zhuanti_count,String zhuanti_words){
-		Log.d(TAG, "插入一个专题:"+jobname+" words"+zhuanti_words);
-		db = DBHelper.getWritableDatabase();
-		ContentValues iniContentValues = new ContentValues();
-		iniContentValues.put(userzhuanti_Jobname, jobname);
-		iniContentValues.put(userzhuanti_zhuantiid, zhuanti_id);
-		iniContentValues.put(userzhuanti_zhuanticount, zhuanti_count);
-		iniContentValues.put(userzhuanti_zhuantiwords, zhuanti_words);
-		db.insert(DATABASE_TABLE_userzhuanti, null, iniContentValues);
-		db.close();
-		DBHelper.close();
-		return;
-	}
+
+
 	
 	public boolean setread_usernews(String _id, boolean read) {
 		db = DBHelper.getWritableDatabase();
@@ -421,10 +404,10 @@ public class DBAdapter
 
 	}
 
-	public Cursor getUsernews(long userid) {
+	public Cursor getUserZhuanti(long userid) {
 		db = DBHelper.getWritableDatabase();
-		Cursor mCursor = db.query(DATABASE_TABLE_usernews, null,
-				usernewsKEY_ZhuantiId + "=" + String.valueOf(userid), null,
+		Cursor mCursor = db.query(DATABASE_TABLE_userzhuanti, null,
+				usernewsKEY_ZhuantiId + "= '" + String.valueOf(userid)+"'", null,
 				null, null, null, null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
@@ -436,21 +419,23 @@ public class DBAdapter
 	}
 
 	public Cursor dingzhizhuanti(String user, String jobname) {
-		Cursor mCursor1 = null;
+		Cursor  mCursor1 = null;
 		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = getuser(user, jobname);
 		if (mCursor.moveToFirst() != false) {
 
 			long userid = Integer.parseInt((String) mCursor.getString(mCursor
 					.getColumnIndex("_id")));
-			mCursor.close();
-			mCursor1 = getUsernews(userid);
+			
+			 mCursor1 = getUserZhuanti(userid);
 		}
+		mCursor.close();
 		db.close();
 		DBHelper.close();
 		return mCursor1;
 
 	}
+
 
 	public Cursor getuser(String user, String jobname) {
 		db = DBHelper.getWritableDatabase();
