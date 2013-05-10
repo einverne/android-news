@@ -31,11 +31,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_CREATE_divisions = "create table if not exists divisions (_id integer primary key autoincrement, "
 			+ "title text not null, heat integer,UNIQUE (title));";
 	private static final String DATABASE_CREATE_user = "create table if not exists user(_id integer primary key autoincrement, "
-			+ "user text not null,jobname text not null,from1 text,to1 text,count integer,UNIQUE (user,jobname));";
+			+ "user text not null,jobname text not null,count integer,words text,UNIQUE (user,jobname));";
 	private static final String DATABASE_CREATE_usernews = "create table if not exists usernews (_id integer primary key autoincrement, "
 			+ "title text not null, source text,words text,description text,date text,url text,zhuantiId integer,read text);";
-	private static final String DATABASE_CREATE_user_zhuanti = "create table if not exists userzhuanti (_id integer primary key autoincrement, "
-			+ "jobname text not null, id text,count text,words text);";
+
 
 	
 	private static final String TAG = "EV_Debug";
@@ -54,7 +53,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(DATABASE_CREATE_zuijinxinwen);
 		db.execSQL(DATABASE_CREATE_user);
 		db.execSQL(DATABASE_CREATE_usernews);
-		db.execSQL(DATABASE_CREATE_user_zhuanti);
 	}
 
 	@Override
@@ -67,9 +65,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS places");
 		db.execSQL("DROP TABLE IF EXISTS divisions");
 		db.execSQL("DROP TABLE IF EXISTS zuijinxinwen");
-		db.execSQL("DROP TABLE IF EXISTS userzhuanti");
+		db.execSQL("DROP TABLE IF EXISTS user");
 		db.execSQL("DROP TABLE IF EXISTS usernews");
-		db.execSQL("DROP TABLE IF EXISTS userzhuanti");
 		onCreate(db);
 	}
 
