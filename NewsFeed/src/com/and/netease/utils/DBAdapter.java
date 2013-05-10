@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 /**
- * 数据库操作类 适配器
+ * 数据库操作类
  */
 public class DBAdapter
 
@@ -25,12 +25,13 @@ public class DBAdapter
 	private static final String DATABASE_TABLE_zuijinxinwen = "zuijinxinwen";
 	private static final String DATABASE_TABLE_user = "user";
 	private static final String DATABASE_TABLE_usernews = "usernews";
+	private static final String DATABASE_TABLE_userzhuanti = "userzhuanti";
 
-	// 数据库数据格式
-	/*
+	/**
+	 * 专题带下来的新闻们
 	 * title source description date url
 	 */
-	public static final String newsKEY_ROWID = "_id";// 专题带下来的新闻们
+	public static final String newsKEY_ROWID = "_id";
 	public static final String newsKEY_Title = "title";
 	public static final String newsKEY_Source = "source";
 	public static final String newsKEY_Date = "date";
@@ -75,6 +76,11 @@ public class DBAdapter
 	public static final String divisionsKEY_ROWID = "_id";
 	public static final String divisionsKEY_Title = "title";
 	public static final String divisionsKEY_Heat = "heat";
+	
+	private static final String userzhuanti_Jobname = "jobname";
+	private static final String userzhuanti_zhuantiid = "id";
+	private static final String userzhuanti_zhuanticount = "count";
+	private static final String userzhuanti_zhuantiwords = "words";
 
 	// 数据库管理工具 ：扩展SQLiteOpenHelper类，它是一个Android辅助类，主要用于数据库创建和版本管理。
 	private DatabaseHelper DBHelper;
@@ -96,7 +102,7 @@ public class DBAdapter
 	 * @param count
 	 * @return
 	 */
-	public long userinsert(String user, String jobname, String from, String to,
+	public long userInsert(String user, String jobname, String from, String to,
 			int count) {
 		db = DBHelper.getWritableDatabase();
 		ContentValues initialValues = new ContentValues();
@@ -112,15 +118,13 @@ public class DBAdapter
 		long result = -1;
 		if (mCursor.moveToFirst() != false) {
 			result = -1;
-
 		} else {
 			result = db.insert(DATABASE_TABLE_user, null, initialValues);
 		}
-
 		db.close();
 		DBHelper.close();
 		mCursor.close();
-		Log.d("test", "插入user表数据条数：" + String.valueOf(result));
+		Log.d(TAG, "插入user表数据条数：" + String.valueOf(result));
 		return result;
 	}
 
@@ -204,8 +208,9 @@ public class DBAdapter
 	 * @return
 	 * 
 	 */
-	public long userinsertnews(String title, String source, String description,
+	public long userInsertNews(String title, String source, String description,
 			String date, String url, String words, long zhuantiId, boolean read) {
+		Log.d(TAG, "插入一条新闻：title:" + title);
 		db = DBHelper.getWritableDatabase();
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(usernewsKEY_Title, title);
@@ -222,6 +227,20 @@ public class DBAdapter
 		return result;
 	}
 
+	public void userInsertZhuanti(String jobname,int zhuanti_id,int zhuanti_count,String zhuanti_words){
+		Log.d(TAG, "插入一个专题:"+jobname+" words"+zhuanti_words);
+		db = DBHelper.getWritableDatabase();
+		ContentValues iniContentValues = new ContentValues();
+		iniContentValues.put(userzhuanti_Jobname, jobname);
+		iniContentValues.put(userzhuanti_zhuantiid, zhuanti_id);
+		iniContentValues.put(userzhuanti_zhuanticount, zhuanti_count);
+		iniContentValues.put(userzhuanti_zhuantiwords, zhuanti_words);
+		db.insert(DATABASE_TABLE_userzhuanti, null, iniContentValues);
+		db.close();
+		DBHelper.close();
+		return;
+	}
+	
 	public boolean setread_usernews(String _id, boolean read) {
 		db = DBHelper.getWritableDatabase();
 		ContentValues initialValues = new ContentValues();
@@ -402,7 +421,7 @@ public class DBAdapter
 
 	}
 
-	public Cursor getusernews(long userid) {
+	public Cursor getUsernews(long userid) {
 		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = db.query(DATABASE_TABLE_usernews, null,
 				usernewsKEY_ZhuantiId + "=" + String.valueOf(userid), null,
@@ -425,7 +444,7 @@ public class DBAdapter
 			long userid = Integer.parseInt((String) mCursor.getString(mCursor
 					.getColumnIndex("_id")));
 			mCursor.close();
-			mCursor1 = getusernews(userid);
+			mCursor1 = getUsernews(userid);
 		}
 		db.close();
 		DBHelper.close();
@@ -568,7 +587,6 @@ public class DBAdapter
 	}
 
 	// ---删除一个指定标题---
-	// db.delete("person", "age < ?", new String[]{"35"});
 	public boolean deleteuser(String user) {
 		db = DBHelper.getWritableDatabase();
 		boolean result = false;
