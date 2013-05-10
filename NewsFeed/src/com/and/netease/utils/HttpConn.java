@@ -38,7 +38,6 @@ public class HttpConn {
 						+ httpResponse.getStatusLine().toString();
 			}
 		} catch (ClientProtocolException e) {
-			// TODO: handle exception
 			str = e.getMessage().toString();
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -48,6 +47,7 @@ public class HttpConn {
 			str = e.getMessage().toString();
 			e.printStackTrace();
 		}
+		Log.d("http", str);
 		return str;
 	}
 

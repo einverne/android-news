@@ -34,12 +34,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ "user text not null,jobname text not null,from1 text,to1 text,count integer,UNIQUE (user,jobname));";
 	private static final String DATABASE_CREATE_usernews = "create table if not exists usernews (_id integer primary key autoincrement, "
 			+ "title text not null, source text,words text,description text,date text,url text,zhuantiId integer,read text);";
+	private static final String DATABASE_CREATE_user_zhuanti = "create table if not exists userzhuanti (_id integer primary key autoincrement, "
+			+ "jobname text not null, id text,count text,words text);";
 
+	
 	private static final String TAG = "EV_Debug";
 
 	public DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -52,6 +54,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(DATABASE_CREATE_zuijinxinwen);
 		db.execSQL(DATABASE_CREATE_user);
 		db.execSQL(DATABASE_CREATE_usernews);
+		db.execSQL(DATABASE_CREATE_user_zhuanti);
 	}
 
 	@Override
@@ -66,6 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS zuijinxinwen");
 		db.execSQL("DROP TABLE IF EXISTS userzhuanti");
 		db.execSQL("DROP TABLE IF EXISTS usernews");
+		db.execSQL("DROP TABLE IF EXISTS userzhuanti");
 		onCreate(db);
 	}
 

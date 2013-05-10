@@ -18,6 +18,8 @@ import android.util.Log;
 
 public class ConnectWeb {
 
+	private static final String TAG = "EV_DEBUG";
+
 	/**
 	 * 获取用户定制内容的某一项,需呀参数user和jobname
 	 * http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi
@@ -38,32 +40,32 @@ public class ConnectWeb {
 				+ "&start="
 				+ start
 				+ "&max=" + max;
-		// String theurl =
-		// "http://10.0.2.2:8080/RMI_WEB/rmi?r=getJobOfUser&user="
-		// + username + "&jobname=" + jobname;
 		try {
 			String str = HttpConn.getJsonFromUrlGet(theurl);
-			Log.d("EV_DEBUG", str);
 			// 通过json 来解析收到的字符串
 			JSONObject result = new JSONObject(str);
-
 			// count是总共取到的专题条数
 			int count = result.getInt("count");
 			String to = result.getString("to");
 			String from = result.getString("from");
-			long jobid = dbadapter.userinsert(username, jobname, from, to,
-					count);
+			long jobid = dbadapter.userInsert(username, jobname, from, to,
+					count);			//将用户定制信息添加到数据库
 			if (jobid < 0)
 				return returnresult;
-			Log.d("这个Jobname一共有条数", String.valueOf(count));
+			Log.d(TAG, "这个Jobname一共有新闻数:" + String.valueOf(count));
 			JSONArray docs = result.getJSONArray("docs");
 			// 循环从专题数取出每个专题进行解析
-			Log.d("test getJobOfUser cluster.length一共有多少个专题",
-					String.valueOf(docs.length()));// 0
+			Log.d(TAG, "这个Job一共有多少个专题" + String.valueOf(docs.length()));
 			for (int i = 0; i < docs.length(); i += 1) {
 				// 挨个取出专题
 				JSONObject onecluster = (JSONObject) docs.get(i);
 
+				int zhuanti_id = onecluster.getInt("id");
+				int zhuanti_count = onecluster.getInt("count");
+				String zhuanti_words = jiexiwords(onecluster.getString("words"));
+				Log.d(TAG, "id"+zhuanti_id+" count:"+zhuanti_count+" words"+zhuanti_words);
+				dbadapter.userInsertZhuanti(jobname, zhuanti_id, zhuanti_count, zhuanti_words);
+				
 				// 取出doc，doc是具体新闻名的数组
 				JSONArray doc = onecluster.getJSONArray("doc");
 				// 取出第一条新闻名作为专题的标题
@@ -80,7 +82,7 @@ public class ConnectWeb {
 							.getString("description");
 					String date = (String) onenews.getString("date");
 					String url = (String) onenews.getString("url");
-					dbadapter.userinsertnews(title, source, description, date,
+					dbadapter.userInsertNews(title, source, description, date,
 							url, words, jobid, false);
 				}
 			}
@@ -91,7 +93,7 @@ public class ConnectWeb {
 		return returnresult;
 
 	}
-
+	
 	/**
 	 * 提交一个任务
 	 * http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=submitJob&query=date
