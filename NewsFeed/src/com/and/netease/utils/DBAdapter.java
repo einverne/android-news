@@ -107,7 +107,7 @@ public class DBAdapter
 		initialValues.put(userKEY_words, words);
 		Cursor mCursor = db.query(DATABASE_TABLE_user,
 				new String[] { userKEY_ROWID }, userKEY_user + " = '" + user
-						+ "'  and " + userKEY_jobname + " = '" + jobname + "'",
+						+ "'  and " + userKEY_jobname + " = '" + jobname + "'"+" and "+userKEY_words+"='"+words+"'",
 				null, null, null, null, null);
 		long result = -1;
 		if (mCursor.moveToFirst() != false) {
