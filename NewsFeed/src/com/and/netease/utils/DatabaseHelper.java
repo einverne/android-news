@@ -31,7 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_CREATE_divisions = "create table if not exists divisions (_id integer primary key autoincrement, "
 			+ "title text not null, heat integer,UNIQUE (title));";
 	private static final String DATABASE_CREATE_user = "create table if not exists user(_id integer primary key autoincrement, "
-			+ "user text not null,jobname text not null,count integer,words text,UNIQUE (user,jobname));";
+			+ "user text not null,jobname text not null,count integer,words text,UNIQUE (user,jobname,words));";
 	private static final String DATABASE_CREATE_usernews = "create table if not exists usernews (_id integer primary key autoincrement, "
 			+ "title text not null, source text,words text,description text,date text,url text,zhuantiId integer,read text);";
 
