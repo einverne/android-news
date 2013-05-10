@@ -34,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.and.netease.utils.ConnectWeb;
 import com.and.netease.utils.DBAdapter;
@@ -528,15 +529,25 @@ public class hot_main extends Activity implements OnScrollListener {
 
 		@Override
 		protected void onPostExecute(String[] result) {
+			
+			
+			
 			switch (index) {
 			case 0:
+				c = dbadapter.getpeople(0, MaxDataNum);
+				Toast.makeText(hot_main.this, "本次共刷新数据"+list_People.size()+"条",
+						Toast.LENGTH_SHORT).show();
 
-				for (int j = 0; j < list_People.size(); j++) {
-					Map<String, Object> map1 = list_People.get(j);
+				for (int i = 0; c.moveToNext(); i++) {
+					c.moveToPosition(i);
+					String text = c.getString(c.getColumnIndex("title"));
+					String heat = c.getString(c.getColumnIndex("heat"));
+
 					HashMap<String, Object> map = new HashMap<String, Object>();
-					map.put("ItemTitle", (String) map1.get("title"));
-					map.put("ItemText", (String) map1.get("heat"));
-					listItem0.add(j, map);
+					map.put("ItemTitle", text);
+					map.put("ItemText", heat);
+
+					listItem0.add(map);
 				}
 
 				PullToRefreshListView mylistview1 = (PullToRefreshListView) mPager
@@ -544,13 +555,20 @@ public class hot_main extends Activity implements OnScrollListener {
 				mylistview1.onRefreshComplete();
 				break;
 			case 1:
+				c_place = dbadapter.getplace(0, MaxDataNum);
+				Toast.makeText(hot_main.this, "本次共刷新数据"+list_place.size()+"条",
+						Toast.LENGTH_SHORT).show();
 
-				for (int j = 0; j < list_place.size(); j++) {
-					Map<String, Object> map1 = list_place.get(j);
+				for (int i = 0; c.moveToNext(); i++) {
+					c.moveToPosition(i);
+					String text = c.getString(c.getColumnIndex("title"));
+					String heat = c.getString(c.getColumnIndex("heat"));
+
 					HashMap<String, Object> map = new HashMap<String, Object>();
-					map.put("ItemTitle", (String) map1.get("title"));
-					map.put("ItemText", (String) map1.get("heat"));
-					listItem1.add(j, map);
+					map.put("ItemTitle", text);
+					map.put("ItemText", heat);
+
+					listItem0.add(map);
 				}
 
 				PullToRefreshListView mylistview_place = (PullToRefreshListView) mPager
@@ -558,13 +576,20 @@ public class hot_main extends Activity implements OnScrollListener {
 				mylistview_place.onRefreshComplete();
 				break;
 			case 2:
+				c_division = dbadapter.getdivision(0, MaxDataNum);
+				Toast.makeText(hot_main.this, "本次共刷新数据"+list_division.size()+"条",
+						Toast.LENGTH_SHORT).show();
 
-				for (int j = 0; j < list_division.size(); j++) {
-					Map<String, Object> map1 = list_division.get(j);
+				for (int i = 0; c.moveToNext(); i++) {
+					c.moveToPosition(i);
+					String text = c.getString(c.getColumnIndex("title"));
+					String heat = c.getString(c.getColumnIndex("heat"));
+
 					HashMap<String, Object> map = new HashMap<String, Object>();
-					map.put("ItemTitle", (String) map1.get("title"));
-					map.put("ItemText", (String) map1.get("heat"));
-					listItem2.add(j, map);
+					map.put("ItemTitle", text);
+					map.put("ItemText", heat);
+
+					listItem0.add(map);
 				}
 
 				PullToRefreshListView mylistview_division = (PullToRefreshListView) mPager
