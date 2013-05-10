@@ -1,35 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="50dip"
-    android:textAppearance="?android:attr/textAppearanceLarge"  
-    android:textColor="@color/gray"  
+    android:layout_height="60dp"
+    android:layout_gravity="left"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
     android:background="@color/list_item_background"
-     android:layout_gravity="left"
-     
-  
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:textAppearance="?android:attr/textAppearanceLarge"
+    android:textColor="@color/gray" >
 
     <TextView
         android:id="@+id/textView_heat"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:text="Large Text"
+        android:text=""
         android:textColor="#be0703"
         android:textSize="25sp"
         android:textStyle="bold" />
 
     <TextView
-         android:gravity="center"
         android:id="@+id/textView_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-         android:layout_marginLeft="30dp"
+        android:layout_marginLeft="20dp"
         android:text="Large Text"
-         android:textSize="20sp"
-        android:textColor="@color/textView_color" />
+        android:textColor="@color/textView_color"
+        android:textSize="20sp" />
 
 </LinearLayout>

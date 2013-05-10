@@ -58,11 +58,11 @@
                 android:id="@+id/gridView1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
+                android:horizontalSpacing="15dp"
                 android:numColumns="3"
-                android:horizontalSpacing="20dp"   
-  			    android:verticalSpacing="20dp" 
-  			     android:gravity="center"  
-                  >
+                android:verticalSpacing="15dp" >
+
             </GridView>
 
         </LinearLayout>
