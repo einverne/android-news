@@ -38,6 +38,7 @@ public class advanced_search extends Activity {
 	String syear;
 	CheckBox cb_aboutChina;
 	boolean aboutChina;
+	int mon;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,29 @@ public class advanced_search extends Activity {
 		startTextView = (TextView) findViewById(R.id.startdate);
 		endTextView = (TextView) findViewById(R.id.enddate);
 		cb_aboutChina = (CheckBox) findViewById(R.id.checkBox_aboutChina);
+		
+		final Calendar c = Calendar.getInstance();
+		mYear = c.get(Calendar.YEAR);
+		mMonth = c.get(Calendar.MONTH);
+		mDay = c.get(Calendar.DAY_OF_MONTH);
+		int curMonth;
+		int curYear;
+		if(mMonth>=4){
+			curMonth = mMonth - 2;
+		}
+		else{
+			curYear = mYear - 1;
+			curMonth = mMonth +10;
+		}
+		mon = mMonth + 1;
+		String date = mYear + "-" + mon + "-" + mDay;
+		String fordate =  mYear + "-" + curMonth + "-" + mDay;
+		
+		//默认是从现在到之前的三个月时间
+		startTextView.setText(fordate);
+		endTextView.setText(date);
+		
+		
 
 		Bundle bundle = this.getIntent().getExtras();
 		keyword = bundle.getString("keyword");
@@ -71,17 +95,15 @@ public class advanced_search extends Activity {
 							Toast.LENGTH_SHORT).show();
 					return;
 				}
-				final Calendar c = Calendar.getInstance();
-				mYear = c.get(Calendar.YEAR);
-				mMonth = c.get(Calendar.MONTH);
-				mDay = c.get(Calendar.DAY_OF_MONTH);
+				
 
 				// Date
 
 				String startTime = startTextView.getText().toString();
 				String endTime = endTextView.getText().toString();
-				int mon = mMonth + 1;
+				
 				String currentTime = mYear + "-" + mon + "-" + mDay;
+				
 				Log.d("wwwcurTime", "" + currentTime);
 				DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
 				DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
@@ -102,6 +124,8 @@ public class advanced_search extends Activity {
 				// aboutChina
 				aboutChina = cb_aboutChina.isChecked();
 				Log.d(TAG, "aboutChina:" + aboutChina);
+				
+				
 
 				if (date1 == null || date2 == null
 						|| date1.compareTo(date2) > 0
@@ -129,10 +153,10 @@ public class advanced_search extends Activity {
 			}
 		});
 
-		final Calendar c = Calendar.getInstance();
-		mYear = c.get(Calendar.YEAR);
-		mMonth = c.get(Calendar.MONTH);
-		mDay = c.get(Calendar.DAY_OF_MONTH);
+//		final Calendar c = Calendar.getInstance();
+//		mYear = c.get(Calendar.YEAR);
+//		mMonth = c.get(Calendar.MONTH);
+//		mDay = c.get(Calendar.DAY_OF_MONTH);
 		// 设置当前时间
 
 		startdateButton.setOnClickListener(new OnClickListener() {
@@ -215,11 +239,11 @@ public class advanced_search extends Activity {
 			mYear = year;
 			mMonth = monthOfYear;
 			mDay = dayOfMonth;
-			if (tag == 0) {
+			//if (tag == 0) {
 				updateDisplay(tag);
-			} else if (tag == 1) {
-				updateDisplay(1);
-			}
+			//} else if (tag == 1) {
+		//		updateDisplay(1);
+		//	}
 		}
 	};
 
