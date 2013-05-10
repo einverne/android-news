@@ -1,8 +1,6 @@
 package com.and.netease.utils;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,28 +13,29 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import android.util.Log;
-import android.widget.SlidingDrawer;
 
 public class HttpConn {
 
 	public static String getJsonFromUrlGet(String url) {
 		Log.d("EV_DEBUG", "getJsonFromUrlGet");
 		String str = null;
-		//将url格式化
+		// 将url格式化
 		Log.d("EV_DEBUG", url);
 		url = url.replace(" ", "%20");
 		url = url.replace("\"", "%22");
 		Log.d("EV_DEBUG", url);
-		//创建HTTPGET连接
+		// 创建HTTPGET连接
 		HttpGet httpRequest = new HttpGet(url);
 		try {
-			HttpResponse httpResponse = new DefaultHttpClient().execute(httpRequest);
-			//若状态码为200，OK
+			HttpResponse httpResponse = new DefaultHttpClient()
+					.execute(httpRequest);
+			// 若状态码为200，OK
 			if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 				String string = EntityUtils.toString(httpResponse.getEntity());
 				str = string;
 			} else {
-				str ="Error Response: "+httpResponse.getStatusLine().toString();
+				str = "Error Response: "
+						+ httpResponse.getStatusLine().toString();
 			}
 		} catch (ClientProtocolException e) {
 			// TODO: handle exception
@@ -46,13 +45,12 @@ public class HttpConn {
 			str = e.getMessage().toString();
 			e.printStackTrace();
 		} catch (Exception e) {
-			str =e.getMessage().toString();
+			str = e.getMessage().toString();
 			e.printStackTrace();
 		}
 		return str;
 	}
 
-	
 	public static String getJsonFromUrlPost(String url) {
 		String str = null;
 		// 创建HTTPGET连接

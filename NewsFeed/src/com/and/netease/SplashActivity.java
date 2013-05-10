@@ -1,14 +1,13 @@
 package com.and.netease;
 
-import com.and.netease.utils.CheckNetwork;
-import com.and.netease.utils.ConnectWeb;
-import com.and.netease.utils.DBAdapter;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
+
+import com.and.netease.utils.CheckNetwork;
+import com.and.netease.utils.ConnectWeb;
+import com.and.netease.utils.DBAdapter;
 
 public class SplashActivity extends Activity {
 
@@ -36,26 +35,27 @@ public class SplashActivity extends Activity {
 					ConnectWeb.getdivisions(dbadapter);
 				}
 				/* Create an Intent that will start the Menu-Activity. */
-				Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
+				Intent mainIntent = new Intent(SplashActivity.this,
+						MainActivity.class);
 				SplashActivity.this.startActivity(mainIntent);
 				SplashActivity.this.finish();
 			}
 		}, SPLASH_DISPLAY_LENGHT);
-		
-		
-//		Toast.makeText(SplashActivity.this, "......", Toast.LENGTH_LONG);
-//		
-//		TimerTask task = new TimerTask() {
-//			
-//			@Override
-//			public void run() {
-//				// TODO Auto-generated method stub
-//				finish();
-//				Intent mainIntent = new Intent().setClass(SplashActivity.this, MainActivity.class);
-//				startActivity(mainIntent);
-//			}
-//		};
-//		Timer timer = new Timer();
-//		timer.schedule(task, SPLASH_DISPLAY_LENGHT);
+
+		// Toast.makeText(SplashActivity.this, "......", Toast.LENGTH_LONG);
+		//
+		// TimerTask task = new TimerTask() {
+		//
+		// @Override
+		// public void run() {
+		// // TODO Auto-generated method stub
+		// finish();
+		// Intent mainIntent = new Intent().setClass(SplashActivity.this,
+		// MainActivity.class);
+		// startActivity(mainIntent);
+		// }
+		// };
+		// Timer timer = new Timer();
+		// timer.schedule(task, SPLASH_DISPLAY_LENGHT);
 	}
 }

@@ -13,20 +13,18 @@ import android.util.Log;
  * 
  */
 public class CheckNetwork {
-	
+
 	private static final String TAG = "EV_DEBUG";
 	private Activity activity;
 
 	public CheckNetwork(Activity activity) {
 		this.activity = activity;
-		Log.d(TAG,"CheckNetwork");
+		Log.d(TAG, "CheckNetwork");
 	}
 
 	/**
 	 * 
-	 * @return
-	 * 		true
-	 * 		false
+	 * @return true false
 	 */
 	public boolean check() {
 		ConnectivityManager CM = (ConnectivityManager) activity

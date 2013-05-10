@@ -1,43 +1,40 @@
 package com.and.netease;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.AbsListView.OnScrollListener;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.util.Log;
-import android.view.View.OnClickListener;
 import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import android.content.Intent;
-import android.database.Cursor;
 import com.and.netease.utils.ConnectWeb;
 import com.and.netease.utils.DBAdapter;
 import com.markupartist.android.widget.PullToRefreshListView;
@@ -196,7 +193,7 @@ public class hot_main extends Activity implements OnScrollListener {
 					R.layout.hot_item,
 					new String[] { "ItemTitle", "ItemText" }, new int[] {
 							R.id.textView_name, R.id.textView_heat });
-//			mylistview.addFooterView(moreView);
+			// mylistview.addFooterView(moreView);
 			mylistview.setAdapter(listItemAdapter0);
 
 			break;
@@ -220,7 +217,7 @@ public class hot_main extends Activity implements OnScrollListener {
 					R.layout.hot_item,
 					new String[] { "ItemTitle", "ItemText" }, new int[] {
 							R.id.textView_name, R.id.textView_heat });
-//			mylistview.addFooterView(moreView);
+			// mylistview.addFooterView(moreView);
 			mylistview.setAdapter(listItemAdapter1);
 
 			break;
@@ -245,7 +242,7 @@ public class hot_main extends Activity implements OnScrollListener {
 					R.layout.hot_item,
 					new String[] { "ItemTitle", "ItemText" }, new int[] {
 							R.id.textView_name, R.id.textView_heat });
-//			mylistview.addFooterView(moreView);
+			// mylistview.addFooterView(moreView);
 			mylistview.setAdapter(listItemAdapter2);
 
 			break;
@@ -502,10 +499,10 @@ public class hot_main extends Activity implements OnScrollListener {
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
-//		if (totalItemCount >= MaxDataNum && flag == 0) {
-//			Toast.makeText(this, "没有数据了", Toast.LENGTH_SHORT).show();
-//			flag = 1;
-//		}
+		// if (totalItemCount >= MaxDataNum && flag == 0) {
+		// Toast.makeText(this, "没有数据了", Toast.LENGTH_SHORT).show();
+		// flag = 1;
+		// }
 	}
 
 	@Override

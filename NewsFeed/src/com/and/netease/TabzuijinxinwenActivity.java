@@ -1,8 +1,6 @@
 package com.and.netease;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 import android.app.ListActivity;
@@ -10,7 +8,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -22,7 +19,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
-import android.widget.SlidingDrawer;
 import android.widget.Toast;
 
 import com.and.netease.utils.CheckNetwork;
@@ -36,13 +32,10 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		OnScrollListener {
 
 	private View moreView;
-	private Handler handler;
 	private SimpleAdapter listItemAdapter;
 	private int lastVisibleIndex;
 	private Button bt;
 	private ProgressBar pg;
-	private int flag = 0;
-
 	private DBAdapter dbadapter;
 	private Cursor c;
 
@@ -61,11 +54,10 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		moreView = getLayoutInflater().inflate(R.layout.moredata, null);
 		bt = (Button) moreView.findViewById(R.id.bt_load);
 		pg = (ProgressBar) moreView.findViewById(R.id.pg);
-		handler = new Handler();
 		queryDate = DateTool.getDateTodayMinusDay(days);
-		
+
 		dbadapter = new DBAdapter(this);
-		Log.d(TAG, "Today:"+DateTool.getTodayDate());
+		Log.d(TAG, "Today:" + DateTool.getTodayDate());
 		c = dbadapter.getzuijinxinwen(0, 50);
 		listItem = new ArrayList<HashMap<String, String>>();
 		for (int i = 0; c.moveToNext(); i++) {
@@ -164,44 +156,6 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		super.onStart();
 	}
 
-	private void loadMoreData() {
-		int count = listItemAdapter.getCount();
-		if (count + 10 < 50) {
-			{
-				for (int i = count; i < count + 10 && c.moveToNext(); i++) {
-					c.moveToPosition(i);
-					String title = c.getString(c.getColumnIndex("title"));
-					String words = c.getString(c.getColumnIndex("words"));
-					String date = c.getString(c.getColumnIndex("date"));
-					String counts = c.getString(c.getColumnIndex("count"));
-
-					HashMap<String, String> map = new HashMap<String, String>();
-					map.put("date", date);
-					map.put("counts", counts);
-					map.put("ItemTitle", title);
-					map.put("ItemText", words);
-					listItem.add(map);
-				}
-			}
-		} else {
-			// 数据已经不足10条
-			for (int i = count; i < 50 && c.moveToNext(); i++) {
-				c.moveToPosition(i);
-				String title = c.getString(c.getColumnIndex("title"));
-				String words = c.getString(c.getColumnIndex("words"));
-				String date = c.getString(c.getColumnIndex("date"));
-				String counts = c.getString(c.getColumnIndex("count"));
-
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("date", date);
-				map.put("counts", counts);
-				map.put("ItemTitle", title);
-				map.put("ItemText", words);
-				listItem.add(map);
-			}
-		}
-	}
-
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		Log.d(TAG, "Tabzuijinxinwen Activity onKeydown");
@@ -219,8 +173,8 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 
 		lastVisibleIndex = firstVisibleItem + visibleItemCount - 1;
 		// 所有的条目已经和最大条数相等，则移除底部的View
-		Log.d(TAG, "totalItemCount:" + totalItemCount + " lastVisibleIndex"
-				+ lastVisibleIndex);
+		// Log.d(TAG, "totalItemCount:" + totalItemCount + " lastVisibleIndex"
+		// + lastVisibleIndex);
 		// if ((totalItemCount >= 50 || (c.isAfterLast() == true))
 		// && flag == 0) {
 		// ((PullToRefreshListView) getListView()).removeFooterView(moreView);
@@ -247,16 +201,12 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 			pg.setVisibility(View.VISIBLE);
 			bt.setVisibility(View.GONE);
 			new GetDataTask(queryDate).execute();
-			queryDate = DateTool.getDateTodayMinusDay(++days );
+			queryDate = DateTool.getDateTodayMinusDay(++days);
 		}
 	}
 
 	private class GetDataTask extends AsyncTask<Void, Void, Integer> {
 		String date;
-
-		public GetDataTask() {
-
-		}
 
 		public GetDataTask(String date) {
 			this.date = date;
@@ -314,5 +264,29 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		Log.d(TAG, "Tabzuijinxinwen Destroy");
 		super.onDestroy();
 		c.close();
+	}
+
+	@Override
+	protected void onPause() {
+		Log.d(TAG, "TabzuijinxinwenActivity onPause");
+		super.onPause();
+	}
+
+	@Override
+	protected void onRestart() {
+		Log.d(TAG, "TabzuijinxinwenActivity onRestart");
+		super.onRestart();
+	}
+
+	@Override
+	protected void onResume() {
+		Log.d(TAG, "TabzuijinxinwenActivity onResume");
+		super.onResume();
+	}
+
+	@Override
+	protected void onStop() {
+		Log.d(TAG, "TabzuijinxinwenActivity onStop");
+		super.onStop();
 	}
 }

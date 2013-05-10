@@ -9,9 +9,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.util.Log;
 
 public class ConnectWeb {
@@ -27,11 +29,18 @@ public class ConnectWeb {
 	 * @return
 	 */
 	static public boolean getJobOfUser(DBAdapter dbadapter, String username,
-			String jobname) {
+			String jobname, int start, int max) {
 		boolean returnresult = true;
-		 String theurl="http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getJobOfUser&user="+username+"&jobname="+jobname;
-//		String theurl = "http://10.0.2.2:8080/RMI_WEB/rmi?r=getJobOfUser&user="
-//				+ username + "&jobname=" + jobname;
+		String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getJobOfUser&user="
+				+ username
+				+ "&jobname="
+				+ jobname
+				+ "&start="
+				+ start
+				+ "&max=" + max;
+		// String theurl =
+		// "http://10.0.2.2:8080/RMI_WEB/rmi?r=getJobOfUser&user="
+		// + username + "&jobname=" + jobname;
 		try {
 			String str = HttpConn.getJsonFromUrlGet(theurl);
 			Log.d("EV_DEBUG", str);
@@ -42,15 +51,14 @@ public class ConnectWeb {
 			int count = result.getInt("count");
 			String to = result.getString("to");
 			String from = result.getString("from");
-			int days = result.getInt("days");
-			long jobid = dbadapter.userinsert(username, jobname, days, from,
-					to, count);
+			long jobid = dbadapter.userinsert(username, jobname, from, to,
+					count);
 			if (jobid < 0)
 				return returnresult;
-			Log.d("test getJobOfUser count,all news", String.valueOf(count));
+			Log.d("这个Jobname一共有条数", String.valueOf(count));
 			JSONArray docs = result.getJSONArray("docs");
 			// 循环从专题数取出每个专题进行解析
-			Log.d("test getJobOfUser cluster.length",
+			Log.d("test getJobOfUser cluster.length一共有多少个专题",
 					String.valueOf(docs.length()));// 0
 			for (int i = 0; i < docs.length(); i += 1) {
 				// 挨个取出专题
@@ -128,10 +136,10 @@ public class ConnectWeb {
 	}
 
 	// http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getAllJobsOfUser&user=test
-	static public List<Map<String, String>> getAllJobsOfUser(
+	static public ArrayList<Map<String, String>> getAllJobsOfUser(
 			DBAdapter dbadapter, String name) {
 		Log.d("EV_DEBUG", "getAllJobsOfUser");
-		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		Map<String, String> map = null;
 		String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getAllJobsOfUser&user="
 				+ name;
@@ -146,12 +154,15 @@ public class ConnectWeb {
 				String createtime = (String) inforMap.getString("createtime");
 				createtime = jiexidate(createtime);
 				String aboutChina = (String) inforMap.getString("aboutChina");
-				String endtime = (String) inforMap.getString("endtime");
-				endtime = jiexidate(endtime);
+
 				String description = (String) inforMap.getString("description");
 				String query = (String) inforMap.getString("query");
-				String name1 = (String) inforMap.getString("name");
 				String status = (String) inforMap.getString("status");
+				String name1 = (String) inforMap.getString("name");
+
+				String endtime = (String) inforMap.getString("endtime");
+				endtime = jiexidate(endtime);
+
 				String end = (String) inforMap.getString("end");
 				map = new HashMap<String, String>();
 				map.put("createtime", createtime);
@@ -329,7 +340,8 @@ public class ConnectWeb {
 	 * 数据格式： result clusters others cluster words count source-distribution doc
 	 * title words source date url
 	 */
-	static synchronized public int getZhuantiFromDate(DBAdapter dbadapter, String date) {
+	static synchronized public int getZhuantiFromDate(DBAdapter dbadapter,
+			String date) {
 
 		int count = 0;
 		try {
@@ -432,32 +444,26 @@ public class ConnectWeb {
 	}
 
 	static private String jiexiwords(String words) {
-		//(Obama&obama,10.736268009190807)(Syria&syria,7.543050279718943)(Republican&republican,7.265170719317765)(column&column,6.95013685662713)(headline&headlin,6.3865253967639495)(Hagel&hagel,6.156314922267465)(synonym&synonym,6.156314922267465)(Noonan&noonan,5.629863624761026)(excuse&excus,5.629863624761026)(rebels&rebel,5.618906849791507)
-/*		int index1 = -1;
-		int index2 = -1;
-		String keyword = "";
-		int tmp = 0;
-		Log.d("EV_DEBUG_WORDS", words);
-		while ((index1 = words.indexOf("(", index1)) > -1
-				&& (index2 = words.indexOf(",", index2)) > -1 && (tmp < 5)) {	//有的数据中包含&字符,坑死我了..
-//			Log.d("EV_DEBUG", "index1:"+index1+"2:"+index2);
-			if (index1 > words.length() || index2>words.length()) {
-				break;
-			}
-			keyword = keyword + words.substring(index1 + 1, index2) + " ";
-			index1 += 1;
-			index2 += 1;
-			tmp++;
-			
-		}
-		*/
+		// (Obama&obama,10.736268009190807)(Syria&syria,7.543050279718943)(Republican&republican,7.265170719317765)(column&column,6.95013685662713)(headline&headlin,6.3865253967639495)(Hagel&hagel,6.156314922267465)(synonym&synonym,6.156314922267465)(Noonan&noonan,5.629863624761026)(excuse&excus,5.629863624761026)(rebels&rebel,5.618906849791507)
+		/*
+		 * int index1 = -1; int index2 = -1; String keyword = ""; int tmp = 0;
+		 * Log.d("EV_DEBUG_WORDS", words); while ((index1 = words.indexOf("(",
+		 * index1)) > -1 && (index2 = words.indexOf(",", index2)) > -1 && (tmp <
+		 * 5)) { //有的数据中包含&字符,坑死我了.. // Log.d("EV_DEBUG",
+		 * "index1:"+index1+"2:"+index2); if (index1 > words.length() ||
+		 * index2>words.length()) { break; } keyword = keyword +
+		 * words.substring(index1 + 1, index2) + " "; index1 += 1; index2 += 1;
+		 * tmp++;
+		 * 
+		 * }
+		 */
 		String keyword = "";
 		String[] keywords = words.split("\\)");
 		for (int i = 0; i < keywords.length; i++) {
-			int a =keywords[i].indexOf("(");
+			int a = keywords[i].indexOf("(");
 			int b = keywords[i].indexOf("&");
-			keyword = keyword + keywords[i].substring(a+1, b)+" ";
-//			Log.d("EV_DEBUG_WORDS", keyword);
+			keyword = keyword + keywords[i].substring(a + 1, b) + " ";
+			// Log.d("EV_DEBUG_WORDS", keyword);
 		}
 		return keyword;
 	}

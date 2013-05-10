@@ -18,8 +18,10 @@ public class MoveBg {
 	 * @param toY
 	 *            ÖÕÖ¹y×ø±ê
 	 */
-	public static void moveFrontBg(View v, int startX, int toX, int startY, int toY) {
-		TranslateAnimation anim = new TranslateAnimation(startX, toX, startY, toY);
+	public static void moveFrontBg(View v, int startX, int toX, int startY,
+			int toY) {
+		TranslateAnimation anim = new TranslateAnimation(startX, toX, startY,
+				toY);
 		anim.setDuration(200);
 		anim.setFillAfter(true);
 		v.startAnimation(anim);

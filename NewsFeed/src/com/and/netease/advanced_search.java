@@ -15,12 +15,10 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,11 +34,11 @@ public class advanced_search extends Activity {
 	static final int DATE_DIALOG_ID = 0;
 	TextView startTextView;
 	TextView endTextView;
-	
+
 	String syear;
 	CheckBox cb_aboutChina;
 	boolean aboutChina;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -100,10 +98,10 @@ public class advanced_search extends Activity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				//aboutChina
+
+				// aboutChina
 				aboutChina = cb_aboutChina.isChecked();
-				Log.d(TAG, "aboutChina:"+aboutChina);
+				Log.d(TAG, "aboutChina:" + aboutChina);
 
 				if (date1 == null || date2 == null
 						|| date1.compareTo(date2) > 0
@@ -252,11 +250,4 @@ public class advanced_search extends Activity {
 		super.onStop();
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.d(TAG, "request1111");
-		if (requestCode == 1) {
-			Log.d(TAG, "request");
-		}
-	}
 }

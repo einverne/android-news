@@ -2,10 +2,6 @@ package com.and.netease;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-
-import com.and.netease.utils.ConnectWeb;
-import com.and.netease.utils.DBAdapter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -20,11 +16,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+
+import com.and.netease.utils.ConnectWeb;
+import com.and.netease.utils.DBAdapter;
 
 public class TabSearchActivity extends Activity {
 	private static final String TAG = "Demo";
@@ -43,15 +39,15 @@ public class TabSearchActivity extends Activity {
 		setContentView(R.layout.layout_search);
 		Log.d(TAG, "Search Start");
 		dbadapter = new DBAdapter(this);
-		
+
 		new Handler().postDelayed(new Runnable() {
-			
+
 			@Override
 			public void run() {
 
 			}
 		}, 2000);
-		
+
 		c = dbadapter.getpeople(0, 3);
 		cp = dbadapter.getplace(0, 3);
 		cd = dbadapter.getdivision(0, 3);
