@@ -39,6 +39,7 @@ import com.and.netease.utils.MakeQuery;
 public class search extends Activity {
 	SharedPreferences sharedPreferences;
 	SharedPreferences.Editor editor;
+	private boolean  flag=false;//用来判断是否有数据；
 
 	public class getData extends
 			AsyncTask<Void, Void, ArrayList<HashMap<String, Object>>> {
@@ -48,6 +49,8 @@ public class search extends Activity {
 		private String keyword;
 		private int max;
 		private int start;
+		
+		
 
 		public getData(String keyword, String dateF, String dateT,
 				String aboutChina, int start, int max) {
@@ -92,6 +95,8 @@ public class search extends Activity {
 			String te = "共有" + numberOfSearchResult + "条";
 			text.setText(te);
 			if (numberOfSearchResult == 0) {
+				flag=true;
+				//在这里设置加载更多的button，让他不要出现
 				Toast.makeText(search.this, "没有符合关键词的结果,请调整关键词",
 						Toast.LENGTH_SHORT).show();
 			}
@@ -124,6 +129,9 @@ public class search extends Activity {
 	private int mDay;
 	private int mMonth;
 	String month;
+	
+	
+	//lene
 	private View moreView;
 	private int mYear;
 	private ListView myListView;
@@ -154,7 +162,7 @@ public class search extends Activity {
 
 		}
 		if (mDay <= 9) {
-			day = "0" + mDay;
+			day = "0" + mDay; 
 		} else {
 			day = mDay + "";
 		}
@@ -240,6 +248,11 @@ public class search extends Activity {
 		moreView = getLayoutInflater().inflate(R.layout.moredata, null);
 		bt = (Button) moreView.findViewById(R.id.bt_load);
 		pg = (ProgressBar) moreView.findViewById(R.id.pg);
+		if(!flag)
+		{
+		
+		bt.setVisibility(View.GONE);
+		}
 		myListView.addFooterView(moreView);
 		myListView.setAdapter(listItemAdapter);
 		/**
