@@ -3,8 +3,6 @@ package com.and.netease;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.and.netease.utils.CheckNetwork;
-import com.and.netease.utils.DBAdapter;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -13,13 +11,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+
+import com.and.netease.utils.CheckNetwork;
+import com.and.netease.utils.DBAdapter;
 
 public class zhuanti extends ListActivity {
 	private static final String TAG = "Demo";
@@ -37,8 +36,9 @@ public class zhuanti extends ListActivity {
 		dbadapter = new DBAdapter(this);
 		c = dbadapter.getnews(title);
 
-		Toast.makeText(this, "该专题共"+c.getCount()+"条新闻", Toast.LENGTH_SHORT).show();
-		
+		Toast.makeText(this, "该专题共" + c.getCount() + "条新闻", Toast.LENGTH_SHORT)
+				.show();
+
 		listItem = new ArrayList<HashMap<String, Object>>();
 		for (int i = 0; c.moveToNext(); i++) {
 			c.moveToPosition(i);
@@ -46,10 +46,10 @@ public class zhuanti extends ListActivity {
 			String source = c.getString(c.getColumnIndex("source"));
 			String description = c.getString(c.getColumnIndex("description"));
 			String date = c.getString(c.getColumnIndex("date"));
-			
+
 			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put("icon",getIcon(source));
-			map.put("source",source);
+			map.put("icon", getIcon(source));
+			map.put("source", source);
 			map.put("ItemTime", date);
 			map.put("Title", Title);
 			map.put("description", description);
@@ -57,8 +57,9 @@ public class zhuanti extends ListActivity {
 		}
 
 		listItemAdapter = new SimpleAdapter(this, listItem,
-				R.layout.zhuanti_item, new String[] { "icon","source","ItemTime", "Title",
-						"description", "ItemMedio" }, new int[] {R.id.imageView_icon,R.id.textView_source,
+				R.layout.zhuanti_item, new String[] { "icon", "source",
+						"ItemTime", "Title", "description", "ItemMedio" },
+				new int[] { R.id.imageView_icon, R.id.textView_source,
 						R.id.textView_ItemTime, R.id.Title, R.id.ItemDes });
 		// 添加并且显示
 		setListAdapter(listItemAdapter);
@@ -71,20 +72,23 @@ public class zhuanti extends ListActivity {
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
 
-						Log.d(TAG, "专题中点击的Item标号:"+arg2);
-						
+						Log.d(TAG, "专题中点击的Item标号:" + arg2);
+
 						CheckNetwork net = new CheckNetwork(zhuanti.this);
-						boolean net_conn  = net.check();
+						boolean net_conn = net.check();
 						if (net_conn) {
 							c.moveToPosition(arg2);
-							String url = (String) c.getString(c.getColumnIndex("url"));
+							String url = (String) c.getString(c
+									.getColumnIndex("url"));
 							Bundle bundle = new Bundle();
-							Intent intent = new Intent(zhuanti.this, jutixinwen.class);
+							Intent intent = new Intent(zhuanti.this,
+									jutixinwen.class);
 							bundle.putString("url", url);
 							intent.putExtras(bundle);
 							startActivity(intent);
 						} else {
-							Toast.makeText(zhuanti.this, "请检查联网状态", Toast.LENGTH_SHORT).show();
+							Toast.makeText(zhuanti.this, "请检查联网状态",
+									Toast.LENGTH_SHORT).show();
 						}
 					}
 				});
@@ -92,21 +96,21 @@ public class zhuanti extends ListActivity {
 
 	/**
 	 * 传入资源名字 返回资源id
-	 * @param name 资源名字
+	 * 
+	 * @param name
+	 *            资源名字
 	 * @return 资源的id
 	 */
-	protected int getIcon(String name){
+	protected int getIcon(String name) {
 		Resources res = getResources();
-		int id =res.getIdentifier(name, "drawable", getPackageName());
+		int id = res.getIdentifier(name, "drawable", getPackageName());
 		if (id == 0) {
 			return R.drawable.icon;
-		}else{
+		} else {
 			return id;
 		}
 	}
-	
-	
-	
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {

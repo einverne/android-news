@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +23,9 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
@@ -28,11 +34,12 @@ import android.widget.Toast;
 
 import com.and.netease.utils.CheckNetwork;
 import com.and.netease.utils.ConnectWeb;
+import com.and.netease.utils.MakeQuery;
 
 public class search extends Activity {
-	/**
-	 * Data
-	 */
+	SharedPreferences sharedPreferences;
+	SharedPreferences.Editor editor;
+
 	public class getData extends
 			AsyncTask<Void, Void, ArrayList<HashMap<String, Object>>> {
 		private String aboutChina;
@@ -100,6 +107,8 @@ public class search extends Activity {
 		}
 
 	}
+
+	final int DATE_DIALOG_ID = 0;
 	private static final String TAG = "EV_DEBUG";
 	boolean aboutChina = false;
 	private Button bt;
@@ -124,6 +133,8 @@ public class search extends Activity {
 	TextView text;
 
 	String url;
+	protected int from_year, from_month, from_day;
+	protected int to_year, to_month, to_day;
 
 	/**
 	 * get date for search
@@ -131,8 +142,8 @@ public class search extends Activity {
 	public void getdate() {
 		final Calendar c = Calendar.getInstance();
 		mYear = c.get(Calendar.YEAR);
-		mMonth = c.get(Calendar.MONTH) + 1;// 锟斤拷取锟斤拷前锟铰凤拷
-		mDay = c.get(Calendar.DAY_OF_MONTH);// 锟斤拷取锟斤拷前锟铰份碉拷锟斤拷锟节猴拷锟斤拷
+		mMonth = c.get(Calendar.MONTH) + 1;
+		mDay = c.get(Calendar.DAY_OF_MONTH);
 		String year = mYear + "";
 		int year1 = mYear - 1;
 		String yearf = year1 + "";
@@ -152,6 +163,29 @@ public class search extends Activity {
 		Log.d("Date", dateF + ":" + dateT + ":" + mMonth);
 	}
 
+	/**
+	 * 20130505
+	 * 
+	 * @param year
+	 * @param month
+	 * @param day
+	 * @return
+	 */
+	public String getFormatdate(int year, int month, int day) {
+		String m_month, m_day;
+		if (month <= 9) {
+			m_month = "0" + month;
+		} else {
+			m_month = "" + month;
+		}
+		if (day <= 9) {
+			m_day = "0" + day;
+		} else {
+			m_day = day + "";
+		}
+		return year + m_month + m_day;
+	}
+
 	protected int getIcon(String name) {
 		Resources res = getResources();
 		int id = res.getIdentifier(name, "drawable", getPackageName());
@@ -167,6 +201,10 @@ public class search extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_search_result);
 		Log.d(TAG, "search_result_Activity_start");
+
+		sharedPreferences = this.getSharedPreferences("userinfo",
+				Context.MODE_PRIVATE);
+		editor = sharedPreferences.edit();
 
 		text = (TextView) findViewById(R.id.textView_newstitle);
 		myListView = (ListView) findViewById(R.id.listView_searchresult);
@@ -278,13 +316,94 @@ public class search extends Activity {
 
 			@Override
 			public void onClick(View v) {
+				final String store_name = sharedPreferences.getString("name",
+						"t");
+				String store_psw = sharedPreferences.getString("psw", "t");
 
-				Intent intent = new Intent();
-				intent.setClass(search.this, dingzhi.class);
-				Bundle bundle = new Bundle();
-				bundle.putString("keyword", keyword);
-				intent.putExtras(bundle);
-				startActivity(intent);
+				if (store_name == "t") {
+					Toast.makeText(search.this, "请先登录", Toast.LENGTH_SHORT)
+							.show();
+					return;
+				}
+
+				View advanced_setting = getLayoutInflater().inflate(
+						R.layout.dingzhi_setting, null);
+				final AlertDialog dialog = new AlertDialog.Builder(search.this)
+						.create();
+				dialog.setView(advanced_setting);
+				dialog.show();
+				final EditText tv_key = (EditText) advanced_setting
+						.findViewById(R.id.searchkeyword);
+				final CheckBox cb_aboutChina = (CheckBox) advanced_setting
+						.findViewById(R.id.checkBox_aboutChina);
+				DatePicker from = (DatePicker) advanced_setting
+						.findViewById(R.id.datePicker_from);
+				DatePicker to = (DatePicker) advanced_setting
+						.findViewById(R.id.datePicker_to);
+				if (keyword != null) {
+					tv_key.setText(keyword);
+				}
+
+				cb_aboutChina.setChecked(aboutChina);
+				// 获取当前的年、月、日、小时、分钟
+				Calendar c = Calendar.getInstance();
+				from_year = c.get(Calendar.YEAR);
+				from_month = c.get(Calendar.MONTH);
+				from_day = c.get(Calendar.DAY_OF_MONTH);
+				to_year = c.get(Calendar.YEAR);
+				to_month = c.get(Calendar.MONTH);
+				to_day = c.get(Calendar.DAY_OF_MONTH);
+				// EV_DEBUG 这里需要高级检索过来的日期，我们设定
+				from.init(from_year, from_month, from_day,
+						new DatePicker.OnDateChangedListener() {
+
+							@Override
+							public void onDateChanged(DatePicker view,
+									int year, int monthOfYear, int dayOfMonth) {
+								from_year = year;
+								from_month = monthOfYear;
+								from_day = dayOfMonth;
+							}
+						});
+				to.init(to_year, to_month, to_day,
+						new DatePicker.OnDateChangedListener() {
+
+							@Override
+							public void onDateChanged(DatePicker view,
+									int year, int monthOfYear, int dayOfMonth) {
+								to_year = year;
+								to_month = monthOfYear;
+								to_day = dayOfMonth;
+							}
+						});
+				Button bu = (Button) advanced_setting
+						.findViewById(R.id.button_advanced_search);
+				bu.setText("添加订阅");
+				bu.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						Log.d(TAG, "from:" + from_year + from_month + from_day
+								+ "to:" + to_year + to_month + to_day);
+						String dateF = getFormatdate(from_year, from_month,
+								from_day);
+						String dateT = getFormatdate(to_year, to_month, to_day);
+						String key = tv_key.getText().toString();
+						String query = MakeQuery.query(key, dateF, dateT);
+						String china = "false";
+						if (cb_aboutChina.isChecked()) {
+							china = "true";
+						}
+						if (ConnectWeb.submitJob(store_name, query, china, key)) {
+							Toast.makeText(search.this, "提交成功",
+									Toast.LENGTH_SHORT).show();
+						} else {
+							Toast.makeText(search.this, "提交失败",
+									Toast.LENGTH_SHORT).show();
+						}
+						dialog.cancel();
+					}
+				});
 			}
 		});
 	}

@@ -27,8 +27,6 @@ public class MainActivity extends TabActivity {
 
 	TextView biaoti;
 	ImageButton imgButton;
-	
-	
 
 	static int screenwidth;
 	private static final String TAG = "EV_Debug";
@@ -38,9 +36,6 @@ public class MainActivity extends TabActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		Log.d(TAG, "MainAct create");
-		
-		
-		
 
 		bottom_layout = (RelativeLayout) findViewById(R.id.layout_bottom);
 		tabHost = getTabHost();
@@ -83,7 +78,7 @@ public class MainActivity extends TabActivity {
 			@Override
 			public void onClick(View v) {
 				tabHost.setCurrentTab(3);
-				
+
 				RadioButton RB = (RadioButton) findViewById(R.id.radio_login);
 				RB.setChecked(true);
 
@@ -139,7 +134,7 @@ public class MainActivity extends TabActivity {
 				biaoti.setText(dengluCharSequence);
 				break;
 			default:
-				break ;
+				break;
 			}
 		}
 	};
