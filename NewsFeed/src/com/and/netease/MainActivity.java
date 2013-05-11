@@ -150,7 +150,7 @@ public class MainActivity extends TabActivity {
 
 	protected void dialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-		builder.setTitle("警告");
+		builder.setTitle("提示");
 		builder.setIcon(R.drawable.alert);
 		builder.setMessage("确定要退出吗?");
 		builder.setPositiveButton("确认",
