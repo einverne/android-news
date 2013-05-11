@@ -17,7 +17,6 @@ import android.util.Log;
 public class HttpConn {
 
 	public static String getJsonFromUrlGet(String url) {
-		Log.d("EV_DEBUG", "getJsonFromUrlGet");
 		String str = null;
 		// 将url格式化
 		Log.d("EV_DEBUG", url);
@@ -47,7 +46,6 @@ public class HttpConn {
 			str = e.getMessage().toString();
 			e.printStackTrace();
 		}
-		Log.d("http", str);
 		return str;
 	}
 

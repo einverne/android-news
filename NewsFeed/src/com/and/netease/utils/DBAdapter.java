@@ -25,7 +25,6 @@ public class DBAdapter
 	private static final String DATABASE_TABLE_zuijinxinwen = "zuijinxinwen";
 	private static final String DATABASE_TABLE_user = "user";
 	private static final String DATABASE_TABLE_usernews = "usernews";
-	private static final String DATABASE_TABLE_userzhuanti = "userzhuanti";
 
 	/**
 	 * 专题带下来的新闻们
@@ -49,7 +48,7 @@ public class DBAdapter
 
 	public static final String userKEY_ROWID = "_id";// 是最近新闻的专题们
 	public static final String userKEY_Count = "count"; //
-	private static final String userKEY_words = "words";
+	public static final String userKEY_words = "words";
 	public static final String userKEY_user = "user";
 	public static final String userKEY_jobname = "jobname";
 
@@ -406,18 +405,24 @@ public class DBAdapter
 
 	public Cursor getUserZhuanti(long userid) {
 		db = DBHelper.getWritableDatabase();
-		Cursor mCursor = db.query(DATABASE_TABLE_userzhuanti, null,
+		Log.d(TAG, "userid"+userid);
+		Cursor mCursor = db.query(DATABASE_TABLE_usernews, null,
 				usernewsKEY_ZhuantiId + "= '" + String.valueOf(userid)+"'", null,
 				null, null, null, null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
 		}
-
 		db.close();
 		DBHelper.close();
 		return mCursor;
 	}
 
+	/**
+	 * news游标
+	 * @param user
+	 * @param jobname
+	 * @return
+	 */
 	public Cursor dingzhizhuanti(String user, String jobname) {
 		Cursor  mCursor1 = null;
 		db = DBHelper.getWritableDatabase();
