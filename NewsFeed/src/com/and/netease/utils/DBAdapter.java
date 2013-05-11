@@ -512,6 +512,20 @@ public class DBAdapter
 	}
 
 	// -----为热点activity所调用
+	public Cursor getHotWords() {
+		db = DBHelper.getWritableDatabase();
+		Cursor mCursor = db.query(DATABASE_TABLE_zuijinxinwen, new String[] {
+				zuijinxinwenKEY_Words}, null,
+				null, null, null, zuijinxinwenKEY_Count + " desc",
+				null);
+		if (mCursor != null) {
+			mCursor.moveToFirst();
+		}
+		db.close();
+		DBHelper.close();
+		return mCursor;
+	}
+	
 	public Cursor getpeople(int num1, int num2) {
 		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = db.query(DATABASE_TABLE_peoples, new String[] {
