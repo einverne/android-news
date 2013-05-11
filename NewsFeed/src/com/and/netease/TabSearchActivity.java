@@ -48,9 +48,9 @@ public class TabSearchActivity extends Activity {
 			}
 		}, 2000);
 
-		c = dbadapter.getpeople(0, 3);
-		cp = dbadapter.getplace(0, 3);
-		cd = dbadapter.getdivision(0, 3);
+		c = dbadapter.getHotWords();
+//		cp = dbadapter.getplace(0, 3);
+//		cd = dbadapter.getdivision(0, 3);
 
 		Button advanceSearchButton = (Button) findViewById(R.id.button_advanced_search);
 		advanceSearchButton.setOnClickListener(new Button.OnClickListener() {
@@ -71,7 +71,7 @@ public class TabSearchActivity extends Activity {
 				if (TabSearchActivity.this.keyword.length() > 0) {
 					jumptoSearchResult();
 				} else {
-					Toast.makeText(TabSearchActivity.this, "请输入关键字",
+					Toast.makeText(TabSearchActivity.this, "璇疯緭鍏ュ叧閿瓧",
 							Toast.LENGTH_SHORT).show();
 				}
 
@@ -106,7 +106,7 @@ public class TabSearchActivity extends Activity {
 
 	/**
 	 * 
-	 * 锟斤拷转锟竭硷拷锟斤拷锟斤拷
+	 * 閿熸枻鎷疯浆閿熺纭锋嫹閿熸枻鎷烽敓鏂ゆ嫹
 	 */
 	public void jumptoAdvancedSearch() {
 		Intent intent = new Intent(TabSearchActivity.this,
@@ -119,7 +119,7 @@ public class TabSearchActivity extends Activity {
 
 	/**
 	 * 
-	 * 锟斤拷转锟斤拷通锟斤拷锟斤拷
+	 * 閿熸枻鎷疯浆閿熸枻鎷烽�閿熸枻鎷烽敓鏂ゆ嫹
 	 */
 	public void jumptoSearchResult() {
 		Intent intent = new Intent(TabSearchActivity.this, search.class);
@@ -131,46 +131,59 @@ public class TabSearchActivity extends Activity {
 
 	/**
 	 * 
-	 * 锟斤拷锟轿憋拷锟斤拷取hot锟叫憋拷锟斤拷锟斤拷
+	 * 閿熸枻鎷烽敓杞挎唻鎷烽敓鏂ゆ嫹鍙杊ot閿熷彨鎲嬫嫹閿熸枻鎷烽敓鏂ゆ嫹
 	 * 
 	 */
 	public void getdata() {
-
-		for (int i = 0; i < 3; i++) {
-			// name
-			c.moveToPosition(i);
-			String text = c.getString(c.getColumnIndex("title"));
-			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put("HotWord", text);
-			// Log.d("wwwwwhotname", text);
-			// place
-			cp.moveToPosition(i);
-			String textp = cp.getString(cp.getColumnIndex("title"));
-			HashMap<String, Object> mapp = new HashMap<String, Object>();
-			mapp.put("HotWord", textp);
-			// divide
-			cd.moveToPosition(i);
-			String textd = cd.getString(cd.getColumnIndex("title"));
-			HashMap<String, Object> mapd = new HashMap<String, Object>();
-			mapd.put("HotWord", textd);
-			if (i == 0) {
-				listItem.add(mapd);
-				listItem.add(map);
-				listItem.add(mapp);
-			}
-			if (i == 1) {
-				listItem.add(mapp);
-				listItem.add(mapd);
-				listItem.add(map);
-			}
-			if (i == 2) {
-				listItem.add(map);
-				listItem.add(mapp);
-				listItem.add(mapd);
-
-			}
+//
+//		for (int i = 0; i < 3; i++) {
+//			// name
+//			c.moveToPosition(i);
+//			String text = c.getString(c.getColumnIndex("title"));
+//			HashMap<String, Object> map = new HashMap<String, Object>();
+//			map.put("HotWord", text);
+//			// Log.d("wwwwwhotname", text);
+//			// place
+//			cp.moveToPosition(i);
+//			String textp = cp.getString(cp.getColumnIndex("title"));
+//			HashMap<String, Object> mapp = new HashMap<String, Object>();
+//			mapp.put("HotWord", textp);
+//			// divide
+//			cd.moveToPosition(i);
+//			String textd = cd.getString(cd.getColumnIndex("title"));
+//			HashMap<String, Object> mapd = new HashMap<String, Object>();
+//			mapd.put("HotWord", textd);
+//			if (i == 0) {
+//				listItem.add(mapd);
+//				listItem.add(map);
+//				listItem.add(mapp);
+//			}
+//			if (i == 1) {
+//				listItem.add(mapp);
+//				listItem.add(mapd);
+//				listItem.add(map);
+//			}
+//			if (i == 2) {
+//				listItem.add(map);
+//				listItem.add(mapp);
+//				listItem.add(mapd);
+//
+//			}
+//		}
+		
+		
+		
+		String text = c.getString(c.getColumnIndex("words"));
+		String[]  str = text.split(" ");
+		for(String st : str ){
+		HashMap<String, Object> mapd = new HashMap<String, Object>();
+		mapd.put("HotWord", st);
+		if(listItem.size()<9){
+		listItem.add(mapd);
 		}
-
+		}
+		
+		
 	}
 
 	@Override
