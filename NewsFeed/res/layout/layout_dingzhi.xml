@@ -38,7 +38,7 @@
             android:layout_marginBottom="2dp"
             android:layout_marginRight="3dp"
             android:layout_marginTop="2dp"
-            android:background="@color/button_background"
+            android:background="#30D5FF"
             android:text="添加定制" />
 
         <Button
