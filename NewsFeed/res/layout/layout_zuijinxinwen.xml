@@ -11,6 +11,7 @@
         android:background="@color/list_item_background"
         android:divider="@color/white"
         android:dividerHeight="1.5px"
+         android:fadingEdgeLength="0dp"
         android:footerDividersEnabled="false" >
     </com.markupartist.android.widget.PullToRefreshListView>
 

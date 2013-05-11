@@ -63,6 +63,7 @@
         android:layout_width="fill_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
+         android:fadingEdgeLength="0dp"
         android:background="@color/list_item_background"
         android:divider="@color/white"
         android:dividerHeight="1.5px"
