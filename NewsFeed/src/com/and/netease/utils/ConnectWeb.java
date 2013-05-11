@@ -48,10 +48,6 @@ public class ConnectWeb {
 			int count = result.getInt("count");
 			String to = result.getString("to");
 			String from = result.getString("from");
-			long jobid = dbadapter.userInsert(username, jobname, from, to,
-					count);			//将用户定制信息添加到数据库
-			if (jobid < 0)
-				return returnresult;
 			Log.d(TAG, "这个Jobname一共有新闻数:" + String.valueOf(count));
 			JSONArray docs = result.getJSONArray("docs");
 			// 循环从专题数取出每个专题进行解析
@@ -60,12 +56,13 @@ public class ConnectWeb {
 				// 挨个取出专题
 				JSONObject onecluster = (JSONObject) docs.get(i);
 
-				int zhuanti_id = onecluster.getInt("id");
 				int zhuanti_count = onecluster.getInt("count");
+				Log.d(TAG, onecluster.getString("words"));
 				String zhuanti_words = jiexiwords(onecluster.getString("words"));
-				Log.d(TAG, "id"+zhuanti_id+" count:"+zhuanti_count+" words"+zhuanti_words);
-				dbadapter.userInsertZhuanti(jobname, zhuanti_id, zhuanti_count, zhuanti_words);
-				
+				long zhuantiid = dbadapter.userInsert(username, jobname, zhuanti_words, zhuanti_count);
+				if (zhuantiid < 0) {
+					return false;
+				}
 				// 取出doc，doc是具体新闻名的数组
 				JSONArray doc = onecluster.getJSONArray("doc");
 				// 取出第一条新闻名作为专题的标题
@@ -73,7 +70,7 @@ public class ConnectWeb {
 				// 目标是：如果有重名 而 新闻个数不同 就将之前的覆盖掉；然后返回 id
 				// 将新闻插入新闻表
 				for (int j = 0; j < doc.length(); j += 1) {
-					JSONObject onenews = (JSONObject) doc.get(i);
+					JSONObject onenews = (JSONObject) doc.get(j);
 					String title = (String) onenews.getString("title");
 					String words = (String) onenews.getString("words");
 					words = jiexiwords(words);
@@ -83,11 +80,12 @@ public class ConnectWeb {
 					String date = (String) onenews.getString("date");
 					String url = (String) onenews.getString("url");
 					dbadapter.userInsertNews(title, source, description, date,
-							url, words, jobid, false);
+							url, words, zhuantiid, false);
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			Log.d(TAG, e.toString());
 			returnresult = false;
 		}
 		return returnresult;
@@ -140,7 +138,6 @@ public class ConnectWeb {
 	// http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getAllJobsOfUser&user=test
 	static public ArrayList<Map<String, String>> getAllJobsOfUser(
 			DBAdapter dbadapter, String name) {
-		Log.d("EV_DEBUG", "getAllJobsOfUser");
 		ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		Map<String, String> map = null;
 		String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=getAllJobsOfUser&user="
@@ -297,7 +294,6 @@ public class ConnectWeb {
 			String str = HttpConn.getJsonFromUrlGet(theurl);
 			// 通过json 来解析收到的字符串
 			JSONObject jay = new JSONObject(str);
-			Log.d("test", "get result");
 			JSONObject result = new JSONObject((String) jay.getString("result"));
 			// 解析key result所对应的值
 			// count是总共取到的专题条数
@@ -410,7 +406,7 @@ public class ConnectWeb {
 			// 2012-06-05 08:14:54
 
 			String url = (String) onexinwen.getString("url");
-			Log.d("test news title", title);
+			Log.d("news title", title);
 			dbadapter.insert(title, source, description, date, url,
 					oneclusterid, false);
 		}
@@ -459,6 +455,9 @@ public class ConnectWeb {
 		 * 
 		 * }
 		 */
+		if (words.equals("other")) {
+			return words;
+		}
 		String keyword = "";
 		String[] keywords = words.split("\\)");
 		for (int i = 0; i < keywords.length; i++) {
@@ -537,7 +536,7 @@ public class ConnectWeb {
 				JSONObject temp = (JSONObject) jay.get(i);
 				String title = (String) temp.getString("first");
 				String heat = (String) temp.getString("second");
-				Log.d("test people title", title);
+				Log.d("people name", title);
 				dbadapter.insertpeople(title, Integer.parseInt(heat));
 			}
 
@@ -662,9 +661,9 @@ public class ConnectWeb {
 			for (int i = 0; i < jay.length(); i += 1) {
 				JSONObject temp = (JSONObject) jay.get(i);
 				String title = (String) temp.getString("first");
-				Log.d("json", title);
+				Log.d("json division", title);
 				String heat = (String) temp.getString("second");
-				Log.d("json", heat);
+				Log.d("json division", heat);
 				dbadapter.insertdivision(title, Integer.parseInt(heat));
 			}
 
@@ -734,7 +733,6 @@ public class ConnectWeb {
 			String title = (String) inforMap.getString("title");
 			Log.d("test string", title);
 			String text = (String) inforMap.getString("text");
-			Log.d("test string", text);
 			String source = (String) inforMap.getString("source");
 			String date = (String) inforMap.getString("date");
 			map.put("title", title);
