@@ -80,7 +80,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 				R.layout.zuijinxinwen_item, new String[] { "date", "counts",
 						"ItemTitle", "ItemText" }, new int[] {
 						R.id.textView_datedistribution, R.id.textView_count,
-						R.id.ItemTitle, R.id.ItemText });
+						R.id.count, R.id.ItemText });
 		// 添加并且显示
 		((PullToRefreshListView) getListView()).addFooterView(moreView);
 		setListAdapter(listItemAdapter);
@@ -115,7 +115,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int position, long arg3) {
 						Log.d(TAG, "zuijinxinwen中点击Item序号:" + position);
-						String title = (String) listItem.get(position - 1).get(
+						String title = listItem.get(position - 1).get(
 								"ItemTitle");
 						Bundle bundle = new Bundle();
 						Intent intent = new Intent(

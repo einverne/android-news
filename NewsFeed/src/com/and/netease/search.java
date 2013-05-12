@@ -324,8 +324,8 @@ public class search extends Activity {
 			}
 		});
 
-		Button btnButton = (Button) findViewById(R.id.button_dingzhi);
-		btnButton.setOnClickListener(new OnClickListener() {
+		Button dingzhiButton = (Button) findViewById(R.id.button_dingzhi);
+		dingzhiButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -336,6 +336,8 @@ public class search extends Activity {
 				if (store_name == "t") {
 					Toast.makeText(search.this, "ÇëÏÈµÇÂ¼", Toast.LENGTH_SHORT)
 							.show();
+//					AlertDialog dialog = new AlertDialog.Builder(search.this).create();
+//					dialog.setView(R.layout.layout_login)
 					return;
 				}
 

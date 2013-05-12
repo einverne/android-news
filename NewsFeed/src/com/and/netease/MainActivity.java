@@ -155,6 +155,7 @@ public class MainActivity extends TabActivity {
 		builder.setMessage("确定要退出吗?");
 		builder.setPositiveButton("确认",
 				new android.content.DialogInterface.OnClickListener() {
+					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						finish();
@@ -162,6 +163,7 @@ public class MainActivity extends TabActivity {
 				});
 		builder.setNegativeButton("取消",
 				new android.content.DialogInterface.OnClickListener() {
+					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 					}
