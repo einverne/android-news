@@ -63,7 +63,6 @@ public class TabLoginActivity extends Activity {
 				if (str_name != "" && !str_psw.equals(null)) {
 					boo = ConnectWeb.getlogin(str_name, str_psw);
 					if (boo) {
-						Log.d(TAG, "str_name" + str_name + "str_psw" + str_psw);
 						editor.putString("name", str_name);
 						editor.putString("psw", str_psw);
 						editor.commit();

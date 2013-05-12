@@ -529,13 +529,12 @@ public class hot_main extends Activity implements OnScrollListener {
 
 		@Override
 		protected void onPostExecute(String[] result) {
-			
-			
-			
+
 			switch (index) {
 			case 0:
 				c = dbadapter.getpeople(0, MaxDataNum);
-				Toast.makeText(hot_main.this, "本次共刷新数据"+list_People.size()+"条",
+				Toast.makeText(hot_main.this,
+						"本次共刷新数据" + list_People.size() + "条",
 						Toast.LENGTH_SHORT).show();
 
 				for (int i = 0; c.moveToNext(); i++) {
@@ -556,8 +555,9 @@ public class hot_main extends Activity implements OnScrollListener {
 				break;
 			case 1:
 				c_place = dbadapter.getplace(0, MaxDataNum);
-				Toast.makeText(hot_main.this, "本次共刷新数据"+list_place.size()+"条",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(hot_main.this,
+						"本次共刷新数据" + list_place.size() + "条", Toast.LENGTH_SHORT)
+						.show();
 
 				for (int i = 0; c.moveToNext(); i++) {
 					c.moveToPosition(i);
@@ -577,7 +577,8 @@ public class hot_main extends Activity implements OnScrollListener {
 				break;
 			case 2:
 				c_division = dbadapter.getdivision(0, MaxDataNum);
-				Toast.makeText(hot_main.this, "本次共刷新数据"+list_division.size()+"条",
+				Toast.makeText(hot_main.this,
+						"本次共刷新数据" + list_division.size() + "条",
 						Toast.LENGTH_SHORT).show();
 
 				for (int i = 0; c.moveToNext(); i++) {

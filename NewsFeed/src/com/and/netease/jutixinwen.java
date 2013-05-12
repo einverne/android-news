@@ -59,10 +59,10 @@ public class jutixinwen extends Activity {
 
 		@Override
 		protected void onPostExecute(Map<String, String> map) {
-			tv_title.setText((String) map.get("title"));
-			tv_source.setText((String) map.get("source"));
-			tv_date.setText((String) map.get("date"));
-			tv_text.setText((String) map.get("text"));
+			tv_title.setText(map.get("title"));
+			tv_source.setText(map.get("source"));
+			tv_date.setText(map.get("date"));
+			tv_text.setText(map.get("text"));
 			progressBar.setVisibility(View.GONE);
 		}
 

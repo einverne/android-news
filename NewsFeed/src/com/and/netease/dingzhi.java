@@ -2,14 +2,16 @@ package com.and.netease;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -29,6 +31,7 @@ import com.and.netease.utils.DBAdapter;
 
 public class dingzhi extends ListActivity {
 	private static final String TAG = "EV_DEBUG";
+	protected static final int MESSAGE_OK = 0;
 	private SharedPreferences sharedPreferences;
 
 	boolean visflag = false;
@@ -36,8 +39,9 @@ public class dingzhi extends ListActivity {
 	String user_name;
 	String job_delete;
 	protected DBAdapter dbAdapter;
-	ArrayList<Map<String, String>> list;
+	ArrayList<HashMap<String, String>> list;
 	private SimpleAdapter listAdapter;
+	private ProgressDialog progressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,18 +51,27 @@ public class dingzhi extends ListActivity {
 
 		Bundle bundle = this.getIntent().getExtras();
 		user_name = bundle.getString("name");
-		Log.d(TAG, "get username:" + user_name);
-		list = ConnectWeb.getAllJobsOfUser(dbAdapter, user_name);
+
+		progressDialog = ProgressDialog.show(this, "等待", "正在下载请稍后");
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					list = ConnectWeb.getAllJobsOfUser(dbAdapter, user_name);
+					// Thread.sleep(5000);
+					// 连接网络获取数据
+				} catch (Exception e) {
+					// 在GUI显示错误提示
+					// tv.setText("Error: " + e.getMessage());
+				}
+
+				Message msg_listData = new Message();
+				msg_listData.what = MESSAGE_OK;
+				handler.sendMessage(msg_listData);
+			}
+		}.start();
+
 		lv = this.getListView();
-		listAdapter = new SimpleAdapter(
-				this,
-				list,
-				R.layout.dingzhi_zhuanti,
-				new String[] { "name", "description", "createtime", "endtime" },
-				new int[] { R.id.textView_title, R.id.textView_description,
-						R.id.textView_startTime, R.id.textView_endTime });
-		lv.setAdapter(listAdapter);
-		lv.setScrollBarStyle(1);
 
 		findViewById(R.id.button_adddingzhi).setOnClickListener(
 				new OnClickListener() {
@@ -82,13 +95,12 @@ public class dingzhi extends ListActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				HashMap<String, String> map = (HashMap<String, String>) lv
-						.getItemAtPosition(position);
-				String task_dingzhi = map.get("name");
-				Intent intent = new Intent();
+				HashMap<String, String> map = list.get(position);
+				String jobname = map.get("name");
+				Log.d(TAG, "点中了第 " + id + " task_name:" + jobname);
+				Intent intent = new Intent(dingzhi.this, Dingzhi_zhuanti.class);
 				intent.putExtra("username", user_name);
-				intent.putExtra("task", task_dingzhi);
-				intent.setClass(dingzhi.this, Dingzhi_zhuanti.class);
+				intent.putExtra("jobname", jobname);
 				startActivity(intent);
 
 			}
@@ -98,12 +110,36 @@ public class dingzhi extends ListActivity {
 			@Override
 			public void onCreateContextMenu(ContextMenu menu, View v,
 					ContextMenuInfo menuInfo) {
+				menu.setHeaderTitle("操作");
 				menu.add(0, 0, 0, "删除");
-				menu.add(0, 1, 0, "鍙栨秷");
 			}
 		});
 	}
 
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message message) {
+			switch (message.what) {
+			case MESSAGE_OK:
+				listAdapter = new SimpleAdapter(
+						dingzhi.this,
+						list,
+						R.layout.dingzhi_zhuanti,
+						new String[] { "name", "description", "createtime",
+								"endtime" },
+						new int[] { R.id.textView_title,
+								R.id.textView_description,
+								R.id.textView_startTime, R.id.textView_endTime });
+				lv.setAdapter(listAdapter);
+				lv.setScrollBarStyle(1);
+				// 刷新UI，显示数据，并关闭进度条
+				progressDialog.dismiss(); // 关闭进度条
+				break;
+			}
+		}
+	};
+
+	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		ContextMenuInfo info = item.getMenuInfo();
 		AdapterView.AdapterContextMenuInfo contextMenuInfo = (AdapterView.AdapterContextMenuInfo) info;
@@ -111,13 +147,8 @@ public class dingzhi extends ListActivity {
 		job_delete = list.get(position).get("name");
 		Log.d(TAG, "position" + position + "name" + job_delete);
 		switch (item.getItemId()) {
-
 		case 0: {
 			delete_job();
-			break;
-		}
-		case 1: {
-
 			break;
 		}
 		default:

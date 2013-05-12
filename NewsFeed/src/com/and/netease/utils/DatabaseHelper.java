@@ -14,10 +14,17 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
 	// 数据库名
-	private static final String DATABASE_NAME = "NewsFeed";
+	public static final String DATABASE_NAME = "NewsFeed";
 	// 版本名
-	private static final int DATABASE_VERSION = 3;
+	public static final int DATABASE_VERSION = 3;
 	// 表名
+	public static final String TABLE_NEWS = "news";
+	public static final String TABLE_ZUIJINXINWEN = "zuijinxinwen";
+	public static final String TABLE_PEOPLE = "peoples";
+	public static final String TABLE_PLACE = "places";
+	public static final String TABLE_DIVISION = "divisions";
+	public static final String TABLE_USER = "user";
+	public static final String TABLE_USERNEWS = "usernews";
 
 	// 这个常量包括创建所需表的SQL语句
 	private static final String DATABASE_CREATE_news = "create table if not exists news (_id integer primary key autoincrement, "
@@ -35,8 +42,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_CREATE_usernews = "create table if not exists usernews (_id integer primary key autoincrement, "
 			+ "title text not null, source text,words text,description text,date text,url text,zhuantiId integer,read text);";
 
-
-	
 	private static final String TAG = "EV_Debug";
 
 	public DatabaseHelper(Context context) {
