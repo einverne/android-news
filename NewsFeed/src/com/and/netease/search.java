@@ -39,8 +39,7 @@ import com.and.netease.utils.MakeQuery;
 public class search extends Activity {
 	SharedPreferences sharedPreferences;
 	SharedPreferences.Editor editor;
-	private boolean  flag=false;//用来判断是否有数据；
-
+	//private boolean  flag=false;//当没有任何搜索内容时，不会出现"正在后台加载数据,请稍等"这句话；
 	public class getData extends
 			AsyncTask<Void, Void, ArrayList<HashMap<String, Object>>> {
 		private String aboutChina;
@@ -95,8 +94,6 @@ public class search extends Activity {
 			String te = "共有" + numberOfSearchResult + "条";
 			text.setText(te);
 			if (numberOfSearchResult == 0) {
-				flag=true;
-				//在这里设置加载更多的button，让他不要出现
 				Toast.makeText(search.this, "没有符合关键词的结果,请调整关键词",
 						Toast.LENGTH_SHORT).show();
 			}
@@ -106,8 +103,11 @@ public class search extends Activity {
 
 		@Override
 		protected void onPreExecute() {
-			Toast.makeText(search.this, "正在后台加载数据,请稍等", Toast.LENGTH_SHORT)
+			if(numberOfSearchResult != 0)//只有当搜索有数据时才显示这句话
+			{
+				Toast.makeText(search.this, "正在后台加载数据,请稍等", Toast.LENGTH_SHORT)
 					.show();
+			}
 			super.onPreExecute();
 		}
 
@@ -248,7 +248,7 @@ public class search extends Activity {
 		moreView = getLayoutInflater().inflate(R.layout.moredata, null);
 		bt = (Button) moreView.findViewById(R.id.bt_load);
 		pg = (ProgressBar) moreView.findViewById(R.id.pg);
-		if(!flag)
+		if(numberOfSearchResult<4)//当获取到的检索内容太少时，让加载更多的按钮消失；
 		{
 		
 		bt.setVisibility(View.GONE);
