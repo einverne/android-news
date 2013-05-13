@@ -10,19 +10,18 @@
         android:id="@+id/RelativeLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="4dp"
-        android:orientation="vertical" >
+        android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="false"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="5dp"
             android:gravity="left"
             android:text="count"
             android:textColor="@color/textView_color"
@@ -34,16 +33,14 @@
             android:id="@+id/dingzhi_words"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="false"
-            android:layout_below="@+id/count"
+            android:layout_alignBaseline="@+id/count"
+            android:layout_alignParentTop="true"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="3dp"
             android:gravity="left"
             android:text="words"
             android:textColor="@color/textView_color"
             android:textSize="20sp" />
-
     </RelativeLayout>
 
 </LinearLayout>

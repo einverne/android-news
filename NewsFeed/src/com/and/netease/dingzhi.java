@@ -58,7 +58,6 @@ public class dingzhi extends ListActivity {
 			public void run() {
 				try {
 					list = ConnectWeb.getAllJobsOfUser(dbAdapter, user_name);
-					// Thread.sleep(5000);
 					// 连接网络获取数据
 				} catch (Exception e) {
 					// 在GUI显示错误提示
@@ -143,12 +142,27 @@ public class dingzhi extends ListActivity {
 	public boolean onContextItemSelected(MenuItem item) {
 		ContextMenuInfo info = item.getMenuInfo();
 		AdapterView.AdapterContextMenuInfo contextMenuInfo = (AdapterView.AdapterContextMenuInfo) info;
-		int position = contextMenuInfo.position;
+		final int position = contextMenuInfo.position;
 		job_delete = list.get(position).get("name");
-		Log.d(TAG, "position" + position + "name" + job_delete);
 		switch (item.getItemId()) {
 		case 0: {
-			delete_job();
+			AlertDialog.Builder builder = new AlertDialog.Builder(dingzhi.this);
+			builder.setTitle("注意")
+					.setMessage("是否要删除定制")
+					.setPositiveButton("Yes",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									if (ConnectWeb.deleteJob(user_name, job_delete)) {
+										Toast.makeText(dingzhi.this, "成功删除",
+												Toast.LENGTH_SHORT).show();
+										list.remove(list.get(position));
+										listAdapter.notifyDataSetChanged();
+									}
+								}
+							}).setNegativeButton("No", null).create();
+			builder.show();
 			break;
 		}
 		default:
@@ -157,27 +171,6 @@ public class dingzhi extends ListActivity {
 		}
 
 		return super.onContextItemSelected(item);
-	}
-
-	public void delete_job() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(dingzhi.this);
-		builder.setTitle("注意")
-				.setMessage("是否要删除定制")
-				.setPositiveButton("Yes",
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								if (ConnectWeb.deleteJob(user_name, job_delete)) {
-									Toast.makeText(dingzhi.this, "成功删除",
-											Toast.LENGTH_SHORT).show();
-									list = ConnectWeb.getAllJobsOfUser(
-											dbAdapter, user_name);
-									listAdapter.notifyDataSetChanged();
-								}
-							}
-						}).setNegativeButton("No", null).create();
-		builder.show();
 	}
 
 	public void submit_job() {
