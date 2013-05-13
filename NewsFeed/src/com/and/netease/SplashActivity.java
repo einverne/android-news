@@ -29,23 +29,20 @@ import com.and.netease.utils.DBAdapter;
 
 public class SplashActivity extends Activity {
 
-	private final int SPLASH_DISPLAY_LENGHT = 4000;
 	protected DBAdapter dbadapter;
-		private ViewPager viewPager; // android-support-v4�еĻ������
-		private List<ImageView> imageViews; // ������ͼƬ����
-		private int[] imageResId; // ͼƬID
-		private List<View> dots; // ͼƬ�������ĵ���Щ��
-		private TextView tv_title;
-		private int currentItem = 0; // ��ǰͼƬ�������
+		private ViewPager viewPager;
+		private List<ImageView> imageViews;
+		private int[] imageResId;
+		private List<View> dots;
+		private int currentItem = 0;
 
 		// An ExecutorService that can schedule commands to run after a given delay,
 		// or to execute periodically.
 		private ScheduledExecutorService scheduledExecutorService;
 
-		// �л���ǰ��ʾ��ͼƬ
 		private Handler handler = new Handler() {
 			public void handleMessage(android.os.Message msg) {
-				viewPager.setCurrentItem(currentItem);// �л���ǰ��ʾ��ͼƬ
+				viewPager.setCurrentItem(currentItem);// 锟叫伙拷锟斤拷前锟斤拷示锟斤拷图片
 			};
 		};
 	@Override
@@ -75,7 +72,7 @@ public class SplashActivity extends Activity {
 		imageResId = new int[] { R.drawable.splash1, R.drawable.splash,R.drawable.splash2};		
 		imageViews = new ArrayList<ImageView>();
 
-		// ��ʼ��ͼƬ��Դ
+		// 锟斤拷始锟斤拷图片锟斤拷源
 		for (int i = 0; i < imageResId.length; i++) {
 			ImageView imageView = new ImageView(this);
 			imageView.setImageResource(imageResId[i]);
@@ -91,8 +88,8 @@ public class SplashActivity extends Activity {
 		
 
 		viewPager = (ViewPager) findViewById(R.id.vp);
-		viewPager.setAdapter(new MyAdapter());// �������ViewPagerҳ���������
-		// ����һ������������ViewPager�е�ҳ��ı�ʱ����
+		viewPager.setAdapter(new MyAdapter());// 锟斤拷锟斤拷锟斤拷锟絍iewPager页锟斤拷锟斤拷锟斤拷锟斤拷锟�
+		// 锟斤拷锟斤拷一锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷ViewPager锟叫碉拷页锟斤拷谋锟绞憋拷锟斤拷锟�
 		viewPager.setOnPageChangeListener(new MyPageChangeListener());
 	}
 
@@ -125,20 +122,20 @@ public class SplashActivity extends Activity {
 		@Override
 		protected void onStart() {
 			scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-			// ��Activity��ʾ������ÿ�������л�һ��ͼƬ��ʾ
+			// 锟斤拷Activity锟斤拷示锟斤拷锟斤拷锟斤拷每锟斤拷锟斤拷锟斤拷锟叫伙拷一锟斤拷图片锟斤拷示
 			scheduledExecutorService.scheduleAtFixedRate(new ScrollTask(), 5, 10, TimeUnit.SECONDS);
 			super.onStart();
 		}
 
 		@Override
 		protected void onStop() {
-			// ��Activity���ɼ��ʱ��ֹͣ�л�
+			// 锟斤拷Activity锟斤拷锟缴硷拷锟绞憋拷锟酵Ｖ癸拷谢锟�
 			scheduledExecutorService.shutdown();
 			super.onStop();
 		}
 
 		/**
-		 * �����л�����
+		 * 锟斤拷锟斤拷锟叫伙拷锟斤拷锟斤拷
 		 * 
 		 * @author Administrator
 		 * 
@@ -150,14 +147,14 @@ public class SplashActivity extends Activity {
 					
 					currentItem++;
 					Log.d("currentItem: " ,""+currentItem);
-					handler.obtainMessage().sendToTarget(); // ͨ��Handler�л�ͼƬ
+					handler.obtainMessage().sendToTarget(); // 通锟斤拷Handler锟叫伙拷图片
 				}
 			}
 
 		}
 
 		/**
-		 * ��ViewPager��ҳ���״̬����ı�ʱ����
+		 * 锟斤拷ViewPager锟斤拷页锟斤拷锟阶刺拷锟斤拷锟侥憋拷时锟斤拷锟斤拷
 		 * 
 		 * @author Administrator
 		 * 
@@ -186,7 +183,7 @@ public class SplashActivity extends Activity {
 		}
 
 		/**
-		 * ���ViewPagerҳ���������
+		 * 锟斤拷锟絍iewPager页锟斤拷锟斤拷锟斤拷锟斤拷锟�
 		 * 
 		 * @author Administrator
 		 * 

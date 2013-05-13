@@ -14,6 +14,8 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -39,7 +41,8 @@ import com.and.netease.utils.MakeQuery;
 public class search extends Activity {
 	SharedPreferences sharedPreferences;
 	SharedPreferences.Editor editor;
-	//private boolean  flag=false;//当没有任何搜索内容时，不会出现"正在后台加载数据,请稍等"这句话；
+
+	// private boolean flag=false;//当没有任何搜索内容时，不会出现"正在后台加载数据,请稍等"这句话；
 	public class getData extends
 			AsyncTask<Void, Void, ArrayList<HashMap<String, Object>>> {
 		private String aboutChina;
@@ -48,8 +51,6 @@ public class search extends Activity {
 		private String keyword;
 		private int max;
 		private int start;
-		
-		
 
 		public getData(String keyword, String dateF, String dateT,
 				String aboutChina, int start, int max) {
@@ -103,10 +104,10 @@ public class search extends Activity {
 
 		@Override
 		protected void onPreExecute() {
-			if(numberOfSearchResult != 0)//只有当搜索有数据时才显示这句话
+			if (numberOfSearchResult != 0)// 只有当搜索有数据时才显示这句话
 			{
 				Toast.makeText(search.this, "正在后台加载数据,请稍等", Toast.LENGTH_SHORT)
-					.show();
+						.show();
 			}
 			super.onPreExecute();
 		}
@@ -115,6 +116,8 @@ public class search extends Activity {
 
 	final int DATE_DIALOG_ID = 0;
 	private static final String TAG = "EV_DEBUG";
+	protected static final int MESSAGE_OK = 0x001;
+	protected static final int MESSAGE_FALSE = 0x002;
 	boolean aboutChina = false;
 	private Button bt;
 	String china = "F";
@@ -129,9 +132,8 @@ public class search extends Activity {
 	private int mDay;
 	private int mMonth;
 	String month;
-	
-	
-	//lene
+
+	// lene
 	private View moreView;
 	private int mYear;
 	private ListView myListView;
@@ -162,7 +164,7 @@ public class search extends Activity {
 
 		}
 		if (mDay <= 9) {
-			day = "0" + mDay; 
+			day = "0" + mDay;
 		} else {
 			day = mDay + "";
 		}
@@ -248,10 +250,10 @@ public class search extends Activity {
 		moreView = getLayoutInflater().inflate(R.layout.moredata, null);
 		bt = (Button) moreView.findViewById(R.id.bt_load);
 		pg = (ProgressBar) moreView.findViewById(R.id.pg);
-		if(numberOfSearchResult<4)//当获取到的检索内容太少时，让加载更多的按钮消失；
+		if (numberOfSearchResult < 4)// 当获取到的检索内容太少时，让加载更多的按钮消失；
 		{
-		
-		bt.setVisibility(View.GONE);
+
+			bt.setVisibility(View.GONE);
 		}
 		myListView.addFooterView(moreView);
 		myListView.setAdapter(listItemAdapter);
@@ -331,13 +333,10 @@ public class search extends Activity {
 			public void onClick(View v) {
 				final String store_name = sharedPreferences.getString("name",
 						"t");
-				String store_psw = sharedPreferences.getString("psw", "t");
 
 				if (store_name == "t") {
 					Toast.makeText(search.this, "请先登录", Toast.LENGTH_SHORT)
 							.show();
-//					AlertDialog dialog = new AlertDialog.Builder(search.this).create();
-//					dialog.setView(R.layout.layout_login)
 					return;
 				}
 
@@ -396,6 +395,10 @@ public class search extends Activity {
 				bu.setText("添加订阅");
 				bu.setOnClickListener(new OnClickListener() {
 
+					private String query;
+					private String key;
+					private boolean b;
+
 					@Override
 					public void onClick(View v) {
 						Log.d(TAG, "from:" + from_year + from_month + from_day
@@ -403,19 +406,32 @@ public class search extends Activity {
 						String dateF = getFormatdate(from_year, from_month,
 								from_day);
 						String dateT = getFormatdate(to_year, to_month, to_day);
-						String key = tv_key.getText().toString();
-						String query = MakeQuery.query(key, dateF, dateT);
-						String china = "false";
+						key = tv_key.getText().toString();
+						query = MakeQuery.query(key, dateF, dateT);
+						china = "false";
 						if (cb_aboutChina.isChecked()) {
 							china = "true";
 						}
-						if (ConnectWeb.submitJob(store_name, query, china, key)) {
-							Toast.makeText(search.this, "提交成功",
-									Toast.LENGTH_SHORT).show();
-						} else {
-							Toast.makeText(search.this, "提交失败",
-									Toast.LENGTH_SHORT).show();
-						}
+						b = false;
+						new Thread() {
+							public void run() {
+								try {
+									b = ConnectWeb.submitJob(store_name, query,
+											china, key);
+								} catch (Exception e) {
+									Log.d("TAG", e.toString());
+								}
+								if (b) {
+									Message msg_listData = new Message();
+									msg_listData.what = MESSAGE_OK;
+									handler.sendMessage(msg_listData);
+								} else {
+									Message msg_listData = new Message();
+									msg_listData.what = MESSAGE_FALSE;
+									handler.sendMessage(msg_listData);
+								}
+							}
+						}.start();
 						dialog.cancel();
 					}
 				});
@@ -423,49 +439,18 @@ public class search extends Activity {
 		});
 	}
 
-	/**
-	 * 
-	 * @return listItem
-	 */
-	// public List<Map<String, Object>> loadMoreData() {
-	// Map<String, Object> searchmap = ConnectWeb.getsearch(keyword, dateF,
-	// dateT, "F", 30, resultOnceQuery);
-	// List<Map<String, Object>> list = (List<Map<String, Object>>) searchmap
-	// .get("first");
-	// int count = listItemAdapter.getCount();
-	//
-	// // if (count+20<MaxDataNum) {
-	// if (list.size() == 20) {
-	// for (int i = count; i < count + 20; i++) {
-	// HashMap<String, Object> map = new HashMap<String, Object>();
-	// Map<String, Object> map1 = list.get(i);
-	// String source = (String) map1.get("source");
-	// map.put("Title", map1.get("title"));
-	// map.put("source", source);
-	// map.put("icon", getIcon(source));
-	// map.put("ItemTime", map1.get("date"));
-	// map.put("description", (String) map1.get("description") + i);
-	// map.put("url", map1.get("url"));
-	// listItem.add(map);
-	// }
-	// } else {
-	// for (int i = count; i < list.size(); i++) {
-	// HashMap<String, Object> map = new HashMap<String, Object>();
-	// Map<String, Object> map1 = list.get(i);
-	// String source = (String) map1.get("source");
-	// map.put("Title", map1.get("title"));
-	// map.put("source", source);
-	// map.put("icon", getIcon(source));
-	// map.put("ItemTime", map1.get("date"));
-	// map.put("description", (String) map1.get("description") + i);
-	// map.put("url", map1.get("url"));
-	// listItem.add(map);
-	// flagLoadMoreData = 5;
-	// }
-	//
-	// }
-	// return listItem;
-	// }
+	private Handler handler = new Handler() {
+		public void handleMessage(Message message) {
+			switch (message.what) {
+			case MESSAGE_OK:
+				Toast.makeText(search.this, "提交成功", Toast.LENGTH_SHORT).show();
+				break;
+			case MESSAGE_FALSE:
+				Toast.makeText(search.this, "提交失败", Toast.LENGTH_SHORT).show();
+				break;
+			}
+		}
+	};
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {

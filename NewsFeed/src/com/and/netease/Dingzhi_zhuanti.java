@@ -69,25 +69,6 @@ public class Dingzhi_zhuanti extends ListActivity {
 			}
 		}.start();
 		
-		Cursor c= dbadapter.getuser(username, jobname);
-		if (c!= null) {
-			listItem = new ArrayList<HashMap<String,String>>();
-			for (int i = 0; c.moveToNext(); i++) {
-				c.moveToPosition(i);
-				String _id = c.getString(c.getColumnIndex("_id"));
-				String count = c.getString(c.getColumnIndex(DBAdapter.userKEY_Count));
-				String words = c.getString(c.getColumnIndex(DBAdapter.userKEY_words));
-				HashMap<String , String> map = new HashMap<String, String>();
-				map.put("_id", _id);
-				map.put(COUNT, count);
-				map.put(WORDS, words);
-				listItem.add(map);
-			}
-			String[] from = new String[]{"count","words"};
-			int[] to = new int[]{R.id.count,R.id.dingzhi_words};
-			listAdapter = new SimpleAdapter(this, listItem, R.layout.dingzhi_item, from, to);
-			setListAdapter(listAdapter);
-		}
 		
 		list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -109,6 +90,25 @@ public class Dingzhi_zhuanti extends ListActivity {
 		public void handleMessage(Message message) {
 			switch (message.what) {
 			case MESSAGE_OK:
+				Cursor c= dbadapter.getuser(username, jobname);
+				if (c!= null) {
+					listItem = new ArrayList<HashMap<String,String>>();
+					for (int i = 0; c.moveToNext(); i++) {
+						c.moveToPosition(i);
+						String _id = c.getString(c.getColumnIndex("_id"));
+						String count = c.getString(c.getColumnIndex(DBAdapter.userKEY_Count));
+						String words = c.getString(c.getColumnIndex(DBAdapter.userKEY_words));
+						HashMap<String , String> map = new HashMap<String, String>();
+						map.put("_id", _id);
+						map.put(COUNT, count);
+						map.put(WORDS, words);
+						listItem.add(map);
+					}
+					String[] from = new String[]{"count","words"};
+					int[] to = new int[]{R.id.count,R.id.dingzhi_words};
+					listAdapter = new SimpleAdapter(Dingzhi_zhuanti.this, listItem, R.layout.dingzhi_item, from, to);
+					setListAdapter(listAdapter);
+				}
 				listAdapter.notifyDataSetChanged();
 				// 刷新UI，显示数据，并关闭进度条
 				progressDialog.dismiss(); // 关闭进度条

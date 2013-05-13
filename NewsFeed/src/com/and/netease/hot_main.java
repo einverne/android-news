@@ -64,7 +64,7 @@ public class hot_main extends Activity implements OnScrollListener {
 	int a;
 
 	private DBAdapter dbadapter;
-	private Cursor c;
+	private Cursor c_people;
 	private Cursor c_place;
 	private Cursor c_division;
 
@@ -78,7 +78,7 @@ public class hot_main extends Activity implements OnScrollListener {
 		handler = new Handler();
 
 		dbadapter = new DBAdapter(this);
-		c = dbadapter.getpeople(0, MaxDataNum);
+		c_people = dbadapter.getpeople(0, MaxDataNum);
 		c_place = dbadapter.getplace(0, MaxDataNum);
 		c_division = dbadapter.getdivision(0, MaxDataNum);
 
@@ -93,20 +93,20 @@ public class hot_main extends Activity implements OnScrollListener {
 		case 0:
 			count = listItemAdapter0.getCount();
 			if (count + 5 < MaxDataNum) {
-				for (int i = count; i < count + 5 && c.moveToNext(); i++) {
-					c.moveToPosition(i);
-					String text = c.getString(c.getColumnIndex("title"));
-					String heat = c.getString(c.getColumnIndex("heat"));
+				for (int i = count; i < count + 5 && c_people.moveToNext(); i++) {
+					c_people.moveToPosition(i);
+					String text = c_people.getString(c_people.getColumnIndex("title"));
+					String heat = c_people.getString(c_people.getColumnIndex("heat"));
 					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("ItemTitle", text);
 					map.put("ItemText", heat);
 					listItem0.add(map);
 				}
 			} else {
-				for (int i = count; i < MaxDataNum && c.moveToNext(); i++) {
-					c.moveToPosition(i);
-					String text = c.getString(c.getColumnIndex("title"));
-					String heat = c.getString(c.getColumnIndex("heat"));
+				for (int i = count; i < MaxDataNum && c_people.moveToNext(); i++) {
+					c_people.moveToPosition(i);
+					String text = c_people.getString(c_people.getColumnIndex("title"));
+					String heat = c_people.getString(c_people.getColumnIndex("heat"));
 					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("ItemTitle", text);
 					map.put("ItemText", heat);
@@ -178,10 +178,10 @@ public class hot_main extends Activity implements OnScrollListener {
 		switch (a) {
 		case 0: {
 			listItem0 = new ArrayList<HashMap<String, Object>>();
-			for (int i = 0; c.moveToNext(); i++) {
-				c.moveToPosition(i);
-				String text = c.getString(c.getColumnIndex("title"));
-				String heat = c.getString(c.getColumnIndex("heat"));
+			for (int i = 0; c_people.moveToNext(); i++) {
+				c_people.moveToPosition(i);
+				String text = c_people.getString(c_people.getColumnIndex("title"));
+				String heat = c_people.getString(c_people.getColumnIndex("heat"));
 
 				HashMap<String, Object> map = new HashMap<String, Object>();
 				map.put("ItemTitle", text);
@@ -532,15 +532,15 @@ public class hot_main extends Activity implements OnScrollListener {
 
 			switch (index) {
 			case 0:
-				c = dbadapter.getpeople(0, MaxDataNum);
+				c_people = dbadapter.getpeople(0, MaxDataNum);
 				Toast.makeText(hot_main.this,
 						"本次共刷新数据" + list_People.size() + "条",
 						Toast.LENGTH_SHORT).show();
 
-				for (int i = 0; c.moveToNext(); i++) {
-					c.moveToPosition(i);
-					String text = c.getString(c.getColumnIndex("title"));
-					String heat = c.getString(c.getColumnIndex("heat"));
+				for (int i = 0; c_people.moveToNext(); i++) {
+					c_people.moveToPosition(i);
+					String text = c_people.getString(c_people.getColumnIndex("title"));
+					String heat = c_people.getString(c_people.getColumnIndex("heat"));
 
 					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("ItemTitle", text);
@@ -559,10 +559,10 @@ public class hot_main extends Activity implements OnScrollListener {
 						"本次共刷新数据" + list_place.size() + "条", Toast.LENGTH_SHORT)
 						.show();
 
-				for (int i = 0; c.moveToNext(); i++) {
-					c.moveToPosition(i);
-					String text = c.getString(c.getColumnIndex("title"));
-					String heat = c.getString(c.getColumnIndex("heat"));
+				for (int i = 0; c_people.moveToNext(); i++) {
+					c_people.moveToPosition(i);
+					String text = c_people.getString(c_people.getColumnIndex("title"));
+					String heat = c_people.getString(c_people.getColumnIndex("heat"));
 
 					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("ItemTitle", text);
@@ -581,10 +581,10 @@ public class hot_main extends Activity implements OnScrollListener {
 						"本次共刷新数据" + list_division.size() + "条",
 						Toast.LENGTH_SHORT).show();
 
-				for (int i = 0; c.moveToNext(); i++) {
-					c.moveToPosition(i);
-					String text = c.getString(c.getColumnIndex("title"));
-					String heat = c.getString(c.getColumnIndex("heat"));
+				for (int i = 0; c_people.moveToNext(); i++) {
+					c_people.moveToPosition(i);
+					String text = c_people.getString(c_people.getColumnIndex("title"));
+					String heat = c_people.getString(c_people.getColumnIndex("heat"));
 
 					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("ItemTitle", text);
@@ -606,7 +606,7 @@ public class hot_main extends Activity implements OnScrollListener {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		c.close();
+		c_people.close();
 	}
 
 	@Override
