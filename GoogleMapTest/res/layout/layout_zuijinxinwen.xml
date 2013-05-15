@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/AbsoluteLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <com.markupartist.android.widget.PullToRefreshListView
+        android:id="@+id/android:list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/list_item_background"
+        android:divider="@color/white"
+        android:dividerHeight="1.5px"
+         android:fadingEdgeLength="0dp"
+        android:footerDividersEnabled="false" >
+    </com.markupartist.android.widget.PullToRefreshListView>
+
+</AbsoluteLayout>
