@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+         >
+
+        <EditText
+            android:id="@+id/editText_search"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/search_hint"
+            android:imeOptions="normal"
+            android:singleLine="true" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editText_search"
+            android:gravity="right|center_vertical"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/button_advanced_search"
+                android:layout_width="120dp"
+                android:layout_height="45dp"
+                android:layout_marginRight="20dp"
+                 android:layout_marginTop="5dp" 
+               	android:background="@color/button_background"
+                android:text="高级检索" />
+
+            <Button
+                android:id="@+id/search"
+                android:layout_width="120dp"
+                android:layout_height="45dp"
+                 android:layout_marginTop="5dp" 
+              android:layout_marginRight="30dp"
+				android:background="@color/button_background"
+                android:text="检索" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+              android:layout_marginTop="20dp"
+            android:layout_alignLeft="@+id/linearLayout1"
+            android:layout_below="@+id/linearLayout1"
+            android:orientation="vertical" >
+
+            <GridView
+                android:id="@+id/gridView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:horizontalSpacing="15dp"
+                android:numColumns="3"
+                android:verticalSpacing="15dp" >
+
+            </GridView>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

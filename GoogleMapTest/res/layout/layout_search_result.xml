@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/list_item_background"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/layout_top"
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:background="#36b0be" >
+
+        <ImageView
+            android:id="@+id/img_biaoti"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dip"
+            android:src="@drawable/biaotizi2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/img_biaoti"
+            android:text="全文检索"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="10dp"
+        android:gravity="center_vertical|center_horizontal" >
+
+        <TextView
+            android:id="@+id/textView_newstitle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/button_dingzhi"
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="2dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="2dp"
+            android:background="@color/button_background"
+            android:text="定制" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/listView_searchresult"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+         android:fadingEdgeLength="0dp"
+        android:background="@color/list_item_background"
+        android:divider="@color/white"
+        android:dividerHeight="1.5px"
+        android:footerDividersEnabled="false" >
+    </ListView>
+
+</LinearLayout>

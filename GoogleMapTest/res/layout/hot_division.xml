@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="#1586FF" >
+ <!-- 
+     <RelativeLayout
+        android:id="@+id/layout_top1"
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:background="#669900" >
+
+    <ImageView
+        android:id="@+id/img_netease_top1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@null"
+        android:src="@drawable/biaotizi" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/img_netease_top1"
+            android:contentDescription="@null"
+            android:text="热点"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+  
+  <LinearLayout
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:background="#e6e6e6"
+      android:orientation="horizontal" >
+  
+
+        <Button
+            android:id="@+id/people2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="人名" />
+
+
+        <Button
+            android:id="@+id/place2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="地名" />
+
+
+
+        <Button
+            android:id="@+id/division2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="机构名" />
+
+    </LinearLayout>
+-->    
+
+  <ViewFlipper
+      android:id="@+id/viewFlipper_hot2"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" >
+
+  </ViewFlipper>
+
+  <com.markupartist.android.widget.PullToRefreshListView
+        android:id="@+id/hot_division"
+        android:layout_width="match_parent"
+       android:fadingEdgeLength="0dp"
+      android:layout_height="wrap_content"
+      android:footerDividersEnabled="false"
+        android:divider="@color/white"  
+ 	    android:dividerHeight="1.5px"
+ 	    android:background="@color/list_item_background"
+        />
+  
+
+
+</LinearLayout>

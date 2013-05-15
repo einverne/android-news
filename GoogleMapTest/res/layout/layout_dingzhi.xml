@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#f2f2f3"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/layout_top"
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:background="#36b0be" >
+
+        <ImageView
+            android:id="@+id/img_netease_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="false"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:src="@drawable/biaotizi2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/img_netease_top"
+            android:contentDescription="@null"
+            android:text="定制"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/button_adddingzhi"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="2dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="2dp"
+            android:background="#30D5FF"
+            android:text="添加定制" />
+
+        <Button
+            android:id="@+id/Button_signout"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="2dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="2dp"
+            android:layout_toLeftOf="@+id/button_adddingzhi"
+            android:background="#30D5FF"
+            android:text="注销" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/android:list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#f2f2f3"
+         android:fadingEdgeLength="0dp"
+        android:divider="@color/white"
+        android:dividerHeight="1px"
+        android:footerDividersEnabled="false" />
+
+</LinearLayout>
