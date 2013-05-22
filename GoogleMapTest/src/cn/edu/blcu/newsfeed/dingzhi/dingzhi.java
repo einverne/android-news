@@ -1,8 +1,9 @@
-package com.and.netease;
+package cn.edu.blcu.newsfeed.dingzhi;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -12,19 +13,19 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+import cn.edu.blcu.newsfeed.R;
+import cn.edu.blcu.newsfeed.search.advanced_search;
 
 import com.and.netease.utils.ConnectWeb;
 import com.and.netease.utils.DBAdapter;
@@ -47,21 +48,22 @@ public class dingzhi extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_dingzhi);
+
+		ActionBar actionBar = this.getActionBar();
+		actionBar.setTitle(getText(R.string.actionbar_dingzhi));
+
 		sharedPreferences = this.getSharedPreferences("userinfo", MODE_PRIVATE);
 
 		Bundle bundle = this.getIntent().getExtras();
 		user_name = bundle.getString("name");
 
-		progressDialog = ProgressDialog.show(this, "µÈ´ı", "ÕıÔÚÏÂÔØÇëÉÔºó");
+		progressDialog = ProgressDialog.show(this, "ç­‰å¾…", "æ­£åœ¨ä¸‹è½½");
 		new Thread() {
 			@Override
 			public void run() {
 				try {
 					list = ConnectWeb.getAllJobsOfUser(dbAdapter, user_name);
-					// Á¬½ÓÍøÂç»ñÈ¡Êı¾İ
 				} catch (Exception e) {
-					// ÔÚGUIÏÔÊ¾´íÎóÌáÊ¾
-					// tv.setText("Error: " + e.getMessage());
 				}
 
 				Message msg_listData = new Message();
@@ -72,23 +74,23 @@ public class dingzhi extends ListActivity {
 
 		lv = this.getListView();
 
-		findViewById(R.id.button_adddingzhi).setOnClickListener(
-				new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						submit_job();
-					}
-				});
-		findViewById(R.id.Button_signout).setOnClickListener(
-				new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						sharedPreferences.edit().clear().commit();
-						dingzhi.this.finish();
-					}
-				});
+		// findViewById(R.id.button_adddingzhi).setOnClickListener(
+		// new OnClickListener() {
+		//
+		// @Override
+		// public void onClick(View v) {
+		// submit_job();
+		// }
+		// });
+		// findViewById(R.id.Button_signout).setOnClickListener(
+		// new OnClickListener() {
+		//
+		// @Override
+		// public void onClick(View v) {
+		// sharedPreferences.edit().clear().commit();
+		// dingzhi.this.finish();
+		// }
+		// });
 
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -96,7 +98,6 @@ public class dingzhi extends ListActivity {
 					int position, long id) {
 				HashMap<String, String> map = list.get(position);
 				String jobname = map.get("name");
-				Log.d(TAG, "µãÖĞÁËµÚ " + id + " task_name:" + jobname);
 				Intent intent = new Intent(dingzhi.this, Dingzhi_zhuanti.class);
 				intent.putExtra("username", user_name);
 				intent.putExtra("jobname", jobname);
@@ -109,8 +110,8 @@ public class dingzhi extends ListActivity {
 			@Override
 			public void onCreateContextMenu(ContextMenu menu, View v,
 					ContextMenuInfo menuInfo) {
-				menu.setHeaderTitle("²Ù×÷");
-				menu.add(0, 0, 0, "É¾³ı");
+				menu.setHeaderTitle("é€‰é¡¹");
+				menu.add(0, 0, 0, "åˆ é™¤");
 			}
 		});
 	}
@@ -131,8 +132,7 @@ public class dingzhi extends ListActivity {
 								R.id.textView_startTime, R.id.textView_endTime });
 				lv.setAdapter(listAdapter);
 				lv.setScrollBarStyle(1);
-				// Ë¢ĞÂUI£¬ÏÔÊ¾Êı¾İ£¬²¢¹Ø±Õ½ø¶ÈÌõ
-				progressDialog.dismiss(); // ¹Ø±Õ½ø¶ÈÌõ
+				progressDialog.dismiss();
 				break;
 			}
 		}
@@ -147,15 +147,16 @@ public class dingzhi extends ListActivity {
 		switch (item.getItemId()) {
 		case 0: {
 			AlertDialog.Builder builder = new AlertDialog.Builder(dingzhi.this);
-			builder.setTitle("×¢Òâ")
-					.setMessage("ÊÇ·ñÒªÉ¾³ı¶¨ÖÆ")
+			builder.setTitle("æ³¨æ„")
+					.setMessage("ä½ ç¡®å®šè¦åˆ é™¤ï¼Ÿ")
 					.setPositiveButton("Yes",
 							new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog,
 										int which) {
-									if (ConnectWeb.deleteJob(user_name, job_delete)) {
-										Toast.makeText(dingzhi.this, "³É¹¦É¾³ı",
+									if (ConnectWeb.deleteJob(user_name,
+											job_delete)) {
+										Toast.makeText(dingzhi.this, "åˆ é™¤æˆåŠŸ",
 												Toast.LENGTH_SHORT).show();
 										list.remove(list.get(position));
 										listAdapter.notifyDataSetChanged();

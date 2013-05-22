@@ -1,8 +1,10 @@
-package com.and.netease;
+package cn.edu.blcu.newsfeed.dingzhi;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -16,35 +18,40 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import cn.edu.blcu.newsfeed.R;
 
 import com.and.netease.utils.ConnectWeb;
 import com.and.netease.utils.DBAdapter;
 
 /**
- * Í¨¹ýÓÃ»§ÃûºÍÃÜÂë,ÁÐ³ö¸ÃÓÃ»§ËùÓÐµÄJobname
  * @author Administrator
- *
+ * 
  */
+@SuppressLint("HandlerLeak")
 public class Dingzhi_zhuanti extends ListActivity {
 
 	public static final String TAG = "EV_DEBUG";
 	public static final String COUNT = "count";
 	public static final String WORDS = "words";
 	protected static final int MESSAGE_OK = 0;
-	
+
 	private DBAdapter dbadapter;
 	ArrayList<HashMap<String, String>> listItem;
 	String url;
-	
+
 	String username;
 	String jobname;
 	private ProgressDialog progressDialog;
 	SimpleAdapter listAdapter;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_zhuanti);
+
+		ActionBar actionBar = this.getActionBar();
+		actionBar.setTitle(getText(R.string.actionbar_dingzhi));
+
 		ListView list = this.getListView();
 
 		dbadapter = new DBAdapter(this);
@@ -52,31 +59,29 @@ public class Dingzhi_zhuanti extends ListActivity {
 		username = intent.getStringExtra("username");
 		jobname = intent.getStringExtra("jobname");
 
-		progressDialog = ProgressDialog.show(this, "µÈ´ý", "ÕýÔÚÏÂÔØÇëÉÔºó");
+		progressDialog = ProgressDialog.show(this, "ç­‰å¾…", "ä¸‹è½½ä¸­");
 		new Thread() {
+			@Override
 			public void run() {
 				try {
 					ConnectWeb.getJobOfUser(dbadapter, username, jobname, 0, 1);
-					// Á¬½ÓÍøÂç»ñÈ¡Êý¾Ý
 				} catch (Exception e) {
-					// ÔÚGUIÏÔÊ¾´íÎóÌáÊ¾
-					// tv.setText("Error: " + e.getMessage());
-				}
 
+				}
 				Message msg_listData = new Message();
 				msg_listData.what = MESSAGE_OK;
 				handler.sendMessage(msg_listData);
 			}
 		}.start();
-		
-		
+
 		list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				Intent intent = new Intent(Dingzhi_zhuanti.this, dingzhi_xinwen.class);
+				Intent intent = new Intent(Dingzhi_zhuanti.this,
+						dingzhi_xinwen.class);
 				Bundle bundle = new Bundle();
-				HashMap<String , String> map = listItem.get(position);
+				HashMap<String, String> map = listItem.get(position);
 				String idd = map.get("_id");
 				bundle.putString("ID", idd);
 				intent.putExtras(bundle);
@@ -86,39 +91,43 @@ public class Dingzhi_zhuanti extends ListActivity {
 		});
 
 	}
+
 	private Handler handler = new Handler() {
+		@Override
 		public void handleMessage(Message message) {
 			switch (message.what) {
 			case MESSAGE_OK:
-				Cursor c= dbadapter.getuser(username, jobname);
-				if (c!= null) {
-					listItem = new ArrayList<HashMap<String,String>>();
+				Cursor c = dbadapter.getuser(username, jobname);
+				if (c != null) {
+					listItem = new ArrayList<HashMap<String, String>>();
 					for (int i = 0; c.moveToNext(); i++) {
 						c.moveToPosition(i);
 						String _id = c.getString(c.getColumnIndex("_id"));
-						String count = c.getString(c.getColumnIndex(DBAdapter.userKEY_Count));
-						String words = c.getString(c.getColumnIndex(DBAdapter.userKEY_words));
-						HashMap<String , String> map = new HashMap<String, String>();
+						String count = c.getString(c
+								.getColumnIndex(DBAdapter.userKEY_Count));
+						String words = c.getString(c
+								.getColumnIndex(DBAdapter.userKEY_words));
+						HashMap<String, String> map = new HashMap<String, String>();
 						map.put("_id", _id);
 						map.put(COUNT, count);
 						map.put(WORDS, words);
 						listItem.add(map);
 					}
-					String[] from = new String[]{"count","words"};
-					int[] to = new int[]{R.id.count,R.id.dingzhi_words};
-					listAdapter = new SimpleAdapter(Dingzhi_zhuanti.this, listItem, R.layout.dingzhi_item, from, to);
+					String[] from = new String[] { "count", "words" };
+					int[] to = new int[] { R.id.count, R.id.dingzhi_words };
+					listAdapter = new SimpleAdapter(Dingzhi_zhuanti.this,
+							listItem, R.layout.dingzhi_item, from, to);
 					setListAdapter(listAdapter);
 				}
 				listAdapter.notifyDataSetChanged();
-				// Ë¢ÐÂUI£¬ÏÔÊ¾Êý¾Ý£¬²¢¹Ø±Õ½ø¶ÈÌõ
-				progressDialog.dismiss(); // ¹Ø±Õ½ø¶ÈÌõ
+				progressDialog.dismiss();
 				break;
 			}
 		}
 	};
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// Èç¹ûÊÇ·µ»Ø¼ü,Ö±½Ó·µ»Øµ½×ÀÃæ
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			finish();
 		}
@@ -128,7 +137,6 @@ public class Dingzhi_zhuanti extends ListActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-
 	}
 
 }

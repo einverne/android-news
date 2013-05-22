@@ -5,30 +5,6 @@
     android:background="#e6e6e6"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/layout_top"
-        android:layout_width="match_parent"
-        android:layout_height="40dip"
-        android:background="#36b0be" >
-
-        <ImageView
-            android:id="@+id/img_biaoti"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dip"
-            android:src="@drawable/biaotizi2" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/img_biaoti"
-            android:text="定制"
-            android:textColor="@android:color/white"
-            android:textSize="20sp" />
-    </RelativeLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -96,8 +72,8 @@
                 <DatePicker
                     android:id="@+id/datePicker_from"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="3dp" />
+                    android:layout_height="120dp"
+                    android:calendarViewShown="false" />
 
             </LinearLayout>
 
@@ -117,8 +93,9 @@
 
                 <DatePicker
                     android:id="@+id/datePicker_to"
+                    android:calendarViewShown="false"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="120dp"
                     android:layout_marginLeft="3dp" />
 
             </LinearLayout>
@@ -161,12 +138,12 @@
 
             <Button
                 android:id="@+id/button_advanced_search"
-                android:layout_width="84dp"
+                android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="15dp"
                 android:background="@color/button_background"
-                android:text="搜索" />
+                android:text="@string/actionbar_dingzhi" />
 
         </LinearLayout>
 

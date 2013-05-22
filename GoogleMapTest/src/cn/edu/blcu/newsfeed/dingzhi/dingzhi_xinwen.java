@@ -1,8 +1,9 @@
-package com.and.netease;
+package cn.edu.blcu.newsfeed.dingzhi;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.app.ActionBar;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -12,16 +13,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+import cn.edu.blcu.newsfeed.R;
+import cn.edu.blcu.newsfeed.activity.jutixinwen;
 
 import com.and.netease.utils.CheckNetwork;
 import com.and.netease.utils.DBAdapter;
 
 /**
- * Ã¿Ò»¸öJobname¶ÔÓ¦µÄºÃ¶à×¨Ìâ
- * 
  * @author einverne
  * 
  */
@@ -43,11 +43,15 @@ public class dingzhi_xinwen extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_zhuanti);
+
+		ActionBar actionBar = this.getActionBar();
+		actionBar.setTitle(R.string.actionbar_dingzhi);
+
 		list = new ArrayList<HashMap<String, Object>>();
 		dbAdapter = new DBAdapter(this);
 		Intent intent = this.getIntent();
 		String id = intent.getStringExtra("ID");
-		Log.d(TAG, "id:"+id);
+		Log.d(TAG, "id:" + id);
 		cursor = dbAdapter.getUserZhuanti(Long.parseLong(id));
 		if (cursor != null) {
 			for (int i = 0; cursor.moveToNext(); i++) {
@@ -75,23 +79,19 @@ public class dingzhi_xinwen extends ListActivity {
 						"description", "ItemMedio" }, new int[] {
 						R.id.imageView_icon, R.id.textView_source,
 						R.id.textView_ItemTime, R.id.Title, R.id.ItemDes });
-		// Ìí¼Ó²¢ÇÒÏÔÊ¾
 		setListAdapter(listAdapter);
-		// Ìí¼Óµã»÷
-		((ListView) getListView())
+		getListView()
 				.setOnItemClickListener(new OnItemClickListener() {
 
 					@Override
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
 
-						Log.d(TAG, "×¨ÌâÖĞµã»÷µÄItem±êºÅ:" + arg2);
-
 						CheckNetwork net = new CheckNetwork(dingzhi_xinwen.this);
 						boolean net_conn = net.check();
 						if (net_conn) {
 							cursor.moveToPosition(arg2);
-							String url = (String) cursor.getString(cursor
+							String url = cursor.getString(cursor
 									.getColumnIndex(URL));
 							Bundle bundle = new Bundle();
 							Intent intent = new Intent(dingzhi_xinwen.this,
@@ -100,20 +100,13 @@ public class dingzhi_xinwen extends ListActivity {
 							intent.putExtras(bundle);
 							startActivity(intent);
 						} else {
-							Toast.makeText(dingzhi_xinwen.this, "Çë¼ì²éÁªÍø×´Ì¬",
+							Toast.makeText(dingzhi_xinwen.this, "è¯·æ£€æŸ¥è”ç½‘çŠ¶æ€",
 									Toast.LENGTH_SHORT).show();
 						}
 					}
 				});
 	}
 
-	/**
-	 * ´«Èë×ÊÔ´Ãû×Ö ·µ»Ø×ÊÔ´id
-	 * 
-	 * @param name
-	 *            ×ÊÔ´Ãû×Ö
-	 * @return ×ÊÔ´µÄid
-	 */
 	protected int getIcon(String name) {
 		Resources res = getResources();
 		int id = res.getIdentifier(name, "drawable", getPackageName());

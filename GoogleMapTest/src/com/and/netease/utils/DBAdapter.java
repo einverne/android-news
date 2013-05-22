@@ -1,4 +1,4 @@
-//ÔÚAndroidÖÐ£¬Êý¾Ý¿â´æ·ÅÔÚ /data/data/PACKAGE_NAME/databases Ä¿Â¼ÏÂ
+//ï¿½ï¿½Androidï¿½Ð£ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½ï¿½ /data/data/PACKAGE_NAME/databases Ä¿Â¼ï¿½ï¿½
 
 package com.and.netease.utils;
 
@@ -10,17 +10,17 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 /**
- * Êý¾Ý¿â²Ù×÷Àà
+ * ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  */
 public class DBAdapter
 
 {
 	private static final String TAG = "EV_DebugDBAdapter";
-	// ÉÏÏÂÎÄ
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	private final Context context;
 
 	/**
-	 * ×¨Ìâ´øÏÂÀ´µÄÐÂÎÅÃÇ title source description date url
+	 * ×¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ title source description date url
 	 */
 	public static final String newsKEY_ROWID = "_id";
 	public static final String newsKEY_Title = "title";
@@ -31,20 +31,20 @@ public class DBAdapter
 	public static final String newsKEY_ZhuantiId = "zhuantiId";
 	public static final String newsKEY_Read = "read";
 
-	public static final String zuijinxinwenKEY_ROWID = "_id";// ÊÇ×î½üÐÂÎÅµÄ×¨ÌâÃÇ
-	public static final String zuijinxinwenKEY_Words = "words"; // ×¨Ìâ¹Ø¼ü×Ö
+	public static final String zuijinxinwenKEY_ROWID = "_id";// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½×¨ï¿½ï¿½ï¿½ï¿½
+	public static final String zuijinxinwenKEY_Words = "words"; // ×¨ï¿½ï¿½Ø¼ï¿½ï¿½ï¿½
 	public static final String zuijinxinwenKEY_Count = "count"; //
 	public static final String zuijinxinwenKEY_Title = "title"; //
-	public static final String zuijinxinwenKEY_Date = "date"; // ×¨ÌâÈÕÆÚ
+	public static final String zuijinxinwenKEY_Date = "date"; // ×¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public static final String zuijinxinwenKEY_Read = "read";
 
-	public static final String userKEY_ROWID = "_id";// ÊÇ×î½üÐÂÎÅµÄ×¨ÌâÃÇ
+	public static final String userKEY_ROWID = "_id";// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½×¨ï¿½ï¿½ï¿½ï¿½
 	public static final String userKEY_Count = "count"; //
 	public static final String userKEY_words = "words";
 	public static final String userKEY_user = "user";
 	public static final String userKEY_jobname = "jobname";
 
-	public static final String usernewsKEY_ROWID = "_id";// ×¨Ìâ´øÏÂÀ´µÄÐÂÎÅÃÇ
+	public static final String usernewsKEY_ROWID = "_id";// ×¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public static final String usernewsKEY_Title = "title";
 	public static final String usernewsKEY_Source = "source";
 	public static final String usernewsKEY_Date = "date";
@@ -66,9 +66,9 @@ public class DBAdapter
 	public static final String divisionsKEY_Title = "title";
 	public static final String divisionsKEY_Heat = "heat";
 
-	// Êý¾Ý¿â¹ÜÀí¹¤¾ß £ºÀ©Õ¹SQLiteOpenHelperÀà£¬ËüÊÇÒ»¸öAndroid¸¨ÖúÀà£¬Ö÷ÒªÓÃÓÚÊý¾Ý¿â´´½¨ºÍ°æ±¾¹ÜÀí¡£
+	// ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½?ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Õ¹SQLiteOpenHelperï¿½à£¬ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Androidï¿½ï¿½ï¿½ï¿½ï¿½à£¬ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿â´´ï¿½ï¿½ï¿½Í°æ±¾ï¿½ï¿½ï¿½?
 	private DatabaseHelper DBHelper;
-	// SQLiteDatabase´ú±íÒ»¸öÊý¾Ý¿â¶ÔÏó£¬Ìá¹©ÁË²Ù×÷Êý¾Ý¿âµÄÒ»Ð©·½·¨
+	// SQLiteDatabaseï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½ï¿½á¹©ï¿½Ë²ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½Ò»Ð©ï¿½ï¿½ï¿½ï¿½
 	private SQLiteDatabase db;
 
 	public DBAdapter(Context ctx) {
@@ -77,7 +77,7 @@ public class DBAdapter
 	}
 
 	/**
-	 * ---ÏòÊý¾Ý¿âÖÐ²åÈëÒ»¸ö±êÌâ--- ×î½üÐÂÎÅ
+	 * ---ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½Ð²ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½--- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * 
 	 * @param words
 	 *            keywords
@@ -107,7 +107,7 @@ public class DBAdapter
 		db.close();
 		DBHelper.close();
 		mCursor.close();
-		Log.d(TAG, "²åÈëuser±íÊý¾ÝÌõÊý£º" + String.valueOf(result));
+		Log.d(TAG, "ï¿½ï¿½ï¿½ï¿½userï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" + String.valueOf(result));
 		return result;
 	}
 
@@ -191,7 +191,7 @@ public class DBAdapter
 	 */
 	public long userInsertNews(String title, String source, String description,
 			String date, String url, String words, long zhuantiId, boolean read) {
-		Log.d(TAG, "²åÈëÒ»ÌõÐÂÎÅ£ºtitle:" + title);
+		Log.d(TAG, "ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Å£ï¿½title:" + title);
 		db = DBHelper.getWritableDatabase();
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(usernewsKEY_Title, title);
@@ -251,8 +251,8 @@ public class DBAdapter
 		return result;
 	}
 
-	public long insertpeople(String title, int heat) // Èç¹ûÓÐupdate¾ÍÊÇ0£¬Èç¹ûÓÐinsert£¬¾Í·µ»ØÎ»ÖÃ£¬Èç¹ûÃ»ÓÐ
-														// ¾Í·µ»Ø-1
+	public long insertpeople(String title, int heat) // ï¿½ï¿½ï¿½ï¿½ï¿½updateï¿½ï¿½ï¿½ï¿½0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½insertï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½
+														// ï¿½Í·ï¿½ï¿½ï¿½-1
 	{
 		db = DBHelper.getWritableDatabase();
 		ContentValues initialValues = new ContentValues();
@@ -342,7 +342,7 @@ public class DBAdapter
 		return result;
 	}
 
-	// -----Îª×î½üÐÂÎÅËùµ÷ÓÃ desc
+	// -----Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ desc
 	public Cursor getzuijinxinwen(int num1, int num2) {
 		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = db.query(DatabaseHelper.TABLE_ZUIJINXINWEN, null,
@@ -388,7 +388,7 @@ public class DBAdapter
 	}
 
 	/**
-	 * Í¨¹ý´«Èë×¨ÌâId,»ñÈ¡×¨ÌâÐÅÏ¢
+	 * Í¨ï¿½ï¿½ï¿½ï¿½×¨ï¿½ï¿½Id,ï¿½ï¿½È¡×¨ï¿½ï¿½ï¿½ï¿½Ï¢
 	 * 
 	 * @param zhuantiid
 	 * @return
@@ -410,7 +410,7 @@ public class DBAdapter
 	}
 
 	/**
-	 * Í¨¹ýuserºÍjobname»ñµÃJobnameÁÐ±í
+	 * Í¨ï¿½ï¿½userï¿½ï¿½jobnameï¿½ï¿½ï¿½Jobnameï¿½Ð±ï¿½
 	 * 
 	 * @param user
 	 * @param jobname
@@ -453,7 +453,7 @@ public class DBAdapter
 		return mCursor;
 	}
 
-	// ---¼ìË÷Ò»¸öÖ¸¶¨ÐÐ---
+	// ---ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½---
 	public Cursor getselectedrow(int rowId) throws SQLException {
 		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = db.query(true, DatabaseHelper.TABLE_ZUIJINXINWEN,
@@ -484,7 +484,7 @@ public class DBAdapter
 		return mCursor;
 	}
 
-	public Cursor getnews(String words) throws SQLException {
+	public Cursor getZhuantiNews(String words) throws SQLException {
 		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = null;
 		mCursor = db.query(true, DatabaseHelper.TABLE_ZUIJINXINWEN, null,
@@ -495,7 +495,7 @@ public class DBAdapter
 			mCursor.moveToFirst();
 		}
 		String id = mCursor.getString(mCursor.getColumnIndex("_id"));
-		Log.d(TAG, "getStringº¯Êý:" + id);
+		Log.d(TAG, "getStringï¿½ï¿½ï¿½ï¿½:" + id);
 		mCursor = db.query(true, DatabaseHelper.TABLE_NEWS, null,
 				newsKEY_ZhuantiId + "=" + id, null, null, null, null, null);
 
@@ -507,7 +507,7 @@ public class DBAdapter
 		return mCursor;
 	}
 
-	// -----ÎªÈÈµãactivityËùµ÷ÓÃ
+	// -----Îªï¿½Èµï¿½activityï¿½ï¿½ï¿½ï¿½ï¿½
 	public Cursor getHotWords() {
 		db = DBHelper.getWritableDatabase();
 		Cursor mCursor = db.query(DatabaseHelper.TABLE_ZUIJINXINWEN,
@@ -566,7 +566,7 @@ public class DBAdapter
 		return mCursor;
 	}
 
-	// -----Îª×¨ÌâactivityËùµ÷ÓÃ
+	// -----Îª×¨ï¿½ï¿½activityï¿½ï¿½ï¿½ï¿½ï¿½
 
 	public long getselectednews(String words) {
 		db = DBHelper.getWritableDatabase();
@@ -585,7 +585,7 @@ public class DBAdapter
 
 	}
 
-	// ---É¾³ýÒ»¸öÖ¸¶¨±êÌâ---
+	// ---É¾ï¿½ï¿½Ò»ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½---
 	public boolean deleteuser(String user) {
 		db = DBHelper.getWritableDatabase();
 		boolean result = false;
@@ -598,11 +598,11 @@ public class DBAdapter
 		DBHelper.close();
 		return result;
 	}
-	// ---É¾³ý---
+	// ---É¾ï¿½ï¿½---
 	/*
-	 * //--°´Ê±¼äÅÅÐò£¬É¾³ýµ½Ö»Ê£Ç°30Ìõ,Èç¹û±¾Éí²»×ã30Ìõ£¬±ÈÈçÖ»ÓÐ10Ìõ£¬¾ÍÖ»Ê£10Ìõ private void delete_news() {
-	 * db.delete(DatabaseHelper.TABLE_NEWS, "_id >=0", null); } private void
-	 * delete_peoples() {
+	 * //--ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½Ö»Ê£Ç°30ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½30ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½10ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö»Ê£10ï¿½ï¿½ private void
+	 * delete_news() { db.delete(DatabaseHelper.TABLE_NEWS, "_id >=0", null); }
+	 * private void delete_peoples() {
 	 * 
 	 * Cursor mCursor = db.query(DatabaseHelper.TABLE_PEOPLE, null, null, null,
 	 * null, null, peoplesKEY_Heat+ " desc","30");

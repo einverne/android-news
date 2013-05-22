@@ -1,46 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/LinearLayout1"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
     android:background="@color/list_item_background"
-    android:orientation="vertical" >
+    android:orientation="horizontal" >
 
-    <RelativeLayout
-        android:id="@+id/RelativeLayout1"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/count"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="4dp"
-        android:orientation="horizontal" >
+        android:layout_alignBaseline="@+id/dingzhi_words"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="false"
+        android:gravity="right|center_vertical"
+        android:text="count"
+        android:textColor="@color/textView_color"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:gravity="left"
-            android:text="count"
-            android:textColor="@color/textView_color"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:typeface="sans" />
+    <TextView
+        android:id="@+id/dingzhi_words"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_toRightOf="@+id/count"
+        android:gravity="left|center_vertical"
+        android:paddingRight="20dp"
+        android:text="words"
+        android:textColor="@color/textView_color"
+        android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/dingzhi_words"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/count"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="3dp"
-            android:gravity="left"
-            android:text="words"
-            android:textColor="@color/textView_color"
-            android:textSize="20sp" />
-    </RelativeLayout>
-
-</LinearLayout>
+</RelativeLayout>

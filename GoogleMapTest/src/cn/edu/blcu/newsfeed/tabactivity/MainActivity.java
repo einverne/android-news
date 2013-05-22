@@ -1,5 +1,6 @@
-package com.and.netease;
+package cn.edu.blcu.newsfeed.tabactivity;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.DialogInterface;
@@ -7,15 +8,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
-import android.widget.TextView;
+import cn.edu.blcu.newsfeed.R;
+import cn.edu.blcu.newsfeed.hot.hot_main;
 
 @SuppressWarnings("deprecation")
 public class MainActivity extends TabActivity {
@@ -25,17 +27,20 @@ public class MainActivity extends TabActivity {
 	RelativeLayout bottom_layout;
 	int startLeft;
 
-	TextView biaoti;
 	ImageButton imgButton;
 
 	static int screenwidth;
 	private static final String TAG = "EV_Debug";
+
+	ActionBar actionBar;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		Log.d(TAG, "MainAct create");
+
+		actionBar = this.getActionBar();
 
 		bottom_layout = (RelativeLayout) findViewById(R.id.layout_bottom);
 		tabHost = getTabHost();
@@ -52,40 +57,10 @@ public class MainActivity extends TabActivity {
 		radioGroup = (RadioGroup) findViewById(R.id.radiogroup);
 		radioGroup.setOnCheckedChangeListener(checkedChangeListener);
 
-		biaoti = (TextView) findViewById(R.id.biaoti);
 		CharSequence zuijinxinwenCharSequence = getText(R.string.biaoti_zuijinxinwen);
-		biaoti.setText(zuijinxinwenCharSequence);
+		actionBar.setTitle(zuijinxinwenCharSequence);
 
 		screenwidth = getWindowManager().getDefaultDisplay().getWidth();
-
-		imgButton = (ImageButton) findViewById(R.id.imageButton_search);
-		imgButton.setOnClickListener(new OnClickListener() {
-			// 设置标题栏搜索
-			@Override
-			public void onClick(View v) {
-				tabHost.setCurrentTabByTag("search");
-				RadioButton RB = (RadioButton) findViewById(R.id.radio_search);
-				RB.setChecked(true);
-				Log.d("wwwwwwwinnnn", "innnn");
-				CharSequence quanwenCharSequence = getText(R.string.biaoti_quanwen);
-				biaoti.setText(quanwenCharSequence);
-			}
-		});
-
-		// 响应标题栏登陆ImageButton
-		ImageButton imagebutton_login = (ImageButton) findViewById(R.id.imageButton_login);
-		imagebutton_login.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				tabHost.setCurrentTab(3);
-
-				RadioButton RB = (RadioButton) findViewById(R.id.radio_login);
-				RB.setChecked(true);
-
-				CharSequence quanwenCharSequence = getText(R.string.biaoti_denglu);
-				biaoti.setText(quanwenCharSequence);
-			}
-		});
 
 	}
 
@@ -115,23 +90,23 @@ public class MainActivity extends TabActivity {
 			case R.id.radio_zuijinxinwen:
 				tabHost.setCurrentTabByTag("zuijinxinwen");
 				CharSequence zuijinxinwenCharSequence = getText(R.string.biaoti_zuijinxinwen);
-				biaoti.setText(zuijinxinwenCharSequence);
+				actionBar.setTitle(zuijinxinwenCharSequence);
 				break;
 			case R.id.radio_search:
 				tabHost.setCurrentTabByTag("search");
 
 				CharSequence quanwenCharSequence = getText(R.string.biaoti_quanwen);
-				biaoti.setText(quanwenCharSequence);
+				actionBar.setTitle(quanwenCharSequence);
 				break;
 			case R.id.radio_hot:
 				tabHost.setCurrentTabByTag("hot");
 				CharSequence redianCharSequence = getText(R.string.biaoti_redian);
-				biaoti.setText(redianCharSequence);
+				actionBar.setTitle(redianCharSequence);
 				break;
 			case R.id.radio_login:
 				tabHost.setCurrentTabByTag("login");
 				CharSequence dengluCharSequence = getText(R.string.biaoti_denglu);
-				biaoti.setText(dengluCharSequence);
+				actionBar.setTitle(dengluCharSequence);
 				break;
 			default:
 				break;
@@ -150,10 +125,10 @@ public class MainActivity extends TabActivity {
 
 	protected void dialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-		builder.setTitle("提示");
+		builder.setTitle("娉ㄦ剰");
 		builder.setIcon(R.drawable.alert);
-		builder.setMessage("确定要退出吗?");
-		builder.setPositiveButton("确认",
+		builder.setMessage("浣犵‘瀹氳閫�鍑哄悧?");
+		builder.setPositiveButton("纭畾",
 				new android.content.DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -161,7 +136,7 @@ public class MainActivity extends TabActivity {
 						finish();
 					}
 				});
-		builder.setNegativeButton("取消",
+		builder.setNegativeButton("鍙栨秷",
 				new android.content.DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -187,6 +162,35 @@ public class MainActivity extends TabActivity {
 	protected void onStop() {
 		Log.d(TAG, "MainActivity onStop");
 		super.onStop();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.search:
+			tabHost.setCurrentTabByTag("search");
+			RadioButton RB = (RadioButton) findViewById(R.id.radio_search);
+			RB.setChecked(true);
+			CharSequence quanwenCharSequence = getText(R.string.biaoti_quanwen);
+			actionBar.setTitle(quanwenCharSequence);
+			break;
+		case R.id.login:
+			tabHost.setCurrentTab(3);
+			RadioButton RB1 = (RadioButton) findViewById(R.id.radio_login);
+			RB1.setChecked(true);
+			CharSequence quanwenCharSequence1 = getText(R.string.biaoti_denglu);
+			actionBar.setTitle(quanwenCharSequence1);
+			break;
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 }
