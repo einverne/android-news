@@ -22,10 +22,10 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import cn.edu.blcu.newsfeed.R;
 import cn.edu.blcu.newsfeed.tabactivity.MainActivity;
+import cn.edu.blcu.newsfeed.utils.CheckNetwork;
+import cn.edu.blcu.newsfeed.utils.ConnectWeb;
+import cn.edu.blcu.newsfeed.utils.DBAdapter;
 
-import com.and.netease.utils.CheckNetwork;
-import com.and.netease.utils.ConnectWeb;
-import com.and.netease.utils.DBAdapter;
 
 @SuppressLint("HandlerLeak")
 public class SplashActivity extends Activity {

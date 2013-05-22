@@ -1,4 +1,4 @@
-package com.and.netease.utils;
+package cn.edu.blcu.newsfeed.utils;
 
 import java.io.IOException;
 import java.util.regex.Matcher;

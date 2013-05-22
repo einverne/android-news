@@ -19,9 +19,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import cn.edu.blcu.newsfeed.R;
+import cn.edu.blcu.newsfeed.utils.ConnectWeb;
+import cn.edu.blcu.newsfeed.utils.DBAdapter;
 
-import com.and.netease.utils.ConnectWeb;
-import com.and.netease.utils.DBAdapter;
 
 /**
  * @author Administrator

@@ -37,9 +37,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import cn.edu.blcu.newsfeed.R;
 import cn.edu.blcu.newsfeed.search.search;
+import cn.edu.blcu.newsfeed.utils.ConnectWeb;
+import cn.edu.blcu.newsfeed.utils.DBAdapter;
 
-import com.and.netease.utils.ConnectWeb;
-import com.and.netease.utils.DBAdapter;
 import com.markupartist.android.widget.PullToRefreshListView;
 import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
 
