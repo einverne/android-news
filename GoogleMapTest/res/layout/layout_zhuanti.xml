@@ -5,44 +5,15 @@
     android:background="@color/list_item_background"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/layout_top"
-        android:layout_width="match_parent"
-        android:layout_height="40dip"
-        android:background="#36b0be" >
-
-        <ImageView
-            android:id="@+id/img_netease_top"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="false"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dip"
-            android:contentDescription="@null"
-            android:src="@drawable/biaotizi2" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/img_netease_top"
-            android:contentDescription="@null"
-            android:text="专题"
-            android:textColor="@android:color/white"
-            android:textSize="20sp" />
-    </RelativeLayout>
-
     <ListView
         android:id="@+id/android:list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@color/list_item_background" 
-        android:footerDividersEnabled="false"
-         android:fadingEdgeLength="1dp"
-        android:divider="@color/white"  
- 	   android:dividerHeight="1.5px"
-        >
-
+        android:background="@color/list_item_background"
+        android:divider="@color/white"
+        android:dividerHeight="1.5px"
+        android:fadingEdgeLength="1dp"
+        android:footerDividersEnabled="false" >
     </ListView>
 
 </LinearLayout>

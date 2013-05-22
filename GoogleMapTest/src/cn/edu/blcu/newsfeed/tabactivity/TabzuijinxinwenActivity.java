@@ -1,4 +1,4 @@
-package com.and.netease;
+package cn.edu.blcu.newsfeed.tabactivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +20,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+import cn.edu.blcu.newsfeed.R;
+import cn.edu.blcu.newsfeed.zuijinxinwen.zhuanti;
 
 import com.and.netease.utils.CheckNetwork;
 import com.and.netease.utils.ConnectWeb;
@@ -57,7 +59,6 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		queryDate = DateTool.getDateTodayMinusDay(days);
 
 		dbadapter = new DBAdapter(this);
-		Log.d(TAG, "Today:" + DateTool.getTodayDate());
 		c = dbadapter.getzuijinxinwen(0, 50);
 		listItem = new ArrayList<HashMap<String, String>>();
 		for (int i = 0; c.moveToNext(); i++) {
@@ -81,11 +82,9 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 						"ItemTitle", "ItemText" }, new int[] {
 						R.id.textView_datedistribution, R.id.textView_count,
 						R.id.count, R.id.ItemText });
-		// ÃÌº”≤¢«“œ‘ æ
 		((PullToRefreshListView) getListView()).addFooterView(moreView);
 		setListAdapter(listItemAdapter);
 
-		// º”‘ÿ∏¸∂‡
 		((PullToRefreshListView) getListView()).setOnScrollListener(this);
 
 		bt.setOnClickListener(new OnClickListener() {
@@ -107,28 +106,24 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 			}
 		});
 
-		// ÃÌº”µ„ª˜
 		((PullToRefreshListView) getListView())
 				.setOnItemClickListener(new OnItemClickListener() {
 
 					@Override
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int position, long arg3) {
-						Log.d(TAG, "zuijinxinwen÷–µ„ª˜Item–Ú∫≈:" + position);
 						String title = listItem.get(position - 1).get(
 								"ItemTitle");
 						Bundle bundle = new Bundle();
 						Intent intent = new Intent(
 								TabzuijinxinwenActivity.this, zhuanti.class);
-						title = title.replace("\'", "\'\'"); // –ﬁ∏¥"¥´»ÎµƒBUG
-						Log.d(TAG, "¥´µ›µΩ◊®Ã‚ ˝æ›title:" + "title:" + title);
+						title = title.replace("\'", "\'\'");
 						bundle.putString("title", title);
 						intent.putExtras(bundle);
 						startActivity(intent);
 					}
 				});
 
-		// œ¬¿≠À¢–¬
 		((PullToRefreshListView) getListView())
 				.setOnRefreshListener(new OnRefreshListener() {
 					@Override
@@ -140,8 +135,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 							new GetDataTask("fresh").execute();
 						} else {
 							Toast.makeText(TabzuijinxinwenActivity.this,
-									"Õ¯¬Á≤ªø…”√,«ÎºÏ≤È¡™Õ¯◊¥Ã¨", Toast.LENGTH_SHORT).show();
-							// ’‚¿ÔΩ´œ¬¿≠◊¥Ã¨±‰≥…’˝≥£◊¥Ã¨
+									"Ê£ÄÊü•ËÅîÁΩëÁä∂ÊÄÅÃ¨", Toast.LENGTH_SHORT).show();
 							((PullToRefreshListView) TabzuijinxinwenActivity.this
 									.getListView()).onRefreshComplete();
 						}
@@ -162,42 +156,29 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 		return false;
 	}
 
-	// view ±®∏Êª¨∂Ø◊¥Ã¨µƒ ”Õº
-	// firstVisibleItem ø… ”µƒµ⁄“ª∏ˆ¡–±ÌœÓµƒÀ˜“˝
-	// visibleItemCount ø… ”µƒ¡–±ÌœÓ∏ˆ ˝
-	// totalItemCount ◊‹π≤µƒ¡–±ÌœÓ∏ˆ ˝
-	// º∆À„◊Ó∫Ûø…º˚ÃıƒøµƒÀ˜“˝
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
 
 		lastVisibleIndex = firstVisibleItem + visibleItemCount - 1;
-		// À˘”–µƒÃıƒø“—æ≠∫Õ◊Ó¥ÛÃı ˝œ‡µ»£¨‘Ú“∆≥˝µ◊≤øµƒView
+		// ÔøΩÔøΩÔøΩ–µÔøΩÔøΩÔøΩƒøÔøΩ—æÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ»£ÔøΩÔøΩÔøΩÔøΩ∆≥ÔøΩ◊≤ÔøΩÔøΩÔøΩView
 		// Log.d(TAG, "totalItemCount:" + totalItemCount + " lastVisibleIndex"
 		// + lastVisibleIndex);
 		// if ((totalItemCount >= 50 || (c.isAfterLast() == true))
 		// && flag == 0) {
 		// ((PullToRefreshListView) getListView()).removeFooterView(moreView);
-		// Toast.makeText(this, " ˝æ›»´≤øº”‘ÿÕÍ≥…£¨√ª”–∏¸∂‡ ˝æ›£°", Toast.LENGTH_LONG).show();
+		// Toast.makeText(this, "ÔøΩÔøΩÔøΩ»´ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ…£ÔøΩ√ªÔøΩ–∏ÔøΩÔøΩÔøΩÔøΩ›£ÔøΩ",
+		// Toast.LENGTH_LONG).show();
 		// flag = 1;
 		// }
 	}
 
-	// view ±®∏Êª¨∂Ø◊¥Ã¨µƒ ”Õº
-	// scrollState ª¨∂Ø◊¥Ã¨
-	// ª¨∂Ø◊¥Ã¨∞¸¿®
-	// SCROLL_STATE_IDLE : 0  ”Õº√ª”–ª¨∂Ø
-	// SCROLL_STATE_TOUCH_SCROLL : 1 ”√ªß’˝‘⁄¥•√˛ª¨∂Ø£¨ ÷÷∏»‘‘⁄∆¡ƒª…œ
-	// SCROLL_STATE_FLING : 2 ”√ªß÷Æ«∞¥•√˛ª¨∂Ø£¨œ÷‘⁄’˝‘⁄ª¨––£¨÷±µΩÕ£÷π
-	// ª¨µΩµ◊≤ø∫Û◊‘∂Øº”‘ÿ£¨≈–∂œlistview“—æ≠Õ£÷ππˆ∂Ø≤¢«“◊Ó∫Ûø… ”µƒÃıƒøµ»”⁄adapterµƒÃıƒø
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
-		// OnScrollListener.SCROLL_STATE_IDLE ±Ì æListView≤ª∂Ø
 		Log.d(TAG, "lastVisibleIndex:" + lastVisibleIndex
 				+ "ItemAdapter getCount:" + listItemAdapter.getCount());
 		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
 				&& lastVisibleIndex >= listItemAdapter.getCount()) {
-			// µ±ª¨µΩµ◊≤ø ±◊‘∂Øº”‘ÿ
 			pg.setVisibility(View.VISIBLE);
 			bt.setVisibility(View.GONE);
 			new GetDataTask(queryDate).execute();
@@ -226,7 +207,7 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 			} else {
 				count = ConnectWeb.getzuijinxinwen(dbadapter);
 			}
-			return count;// ∫ÛÃ®«Î«Û◊ÓΩ¸–¬Œ≈
+			return count;
 		}
 
 		@Override
@@ -253,7 +234,8 @@ public class TabzuijinxinwenActivity extends ListActivity implements
 				((PullToRefreshListView) getListView()).onRefreshComplete();
 			}
 			Toast.makeText(TabzuijinxinwenActivity.this,
-					"∏¸–¬¡À" + result.toString() + "Ãı", Toast.LENGTH_SHORT).show();
+					"ÂÖ±Êõ¥Êñ∞‰∫Ü" + result.toString() + "Êù°", Toast.LENGTH_SHORT)
+					.show();
 			super.onPostExecute(result);
 		}
 

@@ -5,14 +5,15 @@
     android:layout_height="wrap_content"
     android:background="@color/list_item_background"
     android:orientation="vertical"
-    android:paddingLeft="2dp"
-    android:paddingRight="2dp" >
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin" >
 
     <RelativeLayout
         android:id="@+id/RelativeLayout1"
         android:layout_width="match_parent"
         android:layout_height="16dp"
         android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
         android:orientation="vertical" >
 
         <ImageView
@@ -21,10 +22,7 @@
             android:layout_height="16dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginBottom="1dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:layout_marginTop="2dp"
+            android:contentDescription="@string/contentDes"
             android:src="@drawable/ic_launcher" />
 
         <TextView
@@ -33,6 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
+            android:textIsSelectable="false"
             android:layout_below="@+id/imageView_icon"
             android:textColor="@color/textView_color" />
 
@@ -41,17 +40,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="4dp"
+            android:textIsSelectable="false"
             android:layout_toRightOf="@+id/imageView_icon"
             android:textColor="@color/textView_color" />
-
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-         android:layout_marginLeft="5dp"
         android:orientation="vertical" >
 
         <TextView
@@ -59,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:text="新闻标题"
+            android:text="@string/news_title"
             android:textColor="@color/textView_color"
             android:textSize="17sp"
             android:textStyle="bold"
@@ -71,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:gravity="left"
-            android:text="新闻描述"
+            android:text="@string/news_desc"
             android:textColor="@color/textView_color"
             android:textSize="12sp" />
     </LinearLayout>

@@ -3,21 +3,21 @@ package com.and.netease.utils;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 /**
- * Êý¾Ý¿â¹ÜÀí¹¤¾ßÕâ¸öÀà£ºÊý¾Ý¿â¹ÜÀí¹¤¾ß £ºÀ©Õ¹SQLiteOpenHelperÀà£¬ËüÊÇÒ»¸öAndroid¸¨ÖúÀà£¬Ö÷ÒªÓÃÓÚÊý¾Ý¿â´´½¨ºÍ°æ±¾¹ÜÀí¡£
+ * ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½à£ºï¿½ï¿½Ý¿ï¿½ï¿½ï¿½?ï¿½ï¿½
+ * ï¿½ï¿½ï¿½ï¿½Õ¹SQLiteOpenHelperï¿½à£¬ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Androidï¿½ï¿½ï¿½ï¿½ï¿½à£¬ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿â´´ï¿½ï¿½ï¿½Í°æ±¾ï¿½ï¿½ï¿½?
  * 
  * @author lzt
  * 
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-	// Êý¾Ý¿âÃû
+	// ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½
 	public static final String DATABASE_NAME = "NewsFeed";
-	// °æ±¾Ãû
+	// ï¿½æ±¾ï¿½ï¿½
 	public static final int DATABASE_VERSION = 3;
-	// ±íÃû
+	// ï¿½ï¿½ï¿½ï¿½
 	public static final String TABLE_NEWS = "news";
 	public static final String TABLE_ZUIJINXINWEN = "zuijinxinwen";
 	public static final String TABLE_PEOPLE = "peoples";
@@ -26,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String TABLE_USER = "user";
 	public static final String TABLE_USERNEWS = "usernews";
 
-	// Õâ¸ö³£Á¿°üÀ¨´´½¨ËùÐè±íµÄSQLÓï¾ä
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½SQLï¿½ï¿½ï¿½
 	private static final String DATABASE_CREATE_news = "create table if not exists news (_id integer primary key autoincrement, "
 			+ "title text not null, source text,description text,date text,url text,zhuantiId integer,read text);";
 	private static final String DATABASE_CREATE_zuijinxinwen = "create table if not exists zuijinxinwen(_id integer primary key autoincrement, "
@@ -42,15 +42,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_CREATE_usernews = "create table if not exists usernews (_id integer primary key autoincrement, "
 			+ "title text not null, source text,words text,description text,date text,url text,zhuantiId integer,read text);";
 
-	private static final String TAG = "EV_Debug";
-
 	public DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		// Èç¹ûÒÑ¾­Ö¸¶¨ databaseÒÑ¾­´æÔÚ£¬ÄÇÃ´ÔÚÖØÐÂÔËÐÐ³ÌÐòµÄÊ±ºò£¬¾Í²»»áÖ´ÐÐÕâ¸ö·½·¨ÁË¡£
+		// ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½Ö¸ï¿½ï¿½ databaseï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½Ã´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð³ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ò£¬¾Í²ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¡ï¿½
 		db.execSQL(DATABASE_CREATE_news);
 		db.execSQL(DATABASE_CREATE_peoples);
 		db.execSQL(DATABASE_CREATE_places);
@@ -62,9 +60,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// onUpgrade()·½·¨ÓÃÓÚÉý¼¶Êý¾Ý¿â:Ö»²»¹ýÊÇ¼òµ¥µØÉ¾³ý±í£¬È»ºóÔÚ´´½¨±í¶øÒÑ
-		Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
-				+ newVersion + ", which will destroy all old data");
+		// onUpgrade()ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½:Ö»ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼òµ¥µï¿½É¾ï¿½ï¿½?È»ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		db.execSQL("DROP TABLE IF EXISTS news");
 		db.execSQL("DROP TABLE IF EXISTS peopless");
 		db.execSQL("DROP TABLE IF EXISTS places");

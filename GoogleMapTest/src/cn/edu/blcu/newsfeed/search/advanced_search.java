@@ -1,4 +1,4 @@
-package com.and.netease;
+package cn.edu.blcu.newsfeed.search;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -21,6 +22,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import cn.edu.blcu.newsfeed.R;
 
 public class advanced_search extends Activity {
 	private static final String TAG = "Demo";
@@ -45,37 +47,33 @@ public class advanced_search extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_advanced_search);
 
-		Log.d(TAG, "advanced_search_start");
-
+		ActionBar actionBar = this.getActionBar();
+		actionBar.setTitle(R.string.title_search_advanced);
 		final EditText searchkeywordEdit = (EditText) findViewById(R.id.searchkeyword);
 		Button startdateButton = (Button) findViewById(R.id.button_startdate);
 		Button enddateButton = (Button) findViewById(R.id.button1_enddate);
 		startTextView = (TextView) findViewById(R.id.startdate);
 		endTextView = (TextView) findViewById(R.id.enddate);
 		cb_aboutChina = (CheckBox) findViewById(R.id.checkBox_aboutChina);
-		
+
 		final Calendar c = Calendar.getInstance();
 		mYear = c.get(Calendar.YEAR);
 		mMonth = c.get(Calendar.MONTH);
 		mDay = c.get(Calendar.DAY_OF_MONTH);
 		int curMonth;
 		int curYear;
-		if(mMonth>=4){
+		if (mMonth >= 4) {
 			curMonth = mMonth - 2;
-		}
-		else{
+		} else {
 			curYear = mYear - 1;
-			curMonth = mMonth +10;
+			curMonth = mMonth + 10;
 		}
 		mon = mMonth + 1;
 		String date = mYear + "-" + mon + "-" + mDay;
-		String fordate =  mYear + "-" + curMonth + "-" + mDay;
-		
-		//默认是从现在到之前的三个月时间
+		String fordate = mYear + "-" + curMonth + "-" + mDay;
+
 		startTextView.setText(fordate);
 		endTextView.setText(date);
-		
-		
 
 		Bundle bundle = this.getIntent().getExtras();
 		keyword = bundle.getString("keyword");
@@ -91,19 +89,18 @@ public class advanced_search extends Activity {
 				keyword = searchkeywordEdit.getText().toString();
 
 				if (keyword.length() <= 0) {
-					Toast.makeText(advanced_search.this, "请输入关键词",
+					Toast.makeText(advanced_search.this, "璇疯緭鍏ュ叧閿瘝",
 							Toast.LENGTH_SHORT).show();
 					return;
 				}
-				
 
 				// Date
 
 				String startTime = startTextView.getText().toString();
 				String endTime = endTextView.getText().toString();
-				
+
 				String currentTime = mYear + "-" + mon + "-" + mDay;
-				
+
 				Log.d("wwwcurTime", "" + currentTime);
 				DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
 				DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
@@ -117,28 +114,20 @@ public class advanced_search extends Activity {
 					date2 = format2.parse(endTime);
 					date3 = format3.parse(currentTime);
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
-				// aboutChina
 				aboutChina = cb_aboutChina.isChecked();
 				Log.d(TAG, "aboutChina:" + aboutChina);
-				
-				
 
 				if (date1 == null || date2 == null
 						|| date1.compareTo(date2) > 0
 						|| date1.compareTo(date3) > 0
 						|| date2.compareTo(date3) > 0) {
-					Log.d("wwwwwwst", "" + date1);
-					Log.d("wwwwwwet", "" + date2);
-					Log.d("wwwwwwcur", "" + date3);
-					Toast.makeText(advanced_search.this, "请输入合法日期",
+					Toast.makeText(advanced_search.this, "璇烽�夋嫨鏃ユ湡",
 							Toast.LENGTH_SHORT).show();
 					return;
 				} else {
-					// 传参
 					Intent intent = new Intent();
 					intent.setClass(advanced_search.this, search.class);
 					Bundle bundle = new Bundle();
@@ -152,12 +141,6 @@ public class advanced_search extends Activity {
 				}
 			}
 		});
-
-//		final Calendar c = Calendar.getInstance();
-//		mYear = c.get(Calendar.YEAR);
-//		mMonth = c.get(Calendar.MONTH);
-//		mDay = c.get(Calendar.DAY_OF_MONTH);
-		// 设置当前时间
 
 		startdateButton.setOnClickListener(new OnClickListener() {
 
@@ -234,16 +217,17 @@ public class advanced_search extends Activity {
 	}
 
 	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+		@Override
 		public void onDateSet(DatePicker view, int year, int monthOfYear,
 				int dayOfMonth) {
 			mYear = year;
 			mMonth = monthOfYear;
 			mDay = dayOfMonth;
-			//if (tag == 0) {
-				updateDisplay(tag);
-			//} else if (tag == 1) {
-		//		updateDisplay(1);
-		//	}
+			// if (tag == 0) {
+			updateDisplay(tag);
+			// } else if (tag == 1) {
+			// updateDisplay(1);
+			// }
 		}
 	};
 

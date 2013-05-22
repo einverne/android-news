@@ -1,8 +1,9 @@
-package com.and.netease;
+package cn.edu.blcu.newsfeed.zuijinxinwen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.app.ActionBar;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -10,16 +11,25 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+import cn.edu.blcu.newsfeed.R;
+import cn.edu.blcu.newsfeed.activity.jutixinwen;
+import cn.edu.blcu.newsfeed.tabactivity.MainActivity;
 
 import com.and.netease.utils.CheckNetwork;
 import com.and.netease.utils.DBAdapter;
 
+/**
+ * set up each zhuanti
+ * 
+ * @author Administrator
+ * 
+ */
 public class zhuanti extends ListActivity {
 	private static final String TAG = "Demo";
 	SimpleAdapter listItemAdapter;
@@ -31,12 +41,17 @@ public class zhuanti extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_zhuanti);
+
+		ActionBar actionbar = this.getActionBar();
+		actionbar.setTitle(getText(R.string.zhuanti));
+		actionbar.setDisplayHomeAsUpEnabled(true);
+
 		Bundle bundle = this.getIntent().getExtras();
 		String title = bundle.getString("title");
 		dbadapter = new DBAdapter(this);
-		c = dbadapter.getnews(title);
+		c = dbadapter.getZhuantiNews(title);
 
-		Toast.makeText(this, "¸Ã×¨Ìâ¹²" + c.getCount() + "ÌõĞÂÎÅ", Toast.LENGTH_SHORT)
+		Toast.makeText(this, "è¯¥ä¸“é¢˜å…±" + c.getCount() + "æ¡æ–°é—»", Toast.LENGTH_SHORT)
 				.show();
 
 		listItem = new ArrayList<HashMap<String, Object>>();
@@ -61,24 +76,20 @@ public class zhuanti extends ListActivity {
 						"ItemTime", "Title", "description", "ItemMedio" },
 				new int[] { R.id.imageView_icon, R.id.textView_source,
 						R.id.textView_ItemTime, R.id.Title, R.id.ItemDes });
-		// Ìí¼Ó²¢ÇÒÏÔÊ¾
 		setListAdapter(listItemAdapter);
 
-		// Ìí¼Óµã»÷
-		((ListView) getListView())
+		getListView()
 				.setOnItemClickListener(new OnItemClickListener() {
 
 					@Override
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
 
-						Log.d(TAG, "×¨ÌâÖĞµã»÷µÄItem±êºÅ:" + arg2);
-
 						CheckNetwork net = new CheckNetwork(zhuanti.this);
 						boolean net_conn = net.check();
 						if (net_conn) {
 							c.moveToPosition(arg2);
-							String url = (String) c.getString(c
+							String url = c.getString(c
 									.getColumnIndex("url"));
 							Bundle bundle = new Bundle();
 							Intent intent = new Intent(zhuanti.this,
@@ -87,20 +98,13 @@ public class zhuanti extends ListActivity {
 							intent.putExtras(bundle);
 							startActivity(intent);
 						} else {
-							Toast.makeText(zhuanti.this, "Çë¼ì²éÁªÍø×´Ì¬",
+							Toast.makeText(zhuanti.this, "æ£€æŸ¥è”ç½‘çŠ¶æ€",
 									Toast.LENGTH_SHORT).show();
 						}
 					}
 				});
 	}
 
-	/**
-	 * ´«Èë×ÊÔ´Ãû×Ö ·µ»Ø×ÊÔ´id
-	 * 
-	 * @param name
-	 *            ×ÊÔ´Ãû×Ö
-	 * @return ×ÊÔ´µÄid
-	 */
 	protected int getIcon(String name) {
 		Resources res = getResources();
 		int id = res.getIdentifier(name, "drawable", getPackageName());
@@ -124,6 +128,20 @@ public class zhuanti extends ListActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 		c.close();
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			Intent intent = new Intent(this, MainActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			return true;
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 }

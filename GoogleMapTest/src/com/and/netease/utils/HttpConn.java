@@ -18,17 +18,14 @@ public class HttpConn {
 
 	public static String getJsonFromUrlGet(String url) {
 		String str = null;
-		// 将url格式化
 		Log.d("EV_DEBUG", url);
 		url = url.replace(" ", "%20");
 		url = url.replace("\"", "%22");
 		Log.d("EV_DEBUG", url);
-		// 创建HTTPGET连接
 		HttpGet httpRequest = new HttpGet(url);
 		try {
 			HttpResponse httpResponse = new DefaultHttpClient()
 					.execute(httpRequest);
-			// 若状态码为200，OK
 			if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 				String string = EntityUtils.toString(httpResponse.getEntity());
 				str = string;
@@ -51,12 +48,10 @@ public class HttpConn {
 
 	public static String getJsonFromUrlPost(String url) {
 		String str = null;
-		// 创建HTTPGET连接
 		HttpPost httpRequest = new HttpPost(url);
 		try {
 			HttpResponse httpResponse = new DefaultHttpClient()
 					.execute(httpRequest);
-			// 若状态码为200，OK
 			if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 				String string = EntityUtils.toString(httpResponse.getEntity());
 
@@ -68,7 +63,6 @@ public class HttpConn {
 						+ httpResponse.getStatusLine().toString();
 			}
 		} catch (ClientProtocolException e) {
-			// TODO: handle exception
 			str = e.getMessage().toString();
 			e.printStackTrace();
 		} catch (IOException e) {

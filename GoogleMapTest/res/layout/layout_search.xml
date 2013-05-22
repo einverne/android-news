@@ -3,10 +3,10 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-    <RelativeLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-         >
+        android:layout_height="fill_parent" >
 
         <EditText
             android:id="@+id/editText_search"
@@ -14,44 +14,43 @@
             android:layout_height="wrap_content"
             android:hint="@string/search_hint"
             android:imeOptions="normal"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textColor="@color/black" />
 
         <LinearLayout
             android:id="@+id/linearLayout1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/editText_search"
-            android:gravity="right|center_vertical"
+            android:gravity="center_vertical|center_horizontal"
             android:orientation="horizontal" >
 
             <Button
                 android:id="@+id/button_advanced_search"
                 android:layout_width="120dp"
                 android:layout_height="45dp"
-                android:layout_marginRight="20dp"
-                 android:layout_marginTop="5dp" 
-               	android:background="@color/button_background"
-                android:text="高级检索" />
+                android:layout_marginRight="10dp"
+                android:background="@color/button_background"
+                android:text="@string/title_search_advanced" />
 
             <Button
                 android:id="@+id/search"
                 android:layout_width="120dp"
                 android:layout_height="45dp"
-                 android:layout_marginTop="5dp" 
-              android:layout_marginRight="30dp"
-				android:background="@color/button_background"
-                android:text="检索" />
+                android:layout_marginLeft="10dp"
+                android:background="@color/button_background"
+                android:text="@string/search" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-              android:layout_marginTop="20dp"
             android:layout_alignLeft="@+id/linearLayout1"
             android:layout_below="@+id/linearLayout1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
             android:orientation="vertical" >
 
             <GridView
@@ -62,9 +61,7 @@
                 android:horizontalSpacing="15dp"
                 android:numColumns="3"
                 android:verticalSpacing="15dp" >
-
             </GridView>
-
         </LinearLayout>
     </RelativeLayout>
 

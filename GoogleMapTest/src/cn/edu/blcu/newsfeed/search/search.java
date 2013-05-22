@@ -1,4 +1,4 @@
-package com.and.netease;
+package cn.edu.blcu.newsfeed.search;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -33,6 +34,8 @@ import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import cn.edu.blcu.newsfeed.R;
+import cn.edu.blcu.newsfeed.activity.jutixinwen;
 
 import com.and.netease.utils.CheckNetwork;
 import com.and.netease.utils.ConnectWeb;
@@ -42,7 +45,6 @@ public class search extends Activity {
 	SharedPreferences sharedPreferences;
 	SharedPreferences.Editor editor;
 
-	// private boolean flag=false;//µ±Ã»ÓĞÈÎºÎËÑË÷ÄÚÈİÊ±£¬²»»á³öÏÖ"ÕıÔÚºóÌ¨¼ÓÔØÊı¾İ,ÇëÉÔµÈ"Õâ¾ä»°£»
 	public class getData extends
 			AsyncTask<Void, Void, ArrayList<HashMap<String, Object>>> {
 		private String aboutChina;
@@ -74,13 +76,13 @@ public class search extends Activity {
 			numberOfSearchResult = (Integer) searchmap.get("second");
 			for (int i = 0; i < list.size(); i++) {
 				HashMap<String, Object> map = new HashMap<String, Object>();
-				Map<String, Object> map1 = (Map<String, Object>) list.get(i);
+				Map<String, Object> map1 = list.get(i);
 				String source = (String) map1.get("source");
 				map.put("Title", map1.get("title"));
 				map.put("source", source);
 				map.put("icon", getIcon(source));
 				map.put("ItemTime", map1.get("date"));
-				map.put("description", (String) map1.get("description"));
+				map.put("description", map1.get("description"));
 				map.put("url", map1.get("url"));
 				listItem.add(map);
 			}
@@ -92,11 +94,11 @@ public class search extends Activity {
 
 		@Override
 		protected void onPostExecute(ArrayList<HashMap<String, Object>> result) {
-			String te = "¹²ÓĞ" + numberOfSearchResult + "Ìõ";
+			String te = "å…±æœ‰" + numberOfSearchResult + "æ¡";
 			text.setText(te);
 			if (numberOfSearchResult == 0) {
-				Toast.makeText(search.this, "Ã»ÓĞ·ûºÏ¹Ø¼ü´ÊµÄ½á¹û,Çëµ÷Õû¹Ø¼ü´Ê",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(search.this, "æ²¡æœ‰ç›¸å…³æ–°é—»ï¼Œè¯·è°ƒæ•´å…³é”®å­—", Toast.LENGTH_SHORT)
+						.show();
 			}
 			listItemAdapter.notifyDataSetChanged();
 			super.onPostExecute(result);
@@ -104,11 +106,7 @@ public class search extends Activity {
 
 		@Override
 		protected void onPreExecute() {
-			if (numberOfSearchResult != 0)// Ö»ÓĞµ±ËÑË÷ÓĞÊı¾İÊ±²ÅÏÔÊ¾Õâ¾ä»°
-			{
-				Toast.makeText(search.this, "ÕıÔÚºóÌ¨¼ÓÔØÊı¾İ,ÇëÉÔµÈ", Toast.LENGTH_SHORT)
-						.show();
-			}
+			Toast.makeText(search.this, "æ­£åœ¨åŠ è½½è¯·ç¨å€™", Toast.LENGTH_SHORT).show();
 			super.onPreExecute();
 		}
 
@@ -133,7 +131,6 @@ public class search extends Activity {
 	private int mMonth;
 	String month;
 
-	// lene
 	private View moreView;
 	private int mYear;
 	private ListView myListView;
@@ -212,6 +209,9 @@ public class search extends Activity {
 		setContentView(R.layout.layout_search_result);
 		Log.d(TAG, "search_result_Activity_start");
 
+		ActionBar actionBar = this.getActionBar();
+		actionBar.setTitle(getText(R.string.title_search_result));
+
 		sharedPreferences = this.getSharedPreferences("userinfo",
 				Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
@@ -250,7 +250,7 @@ public class search extends Activity {
 		moreView = getLayoutInflater().inflate(R.layout.moredata, null);
 		bt = (Button) moreView.findViewById(R.id.bt_load);
 		pg = (ProgressBar) moreView.findViewById(R.id.pg);
-		if (numberOfSearchResult < 4)// µ±»ñÈ¡µ½µÄ¼ìË÷ÄÚÈİÌ«ÉÙÊ±£¬ÈÃ¼ÓÔØ¸ü¶àµÄ°´Å¥ÏûÊ§£»
+		if (numberOfSearchResult < 4)// ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì«ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½Ø¸ï¿½ï¿½Ä°ï¿½Å¥ï¿½ï¿½Ê§ï¿½ï¿½
 		{
 
 			bt.setVisibility(View.GONE);
@@ -258,7 +258,7 @@ public class search extends Activity {
 		myListView.addFooterView(moreView);
 		myListView.setAdapter(listItemAdapter);
 		/**
-		 * ÏìÓ¦ButtonÊÂ¼ş
+		 * ï¿½ï¿½Ó¦Buttonï¿½Â¼ï¿½
 		 */
 		bt.setOnClickListener(new OnClickListener() {
 
@@ -272,7 +272,7 @@ public class search extends Activity {
 		});
 
 		/**
-		 * ÏìÓ¦ListÖĞÃ¿Ò»¸öItemÊÂ¼ş
+		 * ï¿½ï¿½Ó¦Listï¿½ï¿½Ã¿Ò»ï¿½ï¿½Itemï¿½Â¼ï¿½
 		 */
 		myListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -320,8 +320,8 @@ public class search extends Activity {
 				}
 				if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
 						&& lastVisibleIndex >= numberOfSearchResult) {
-					Toast.makeText(search.this, "ÒÑ¾­ÊÇ×îºóÒ»ÌõÁË", Toast.LENGTH_SHORT)
-							.show();
+					Toast.makeText(search.this, "ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½",
+							Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -335,7 +335,7 @@ public class search extends Activity {
 						"t");
 
 				if (store_name == "t") {
-					Toast.makeText(search.this, "ÇëÏÈµÇÂ¼", Toast.LENGTH_SHORT)
+					Toast.makeText(search.this, "è¯·å…ˆç™»å½•", Toast.LENGTH_SHORT)
 							.show();
 					return;
 				}
@@ -359,7 +359,6 @@ public class search extends Activity {
 				}
 
 				cb_aboutChina.setChecked(aboutChina);
-				// »ñÈ¡µ±Ç°µÄÄê¡¢ÔÂ¡¢ÈÕ¡¢Ğ¡Ê±¡¢·ÖÖÓ
 				Calendar c = Calendar.getInstance();
 				from_year = c.get(Calendar.YEAR);
 				from_month = c.get(Calendar.MONTH);
@@ -367,7 +366,7 @@ public class search extends Activity {
 				to_year = c.get(Calendar.YEAR);
 				to_month = c.get(Calendar.MONTH);
 				to_day = c.get(Calendar.DAY_OF_MONTH);
-				// EV_DEBUG ÕâÀïĞèÒª¸ß¼¶¼ìË÷¹ıÀ´µÄÈÕÆÚ£¬ÎÒÃÇÉè¶¨
+
 				from.init(from_year, from_month, from_day,
 						new DatePicker.OnDateChangedListener() {
 
@@ -392,7 +391,6 @@ public class search extends Activity {
 						});
 				Button bu = (Button) advanced_setting
 						.findViewById(R.id.button_advanced_search);
-				bu.setText("Ìí¼Ó¶©ÔÄ");
 				bu.setOnClickListener(new OnClickListener() {
 
 					private String query;
@@ -414,6 +412,7 @@ public class search extends Activity {
 						}
 						b = false;
 						new Thread() {
+							@Override
 							public void run() {
 								try {
 									b = ConnectWeb.submitJob(store_name, query,
@@ -440,13 +439,14 @@ public class search extends Activity {
 	}
 
 	private Handler handler = new Handler() {
+		@Override
 		public void handleMessage(Message message) {
 			switch (message.what) {
 			case MESSAGE_OK:
-				Toast.makeText(search.this, "Ìá½»³É¹¦", Toast.LENGTH_SHORT).show();
+				Toast.makeText(search.this, "å®šåˆ¶æˆåŠŸ", Toast.LENGTH_SHORT).show();
 				break;
 			case MESSAGE_FALSE:
-				Toast.makeText(search.this, "Ìá½»Ê§°Ü", Toast.LENGTH_SHORT).show();
+				Toast.makeText(search.this, "å®šåˆ¶å¤±è´¥", Toast.LENGTH_SHORT).show();
 				break;
 			}
 		}

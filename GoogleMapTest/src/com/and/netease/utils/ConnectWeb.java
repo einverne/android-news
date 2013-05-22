@@ -21,12 +21,12 @@ public class ConnectWeb {
 	private static final String TAG = "EV_DEBUG";
 
 	/**
-	 * »ñÈ¡ÓÃ»§¶¨ÖÆÄÚÈÝµÄÄ³Ò»Ïî,ÐèÑ½²ÎÊýuserºÍjobname
+	 * ï¿½ï¿½È¡ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ýµï¿½Ä³Ò»ï¿½ï¿½,ï¿½ï¿½Ñ½ï¿½ï¿½ï¿½ï¿½userï¿½ï¿½jobname
 	 * http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi
 	 * ?r=getJobOfUser&user=gaojinping&jobname=20111226095814434
 	 * 
 	 * @param aboutchina
-	 *            ´«true »ò false
+	 *            ï¿½ï¿½true ï¿½ï¿½ false
 	 * @param
 	 * @return
 	 */
@@ -42,18 +42,18 @@ public class ConnectWeb {
 				+ "&max=" + max;
 		try {
 			String str = HttpConn.getJsonFromUrlGet(theurl);
-			// Í¨¹ýjson À´½âÎöÊÕµ½µÄ×Ö·û´®
+			// Í¨ï¿½ï¿½json ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õµï¿½ï¿½ï¿½ï¿½Ö·ï¿½
 			JSONObject result = new JSONObject(str);
-			// countÊÇ×Ü¹²È¡µ½µÄ×¨ÌâÌõÊý
+			// countï¿½ï¿½ï¿½Ü¹ï¿½È¡ï¿½ï¿½ï¿½ï¿½×¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			int count = result.getInt("count");
 			String to = result.getString("to");
 			String from = result.getString("from");
-			Log.d(TAG, "Õâ¸öJobnameÒ»¹²ÓÐÐÂÎÅÊý:" + String.valueOf(count));
+			Log.d(TAG, "ï¿½ï¿½ï¿½JobnameÒ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:" + String.valueOf(count));
 			JSONArray docs = result.getJSONArray("docs");
-			// Ñ­»·´Ó×¨ÌâÊýÈ¡³öÃ¿¸ö×¨Ìâ½øÐÐ½âÎö
-			Log.d(TAG, "Õâ¸öJobÒ»¹²ÓÐ¶àÉÙ¸ö×¨Ìâ" + String.valueOf(docs.length()));
+			// Ñ­ï¿½ï¿½ï¿½ï¿½×¨ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½Ã¿ï¿½ï¿½×¨ï¿½ï¿½ï¿½ï¿½Ð½ï¿½ï¿½ï¿½
+			Log.d(TAG, "ï¿½ï¿½ï¿½JobÒ»ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ù¸ï¿½×¨ï¿½ï¿½" + String.valueOf(docs.length()));
 			for (int i = 0; i < docs.length(); i += 1) {
-				// °¤¸öÈ¡³ö×¨Ìâ
+				// ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½×¨ï¿½ï¿½
 				JSONObject onecluster = (JSONObject) docs.get(i);
 
 				int zhuanti_count = onecluster.getInt("count");
@@ -64,12 +64,12 @@ public class ConnectWeb {
 				if (zhuantiid < 0) {
 					return false;
 				}
-				// È¡³ödoc£¬docÊÇ¾ßÌåÐÂÎÅÃûµÄÊý×é
+				// È¡ï¿½ï¿½docï¿½ï¿½docï¿½Ç¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				JSONArray doc = onecluster.getJSONArray("doc");
-				// È¡³öµÚÒ»ÌõÐÂÎÅÃû×÷Îª×¨ÌâµÄ±êÌâ
-				// ´ËÊ±½«×¨Ìâ²åÈë×¨Ìâ±í
-				// Ä¿±êÊÇ£ºÈç¹ûÓÐÖØÃû ¶ø ÐÂÎÅ¸öÊý²»Í¬ ¾Í½«Ö®Ç°µÄ¸²¸Çµô£»È»ºó·µ»Ø id
-				// ½«ÐÂÎÅ²åÈëÐÂÎÅ±í
+				// È¡ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª×¨ï¿½ï¿½Ä±ï¿½ï¿½ï¿½
+				// ï¿½ï¿½Ê±ï¿½ï¿½×¨ï¿½ï¿½ï¿½ï¿½ï¿½×¨ï¿½ï¿½ï¿½
+				// Ä¿ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ï¿½Í¬ ï¿½Í½ï¿½Ö®Ç°ï¿½Ä¸ï¿½ï¿½Çµï¿½ï¿½ï¿½È»ï¿½ó·µ»ï¿½ id
+				// ï¿½ï¿½ï¿½ï¿½ï¿½Å²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å±ï¿½
 				for (int j = 0; j < doc.length(); j += 1) {
 					JSONObject onenews = (JSONObject) doc.get(j);
 					String title = onenews.getString("title");
@@ -93,7 +93,7 @@ public class ConnectWeb {
 	}
 
 	/**
-	 * Ìá½»Ò»¸öÈÎÎñ
+	 * ï¿½á½»Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=submitJob&query=date
 	 * :[20110101x TO x] AND (title:China Customs"20OR description:"China
 	 * Customs" OR text:"China Customs")&aboutChina=true&user=test&desc=chania
@@ -120,7 +120,8 @@ public class ConnectWeb {
 
 	/**
 	 * http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=deleteJob&username=
-	 * gaojinping&jobname=20111222194809870 20120523191938669 É¾³ýÖ¸¶¨ÓÃ»§µÄÖ¸¶¨¶¨ÖÆÈÎÎñ
+	 * gaojinping&jobname=20111222194809870 20120523191938669
+	 * É¾ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * 
 	 * @param request
 	 * @param response
@@ -207,8 +208,8 @@ public class ConnectWeb {
 	 * @param dateF
 	 *            2020121106
 	 * @param dateT
-	 *            2020121106x x±íÊ¾ÆäÓà²»¼Æ 2020121106 20201211
-	 * @return ·ûºÏËÑË÷Óï¾äµÄÌõÊý
+	 *            2020121106x xï¿½ï¿½Ê¾ï¿½ï¿½ï¿½à²»ï¿½ï¿½ 2020121106 20201211
+	 * @return ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	static public int getsearchcount(String keyword, String dateF, String dateT) {
 		String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetNewsHit&s=title:\""
@@ -284,8 +285,8 @@ public class ConnectWeb {
 
 	static public int getzuijinxinwen(DBAdapter dbadapter) {
 		/*
-		 * Êý¾Ý¸ñÊ½£º result clusters others cluster words count source-distribution
-		 * doc title words source date url
+		 * ï¿½ï¿½Ý¸ï¿½Ê½ï¿½ï¿½ result clusters others cluster words count
+		 * source-distribution doc title words source date url
 		 */
 		int count = 0;
 		String today = todaydate();
@@ -293,36 +294,36 @@ public class ConnectWeb {
 
 			String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetXML&t=fresh";
 			String str = HttpConn.getJsonFromUrlGet(theurl);
-			// Í¨¹ýjson À´½âÎöÊÕµ½µÄ×Ö·û´®
+			// Í¨ï¿½ï¿½json ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õµï¿½ï¿½ï¿½ï¿½Ö·ï¿½
 			JSONObject jay = new JSONObject(str);
 			JSONObject result = new JSONObject(jay.getString("result"));
-			// ½âÎökey resultËù¶ÔÓ¦µÄÖµ
-			// countÊÇ×Ü¹²È¡µ½µÄ×¨ÌâÌõÊý
+			// ï¿½ï¿½ï¿½ï¿½key resultï¿½ï¿½ï¿½Ó¦ï¿½ï¿½Öµ
+			// countï¿½ï¿½ï¿½Ü¹ï¿½È¡ï¿½ï¿½ï¿½ï¿½×¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			count = Integer.parseInt(result.getString("count"));
 			Log.d("test count", String.valueOf(count));
-			// clusters°üÀ¨Á½²¿·Ö,·Ö±ðÊÇ others ºÍ ×¨ÌâÊý×é
+			// clustersï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½Ö±ï¿½ï¿½ï¿½ others ï¿½ï¿½ ×¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			JSONObject clusters = new JSONObject(result.getString("clusters"));
-			// È¡³ö×¨ÌâÊý×é
+			// È¡ï¿½ï¿½×¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			JSONArray cluster = clusters.getJSONArray("cluster");
-			// Ñ­»·´Ó×¨ÌâÊýÈ¡³öÃ¿¸ö×¨Ìâ½øÐÐ½âÎö
+			// Ñ­ï¿½ï¿½ï¿½ï¿½×¨ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½Ã¿ï¿½ï¿½×¨ï¿½ï¿½ï¿½ï¿½Ð½ï¿½ï¿½ï¿½
 			for (int i = 0; i < cluster.length(); i += 1) {
-				// °¤¸öÈ¡³ö×¨Ìâ
+				// ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½×¨ï¿½ï¿½
 				JSONObject onecluster = (JSONObject) cluster.get(i);
-				// È¡³ö×¨ÌâµÄ¹Ø¼ü×ÖwordºÍ countºÍdoc
+				// È¡ï¿½ï¿½×¨ï¿½ï¿½Ä¹Ø¼ï¿½ï¿½ï¿½wordï¿½ï¿½ countï¿½ï¿½doc
 				String words = onecluster.getString("words");
 				words = jiexiwords(words);
 				int oneclustercount = Integer.parseInt(onecluster
 						.getString("count"));
-				// È¡³ödoc£¬docÊÇ¾ßÌåÐÂÎÅÃûµÄÊý×é
+				// È¡ï¿½ï¿½docï¿½ï¿½docï¿½Ç¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				JSONArray doc = onecluster.getJSONArray("doc");
-				// È¡³öµÚÒ»ÌõÐÂÎÅÃû×÷Îª×¨ÌâµÄ±êÌâ
+				// È¡ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª×¨ï¿½ï¿½Ä±ï¿½ï¿½ï¿½
 				String title = getzhuantititle(doc);
-				// ´ËÊ±½«×¨Ìâ²åÈë×¨Ìâ±í
-				// Ä¿±êÊÇ£ºÈç¹ûÓÐÖØÃû ¶ø ÐÂÎÅ¸öÊý²»Í¬ ¾Í½«Ö®Ç°µÄ¸²¸Çµô£»È»ºó·µ»Ø id
+				// ï¿½ï¿½Ê±ï¿½ï¿½×¨ï¿½ï¿½ï¿½ï¿½ï¿½×¨ï¿½ï¿½ï¿½
+				// Ä¿ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ï¿½Í¬ ï¿½Í½ï¿½Ö®Ç°ï¿½Ä¸ï¿½ï¿½Çµï¿½ï¿½ï¿½È»ï¿½ó·µ»ï¿½ id
 				long oneclusterid = insert(dbadapter, title, today, words,
 						oneclustercount);
-				// ½«ÐÂÎÅ²åÈëÐÂÎÅ±í
-				if (oneclusterid != -1) {// µ±ÖµÎª-1Ê±£¬ËµÃ÷´ËÊ±µÄ×¨ÌâÊý¾Ý¿âÖÐÒÑ´æÔÚ£¬²»ÐèÒª¸üÐÂ
+				// ï¿½ï¿½ï¿½ï¿½ï¿½Å²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å±ï¿½
+				if (oneclusterid != -1) {// ï¿½ï¿½ÖµÎª-1Ê±ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½×¨ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½ï¿½Ú£ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½
 					newsinsert(dbadapter, doc, oneclusterid);
 				}
 			}
@@ -335,8 +336,8 @@ public class ConnectWeb {
 	}
 
 	/*
-	 * Êý¾Ý¸ñÊ½£º result clusters others cluster words count source-distribution doc
-	 * title words source date url
+	 * ï¿½ï¿½Ý¸ï¿½Ê½ï¿½ï¿½ result clusters others cluster words count source-distribution
+	 * doc title words source date url
 	 */
 	static synchronized public int getZhuantiFromDate(DBAdapter dbadapter,
 			String date) {
@@ -346,35 +347,35 @@ public class ConnectWeb {
 			String theurl = "http://democlip.blcu.edu.cn:8081/RMI_WEB/rmi?r=GetXML&t="
 					+ date;
 			String str = HttpConn.getJsonFromUrlGet(theurl);
-			// Í¨¹ýjson À´½âÎöÊÕµ½µÄ×Ö·û´®
+			// Í¨ï¿½ï¿½json ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õµï¿½ï¿½ï¿½ï¿½Ö·ï¿½
 			JSONObject jay = new JSONObject(str);
 			JSONObject result = new JSONObject(jay.getString("result"));
-			// ½âÎökey resultËù¶ÔÓ¦µÄÖµ
-			// countÊÇ×Ü¹²È¡µ½µÄ×¨ÌâÌõÊý
+			// ï¿½ï¿½ï¿½ï¿½key resultï¿½ï¿½ï¿½Ó¦ï¿½ï¿½Öµ
+			// countï¿½ï¿½ï¿½Ü¹ï¿½È¡ï¿½ï¿½ï¿½ï¿½×¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			count = result.getInt("count");
-			// clusters°üÀ¨Á½²¿·Ö,·Ö±ðÊÇ others ºÍ ×¨ÌâÊý×é
+			// clustersï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½Ö±ï¿½ï¿½ï¿½ others ï¿½ï¿½ ×¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			JSONObject clusters = new JSONObject(result.getString("clusters"));
-			// È¡³ö×¨ÌâÊý×é
+			// È¡ï¿½ï¿½×¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			JSONArray cluster = clusters.getJSONArray("cluster");
-			// Ñ­»·´Ó×¨ÌâÊýÈ¡³öÃ¿¸ö×¨Ìâ½øÐÐ½âÎö
+			// Ñ­ï¿½ï¿½ï¿½ï¿½×¨ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½Ã¿ï¿½ï¿½×¨ï¿½ï¿½ï¿½ï¿½Ð½ï¿½ï¿½ï¿½
 			for (int i = 0; i < cluster.length(); i += 1) {
-				// °¤¸öÈ¡³ö×¨Ìâ
+				// ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½×¨ï¿½ï¿½
 				JSONObject onecluster = (JSONObject) cluster.get(i);
-				// È¡³ö×¨ÌâµÄ¹Ø¼ü×ÖwordºÍ countºÍdoc
+				// È¡ï¿½ï¿½×¨ï¿½ï¿½Ä¹Ø¼ï¿½ï¿½ï¿½wordï¿½ï¿½ countï¿½ï¿½doc
 				String words = onecluster.getString("words");
 				words = jiexiwords(words);
 				int oneclustercount = Integer.parseInt(onecluster
 						.getString("count"));
-				// È¡³ödoc£¬docÊÇ¾ßÌåÐÂÎÅÃûµÄÊý×é
+				// È¡ï¿½ï¿½docï¿½ï¿½docï¿½Ç¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				JSONArray doc = onecluster.getJSONArray("doc");
-				// È¡³öµÚÒ»ÌõÐÂÎÅÃû×÷Îª×¨ÌâµÄ±êÌâ
+				// È¡ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª×¨ï¿½ï¿½Ä±ï¿½ï¿½ï¿½
 				String title = getzhuantititle(doc);
-				// ´ËÊ±½«×¨Ìâ²åÈë×¨Ìâ±í
-				// Ä¿±êÊÇ£ºÈç¹ûÓÐÖØÃû ¶ø ÐÂÎÅ¸öÊý²»Í¬ ¾Í½«Ö®Ç°µÄ¸²¸Çµô£»È»ºó·µ»Ø id
+				// ï¿½ï¿½Ê±ï¿½ï¿½×¨ï¿½ï¿½ï¿½ï¿½ï¿½×¨ï¿½ï¿½ï¿½
+				// Ä¿ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ï¿½Í¬ ï¿½Í½ï¿½Ö®Ç°ï¿½Ä¸ï¿½ï¿½Çµï¿½ï¿½ï¿½È»ï¿½ó·µ»ï¿½ id
 				long oneclusterid = insert(dbadapter, title, date, words,
 						oneclustercount);
-				// ½«ÐÂÎÅ²åÈëÐÂÎÅ±í
-				if (oneclusterid != -1) {// µ±ÖµÎª-1Ê±£¬ËµÃ÷´ËÊ±µÄ×¨ÌâÊý¾Ý¿âÖÐÒÑ´æÔÚ£¬²»ÐèÒª¸üÐÂ
+				// ï¿½ï¿½ï¿½ï¿½ï¿½Å²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å±ï¿½
+				if (oneclusterid != -1) {// ï¿½ï¿½ÖµÎª-1Ê±ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½×¨ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½ï¿½Ú£ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½
 					newsinsert(dbadapter, doc, oneclusterid);
 				}
 			}
@@ -416,7 +417,7 @@ public class ConnectWeb {
 					newsinsert(dbadapter, doc, oneclusterid);
 				}
 			}
-			// ¸ù¾ÝÎÄ±¾ÅÅÐò
+			// ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½
 
 			if (!list.isEmpty()) {
 				Collections.sort(list, new Comparator<Map<String, Object>>() {
@@ -431,7 +432,7 @@ public class ConnectWeb {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// ÁôÏÂlist µÄÇ°5¸ö
+		// ï¿½ï¿½ï¿½ï¿½list ï¿½ï¿½Ç°5ï¿½ï¿½
 		for (int i = 5; i < list.size(); i++)
 			list.remove(i);
 		return list;
@@ -470,7 +471,7 @@ public class ConnectWeb {
 				String heat = temp.getString("second");
 				long tmp = dbadapter
 						.insertpeople(title, Integer.parseInt(heat));
-				if (tmp >= 0)// Èç¹û²»ÊÇÁã£¬¾Íinsert£¬ËµÃ÷Ã»ÓÐ
+				if (tmp >= 0)// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã£¬ï¿½ï¿½insertï¿½ï¿½Ëµï¿½ï¿½Ã»ï¿½ï¿½
 				{
 					map = new HashMap<String, Object>();
 					map.put("title", title);
@@ -484,7 +485,7 @@ public class ConnectWeb {
 					@Override
 					public int compare(Map<String, Object> object1,
 							Map<String, Object> object2) {
-						// ¸ù¾ÝÎÄ±¾ÅÅÐò
+						// ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½
 						return ((String) object2.get("heat"))
 								.compareTo((String) object1.get("heat"));
 					}
@@ -514,7 +515,7 @@ public class ConnectWeb {
 				String title = temp.getString("first");
 				String heat = temp.getString("second");
 				long tmp = dbadapter.insertplace(title, Integer.parseInt(heat));
-				if (tmp >= 0)// Èç¹û²»ÊÇÁã£¬¾Íinsert£¬ËµÃ÷Ã»ÓÐ
+				if (tmp >= 0)// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã£¬ï¿½ï¿½insertï¿½ï¿½Ëµï¿½ï¿½Ã»ï¿½ï¿½
 				{
 					map = new HashMap<String, Object>();
 					map.put("title", title);
@@ -527,7 +528,7 @@ public class ConnectWeb {
 					@Override
 					public int compare(Map<String, Object> object1,
 							Map<String, Object> object2) {
-						// ¸ù¾ÝÎÄ±¾ÅÅÐò
+						// ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½
 						return ((String) object2.get("heat"))
 								.compareTo((String) object1.get("heat"));
 					}
@@ -601,7 +602,7 @@ public class ConnectWeb {
 				String heat = temp.getString("second");
 				long tmp = dbadapter.insertdivision(title,
 						Integer.parseInt(heat));
-				if (tmp >= 0)// Èç¹û²»ÊÇÁã£¬¾Íinsert£¬ËµÃ÷Ã»ÓÐ
+				if (tmp >= 0)// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã£¬ï¿½ï¿½insertï¿½ï¿½Ëµï¿½ï¿½Ã»ï¿½ï¿½
 				{
 					map = new HashMap<String, Object>();
 					map.put("title", title);
@@ -614,7 +615,7 @@ public class ConnectWeb {
 					@Override
 					public int compare(Map<String, Object> object1,
 							Map<String, Object> object2) {
-						// ¸ù¾ÝÎÄ±¾ÅÅÐò
+						// ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½
 						return ((String) object2.get("heat"))
 								.compareTo((String) object1.get("heat"));
 					}
@@ -638,7 +639,7 @@ public class ConnectWeb {
 			theurl = str + theurl;
 			String string = HttpConn.getJsonFromUrlGet(theurl);
 			if (string != null) {
-				Log.d("EV_DEBUG", "Ã¿Ò»ÌõÐÂÎÅ" + string);
+				Log.d("EV_DEBUG", "Ã¿Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" + string);
 			}
 			JSONObject jay = new JSONObject(string);
 			JSONObject inforMap = new JSONObject(jay.getString("inforMap"));
@@ -661,7 +662,7 @@ public class ConnectWeb {
 	}
 
 	/**
-	 * ²åÈëNews±í
+	 * ï¿½ï¿½ï¿½ï¿½Newsï¿½ï¿½
 	 * 
 	 * @param dbadapter
 	 * @param doc
@@ -686,7 +687,8 @@ public class ConnectWeb {
 	}
 
 	/**
-	 * Ä¿±êÊÇ£º½«×¨Ìâ²åÈë×¨Ìâ±í Èç¹ûÓÐÖØÃû ¶ø ÐÂÎÅ¸öÊý²»Í¬ ¾Í½«Ö®Ç°µÄ¸²¸Çµô£¬¶øÇÒ½«ÐÂÎÅ±íÀï¶ÔÓ¦µÄÐÂÎÅÉ¾µô
+	 * Ä¿ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½×¨ï¿½ï¿½ï¿½ï¿½ï¿½×¨ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ï¿½Í¬
+	 * ï¿½Í½ï¿½Ö®Ç°ï¿½Ä¸ï¿½ï¿½Çµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ï¿½Å±ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½
 	 * 
 	 * @param dbadapter
 	 * @param title
@@ -720,7 +722,7 @@ public class ConnectWeb {
 		 * int index1 = -1; int index2 = -1; String keyword = ""; int tmp = 0;
 		 * Log.d("EV_DEBUG_WORDS", words); while ((index1 = words.indexOf("(",
 		 * index1)) > -1 && (index2 = words.indexOf(",", index2)) > -1 && (tmp <
-		 * 5)) { //ÓÐµÄÊý¾ÝÖÐ°üº¬&×Ö·û,¿ÓËÀÎÒÁË.. // Log.d("EV_DEBUG",
+		 * 5)) { //ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½Ð°ï¿½&ï¿½Ö·ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.. // Log.d("EV_DEBUG",
 		 * "index1:"+index1+"2:"+index2); if (index1 > words.length() ||
 		 * index2>words.length()) { break; } keyword = keyword +
 		 * words.substring(index1 + 1, index2) + " "; index1 += 1; index2 += 1;
