@@ -21,12 +21,12 @@ import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 import cn.edu.blcu.newsfeed.R;
+import cn.edu.blcu.newsfeed.utils.CheckNetwork;
+import cn.edu.blcu.newsfeed.utils.ConnectWeb;
+import cn.edu.blcu.newsfeed.utils.DBAdapter;
+import cn.edu.blcu.newsfeed.utils.DateTool;
 import cn.edu.blcu.newsfeed.zuijinxinwen.zhuanti;
 
-import com.and.netease.utils.CheckNetwork;
-import com.and.netease.utils.ConnectWeb;
-import com.and.netease.utils.DBAdapter;
-import com.and.netease.utils.DateTool;
 import com.markupartist.android.widget.PullToRefreshListView;
 import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
 

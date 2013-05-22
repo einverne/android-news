@@ -17,9 +17,9 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 import cn.edu.blcu.newsfeed.R;
 import cn.edu.blcu.newsfeed.activity.jutixinwen;
+import cn.edu.blcu.newsfeed.utils.CheckNetwork;
+import cn.edu.blcu.newsfeed.utils.DBAdapter;
 
-import com.and.netease.utils.CheckNetwork;
-import com.and.netease.utils.DBAdapter;
 
 /**
  * @author einverne

@@ -1,6 +1,6 @@
 //��Android�У���ݿ����� /data/data/PACKAGE_NAME/databases Ŀ¼��
 
-package com.and.netease.utils;
+package cn.edu.blcu.newsfeed.utils;
 
 import android.content.ContentValues;
 import android.content.Context;

@@ -36,10 +36,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import cn.edu.blcu.newsfeed.R;
 import cn.edu.blcu.newsfeed.activity.jutixinwen;
+import cn.edu.blcu.newsfeed.utils.CheckNetwork;
+import cn.edu.blcu.newsfeed.utils.ConnectWeb;
+import cn.edu.blcu.newsfeed.utils.MakeQuery;
 
-import com.and.netease.utils.CheckNetwork;
-import com.and.netease.utils.ConnectWeb;
-import com.and.netease.utils.MakeQuery;
 
 public class search extends Activity {
 	SharedPreferences sharedPreferences;

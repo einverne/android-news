@@ -19,8 +19,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 import cn.edu.blcu.newsfeed.R;
 import cn.edu.blcu.newsfeed.dingzhi.dingzhi;
+import cn.edu.blcu.newsfeed.utils.ConnectWeb;
 
-import com.and.netease.utils.ConnectWeb;
 
 @SuppressLint("HandlerLeak")
 public class TabLoginActivity extends Activity {

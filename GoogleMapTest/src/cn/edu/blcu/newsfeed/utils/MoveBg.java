@@ -1,22 +1,22 @@
-package com.and.netease.utils;
+package cn.edu.blcu.newsfeed.utils;
 
 import android.view.View;
 import android.view.animation.TranslateAnimation;
 
 public class MoveBg {
 	/**
-	 * ÒÆ¶¯·½·¨
+	 * ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * 
 	 * @param v
-	 *            ÐèÒªÒÆ¶¯µÄView
+	 *            ï¿½ï¿½Òªï¿½Æ¶ï¿½ï¿½ï¿½View
 	 * @param startX
-	 *            ÆðÊ¼x×ø±ê
+	 *            ï¿½ï¿½Ê¼xï¿½ï¿½ï¿½
 	 * @param toX
-	 *            ÖÕÖ¹x×ø±ê
+	 *            ï¿½ï¿½Ö¹xï¿½ï¿½ï¿½
 	 * @param startY
-	 *            ÆðÊ¼y×ø±ê
+	 *            ï¿½ï¿½Ê¼yï¿½ï¿½ï¿½
 	 * @param toY
-	 *            ÖÕÖ¹y×ø±ê
+	 *            ï¿½ï¿½Ö¹yï¿½ï¿½ï¿½
 	 */
 	public static void moveFrontBg(View v, int startX, int toX, int startY,
 			int toY) {

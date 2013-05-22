@@ -1,4 +1,4 @@
-package com.and.netease.utils;
+package cn.edu.blcu.newsfeed.utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,8 +7,6 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 /**
- * ÅĞ¶ÏÍøÂçÊÇ·ñÁ¬½Ó
- * 
  * @author einverne
  * 
  */
