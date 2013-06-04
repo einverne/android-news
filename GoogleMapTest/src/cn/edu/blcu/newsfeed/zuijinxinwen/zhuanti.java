@@ -3,25 +3,26 @@ package cn.edu.blcu.newsfeed.zuijinxinwen;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.app.ActionBar;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+import cn.edu.blcu.newsfeed.MainFragment;
 import cn.edu.blcu.newsfeed.R;
 import cn.edu.blcu.newsfeed.activity.jutixinwen;
-import cn.edu.blcu.newsfeed.tabactivity.MainActivity;
 import cn.edu.blcu.newsfeed.utils.CheckNetwork;
 import cn.edu.blcu.newsfeed.utils.DBAdapter;
+
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.MenuItem;
 
 
 /**
@@ -30,7 +31,7 @@ import cn.edu.blcu.newsfeed.utils.DBAdapter;
  * @author Administrator
  * 
  */
-public class zhuanti extends ListActivity {
+public class zhuanti extends SherlockListActivity {
 	private static final String TAG = "Demo";
 	SimpleAdapter listItemAdapter;
 	private ArrayList<HashMap<String, Object>> listItem;
@@ -42,7 +43,7 @@ public class zhuanti extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_zhuanti);
 
-		ActionBar actionbar = this.getActionBar();
+		ActionBar actionbar = this.getSupportActionBar();
 		actionbar.setTitle(getText(R.string.zhuanti));
 		actionbar.setDisplayHomeAsUpEnabled(true);
 
@@ -134,7 +135,7 @@ public class zhuanti extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			Intent intent = new Intent(this, MainActivity.class);
+			Intent intent = new Intent(this, MainFragment.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 			return true;

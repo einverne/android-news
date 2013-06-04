@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -22,13 +20,16 @@ import cn.edu.blcu.newsfeed.R;
 import cn.edu.blcu.newsfeed.utils.ConnectWeb;
 import cn.edu.blcu.newsfeed.utils.DBAdapter;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockListActivity;
+
 
 /**
  * @author Administrator
  * 
  */
 @SuppressLint("HandlerLeak")
-public class Dingzhi_zhuanti extends ListActivity {
+public class Dingzhi_zhuanti extends SherlockListActivity {
 
 	public static final String TAG = "EV_DEBUG";
 	public static final String COUNT = "count";
@@ -49,7 +50,7 @@ public class Dingzhi_zhuanti extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_zhuanti);
 
-		ActionBar actionBar = this.getActionBar();
+		ActionBar actionBar = this.getSupportActionBar();
 		actionBar.setTitle(getText(R.string.actionbar_dingzhi));
 
 		ListView list = this.getListView();

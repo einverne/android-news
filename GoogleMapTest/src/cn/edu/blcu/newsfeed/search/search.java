@@ -6,9 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,6 +16,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.SearchRecentSuggestions;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -34,14 +34,17 @@ import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import cn.edu.blcu.contentprovider.SearchSuggestion;
 import cn.edu.blcu.newsfeed.R;
 import cn.edu.blcu.newsfeed.activity.jutixinwen;
 import cn.edu.blcu.newsfeed.utils.CheckNetwork;
 import cn.edu.blcu.newsfeed.utils.ConnectWeb;
 import cn.edu.blcu.newsfeed.utils.MakeQuery;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
 
-public class search extends Activity {
+public class search extends SherlockActivity {
 	SharedPreferences sharedPreferences;
 	SharedPreferences.Editor editor;
 
@@ -202,15 +205,28 @@ public class search extends Activity {
 			return id;
 		}
 	}
-
+	private void doMySearch(String query) {
+		Toast.makeText(getApplicationContext(), query, Toast.LENGTH_SHORT)
+				.show();
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_search_result);
 		Log.d(TAG, "search_result_Activity_start");
 
-		ActionBar actionBar = this.getActionBar();
+		ActionBar actionBar = this.getSupportActionBar();
 		actionBar.setTitle(getText(R.string.title_search_result));
+
+		// Get the intent, verify the action and get the query
+		Intent intent = getIntent();
+		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			String query = intent.getStringExtra(SearchManager.QUERY);
+			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(
+					this, SearchSuggestion.AUTHORITY, SearchSuggestion.MODE);
+			suggestions.saveRecentQuery(query, null);
+			doMySearch(query);
+		}
 
 		sharedPreferences = this.getSharedPreferences("userinfo",
 				Context.MODE_PRIVATE);
@@ -250,16 +266,13 @@ public class search extends Activity {
 		moreView = getLayoutInflater().inflate(R.layout.moredata, null);
 		bt = (Button) moreView.findViewById(R.id.bt_load);
 		pg = (ProgressBar) moreView.findViewById(R.id.pg);
-		if (numberOfSearchResult < 4)// ����ȡ���ļ�������̫��ʱ���ü��ظ��İ�ť��ʧ��
-		{
+		if (numberOfSearchResult < 4) {
 
 			bt.setVisibility(View.GONE);
 		}
 		myListView.addFooterView(moreView);
 		myListView.setAdapter(listItemAdapter);
-		/**
-		 * ��ӦButton�¼�
-		 */
+
 		bt.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -271,9 +284,7 @@ public class search extends Activity {
 			}
 		});
 
-		/**
-		 * ��ӦList��ÿһ��Item�¼�
-		 */
+
 		myListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -320,7 +331,7 @@ public class search extends Activity {
 				}
 				if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
 						&& lastVisibleIndex >= numberOfSearchResult) {
-					Toast.makeText(search.this, "�Ѿ������һ����",
+					Toast.makeText(search.this, "没有更多内容",
 							Toast.LENGTH_SHORT).show();
 				}
 			}

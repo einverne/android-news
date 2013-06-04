@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.edu.blcu.newsfeed"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionCode="2"
+    android:versionName="2.0" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -23,29 +23,16 @@
         android:allowBackup="true"
         android:icon="@drawable/icon2"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.Holo.Light" >
+        android:theme="@style/Theme.Sherlock.Light" >
         <activity
             android:name="cn.edu.blcu.newsfeed.activity.SplashActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Holo.NoActionBar" >
+            android:theme="@style/Theme.Sherlock.Light.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="cn.edu.blcu.newsfeed.tabactivity.MainActivity"
-            android:logo="@drawable/biaotizi2"
-            android:theme="@style/CustomActivityTheme" >
-        </activity>
-        <activity android:name="cn.edu.blcu.newsfeed.hot.hot_main" >
-        </activity>
-        <activity android:name="cn.edu.blcu.newsfeed.tabactivity.TabzuijinxinwenActivity" >
-        </activity>
-        <activity android:name="cn.edu.blcu.newsfeed.tabactivity.TabSearchActivity" >
-        </activity>
-        <activity android:name="cn.edu.blcu.newsfeed.tabactivity.TabLoginActivity" >
         </activity>
         <activity
             android:name="cn.edu.blcu.newsfeed.zuijinxinwen.zhuanti"
@@ -61,6 +48,13 @@
             android:name="cn.edu.blcu.newsfeed.search.search"
             android:logo="@drawable/biaotizi2"
             android:theme="@style/CustomActivityTheme" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
         <activity
             android:name="cn.edu.blcu.newsfeed.search.advanced_search"
@@ -86,6 +80,24 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAY98GsObJ88hiEXVUnDj7zjnWXoCBM794" />
+
+        <activity
+            android:name="cn.edu.blcu.newsfeed.MainFragment"
+            android:label="@string/title_activity_main_fragment"
+            android:logo="@drawable/biaotizi2"
+            android:theme="@style/CustomActivityTheme" >
+        </activity>
+        <activity
+            android:name=".tabactivity.TabSearchActivity"
+            android:label="@string/biaoti_quanwen"
+            android:logo="@drawable/biaotizi2"
+            android:theme="@style/CustomActivityTheme" >
+        </activity>
+
+        <provider
+            android:name="cn.edu.blcu.contentprovider.SearchSuggestion"
+            android:authorities="@string/authority" >
+        </provider>
     </application>
 
 </manifest>

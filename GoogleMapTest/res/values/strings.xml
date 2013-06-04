@@ -6,10 +6,6 @@
     <string name="actionbar_login">登录</string>
     <string name="actionbar_dingzhi">定制</string>
     <string name="news_top_left_text">新闻</string>
-    <string name="topic_top_left_text">话题</string>
-    <string name="picture_top_left_text">图片</string>
-    <string name="follow_top_left_text">跟帖</string>
-    <string name="vote_top_left_text">投票</string>
     <string name="querentuichu">确认退出吗?</string>
     <string name="str_tuichu">退出</string>
     <string name="str_quxiao">清除输入</string>
@@ -37,5 +33,18 @@
     <string name="user_login">用户登录</string>
     <string name="password">密码</string>
     <string name="login_user_hint">用户名或Email</string>
+    <string name="title_activity_fragment">FragmentMain</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_search">搜索</string>
+    <string name="menu_social_share">分享</string>
+    <string name="authority">cn.edu.blcu.contentprovider.SearchSuggestion</string>
+    <string name="title_activity_main_fragment">NewsFeed</string>
+    <string-array name="sliding_menu">
+        <item >最近新闻</item>
+        <item >热点新闻</item>
+        <item >搜索</item>
+        <item >登录</item>
+    </string-array>
 
 </resources>
