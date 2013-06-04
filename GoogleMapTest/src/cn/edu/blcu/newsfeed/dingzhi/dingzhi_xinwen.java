@@ -3,8 +3,6 @@ package cn.edu.blcu.newsfeed.dingzhi;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.app.ActionBar;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -20,12 +18,15 @@ import cn.edu.blcu.newsfeed.activity.jutixinwen;
 import cn.edu.blcu.newsfeed.utils.CheckNetwork;
 import cn.edu.blcu.newsfeed.utils.DBAdapter;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockListActivity;
+
 
 /**
  * @author einverne
  * 
  */
-public class dingzhi_xinwen extends ListActivity {
+public class dingzhi_xinwen extends SherlockListActivity {
 
 	private static final String TAG = "EV_DEBUG";
 	private static final String SOURCE = "source";
@@ -44,7 +45,7 @@ public class dingzhi_xinwen extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_zhuanti);
 
-		ActionBar actionBar = this.getActionBar();
+		ActionBar actionBar = this.getSupportActionBar();
 		actionBar.setTitle(R.string.actionbar_dingzhi);
 
 		list = new ArrayList<HashMap<String, Object>>();

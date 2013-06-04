@@ -3,9 +3,7 @@ package cn.edu.blcu.newsfeed.dingzhi;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,8 +27,11 @@ import cn.edu.blcu.newsfeed.search.advanced_search;
 import cn.edu.blcu.newsfeed.utils.ConnectWeb;
 import cn.edu.blcu.newsfeed.utils.DBAdapter;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockListActivity;
 
-public class dingzhi extends ListActivity {
+
+public class dingzhi extends SherlockListActivity {
 	private static final String TAG = "EV_DEBUG";
 	protected static final int MESSAGE_OK = 0;
 	private SharedPreferences sharedPreferences;
@@ -49,7 +50,7 @@ public class dingzhi extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_dingzhi);
 
-		ActionBar actionBar = this.getActionBar();
+		ActionBar actionBar = this.getSupportActionBar();
 		actionBar.setTitle(getText(R.string.actionbar_dingzhi));
 
 		sharedPreferences = this.getSharedPreferences("userinfo", MODE_PRIVATE);

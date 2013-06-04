@@ -7,7 +7,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,15 +19,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import cn.edu.blcu.newsfeed.MainFragment;
 import cn.edu.blcu.newsfeed.R;
-import cn.edu.blcu.newsfeed.tabactivity.MainActivity;
 import cn.edu.blcu.newsfeed.utils.CheckNetwork;
 import cn.edu.blcu.newsfeed.utils.ConnectWeb;
 import cn.edu.blcu.newsfeed.utils.DBAdapter;
 
+import com.actionbarsherlock.app.SherlockActivity;
+
 
 @SuppressLint("HandlerLeak")
-public class SplashActivity extends Activity {
+public class SplashActivity extends SherlockActivity{
 
 	protected DBAdapter dbadapter;
 	private ViewPager viewPager;
@@ -110,7 +111,7 @@ public class SplashActivity extends Activity {
 		@Override
 		protected void onPostExecute(Void result) {
 			Intent mainIntent = new Intent(SplashActivity.this,
-					MainActivity.class);
+					MainFragment.class);
 			SplashActivity.this.startActivity(mainIntent);
 			SplashActivity.this.finish();
 			super.onPostExecute(result);

@@ -6,8 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import android.app.ActionBar;
-import android.app.Activity;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -24,7 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import cn.edu.blcu.newsfeed.R;
 
-public class advanced_search extends Activity {
+public class advanced_search extends SherlockActivity {
 	private static final String TAG = "Demo";
 	private String keyword;
 	private int mYear;
@@ -47,7 +48,7 @@ public class advanced_search extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_advanced_search);
 
-		ActionBar actionBar = this.getActionBar();
+		ActionBar actionBar = this.getSupportActionBar();
 		actionBar.setTitle(R.string.title_search_advanced);
 		final EditText searchkeywordEdit = (EditText) findViewById(R.id.searchkeyword);
 		Button startdateButton = (Button) findViewById(R.id.button_startdate);

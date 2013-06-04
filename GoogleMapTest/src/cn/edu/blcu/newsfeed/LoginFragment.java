@@ -1,29 +1,27 @@
-package cn.edu.blcu.newsfeed.tabactivity;
+package cn.edu.blcu.newsfeed;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import cn.edu.blcu.newsfeed.R;
 import cn.edu.blcu.newsfeed.dingzhi.dingzhi;
 import cn.edu.blcu.newsfeed.utils.ConnectWeb;
 
-
-@SuppressLint("HandlerLeak")
-public class TabLoginActivity extends Activity {
+public class LoginFragment extends Fragment {
 	private static final String TAG = "Demo";
 	private EditText username;
 	private EditText psw;
@@ -37,16 +35,18 @@ public class TabLoginActivity extends Activity {
 
 	ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.layout_login);
-		Log.d(TAG, "Login start");
-		username = (EditText) findViewById(R.id.editText_username);
-		psw = (EditText) findViewById(R.id.editText_psw);
+	public LoginFragment() {
+	}
 
-		this.sharedPreferences = this.getSharedPreferences("userinfo",
-				MODE_PRIVATE);
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		Log.d(TAG, "Login start");
+		username = (EditText) getActivity()
+				.findViewById(R.id.editText_username);
+		psw = (EditText) getActivity().findViewById(R.id.editText_psw);
+
+		this.sharedPreferences = getActivity().getSharedPreferences("userinfo",
+				Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
 
 		String store_name = sharedPreferences.getString("name", "");
@@ -65,7 +65,8 @@ public class TabLoginActivity extends Activity {
 		// startActivity(intent);
 		// }
 
-		Button loginButton = (Button) findViewById(R.id.button_denglu);
+		Button loginButton = (Button) getActivity().findViewById(
+				R.id.button_denglu);
 		loginButton.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -73,8 +74,8 @@ public class TabLoginActivity extends Activity {
 				str_psw = psw.getText().toString();
 				if (str_name != "" && str_psw != "") {
 
-					progressDialog = ProgressDialog.show(TabLoginActivity.this,
-							"等待", "正在验证");
+					progressDialog = ProgressDialog.show(getActivity(), "等待",
+							"正在验证");
 					new Thread() {
 						@Override
 						public void run() {
@@ -90,20 +91,21 @@ public class TabLoginActivity extends Activity {
 					}.start();
 
 				} else {
-					Toast.makeText(TabLoginActivity.this, "请输入用户名密码",
+					Toast.makeText(getActivity(), "请输入用户名密码",
 							Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
 
-		Button quxiaoButton = (Button) findViewById(R.id.button_quxiao);
+		Button quxiaoButton = (Button) getActivity().findViewById(
+				R.id.button_quxiao);
 		quxiaoButton.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				setNull();
 			}
 		});
-
+		super.onActivityCreated(savedInstanceState);
 	}
 
 	private Handler handler = new Handler() {
@@ -115,15 +117,14 @@ public class TabLoginActivity extends Activity {
 					editor.putString("name", str_name);
 					editor.putString("psw", str_psw);
 					editor.commit();
-					Intent intent = new Intent(TabLoginActivity.this,
-							dingzhi.class);
+					Intent intent = new Intent(getActivity(), dingzhi.class);
 					Bundle data = new Bundle();
 					data.putString("name", str_name);
 					intent.putExtras(data);
 					startActivity(intent);
 				} else {
-					Toast.makeText(TabLoginActivity.this, "用户名密码错误",
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), "用户名密码错误", Toast.LENGTH_SHORT)
+							.show();
 					setNull();
 				}
 				progressDialog.dismiss();
@@ -138,7 +139,9 @@ public class TabLoginActivity extends Activity {
 	}
 
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		return false;
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.layout_login, null);
 	}
+
 }

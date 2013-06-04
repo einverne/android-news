@@ -3,7 +3,6 @@ package cn.edu.blcu.newsfeed.activity;
 import java.util.Map;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,13 +11,16 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import cn.edu.blcu.newsfeed.R;
 import cn.edu.blcu.newsfeed.utils.ConnectWeb;
 import cn.edu.blcu.newsfeed.utils.DBAdapter;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 
-public class jutixinwen extends Activity {
+
+public class jutixinwen extends SherlockActivity {
 	private static final String TAG = "Demo";
 	DBAdapter dbadapter;
 
@@ -37,6 +39,7 @@ public class jutixinwen extends Activity {
 
 		ActionBar actionBar = this.getActionBar();
 		actionBar.setTitle(getText(R.string.actionbar_new_text));
+		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		tv_title = (TextView) findViewById(R.id.textView_newstitle);
 		tv_source = (TextView) findViewById(R.id.textView_media);
@@ -88,8 +91,41 @@ public class jutixinwen extends Activity {
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Toast.makeText(this, resultCode, Toast.LENGTH_LONG).show();
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			return true;
+		case R.id.share:
+			shareApps();
+			break;
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getSupportMenuInflater().inflate(R.menu.jutixinwen, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	/*
+	 * 调用系统的分享菜单 share app
+	 */
+	private void shareApps(){
+		//实例化一个Intent对象，并且设置Intent的Action为ACTION_SEND
+		Intent intent=new Intent(Intent.ACTION_SEND); 
+		//设置MIME数据类型
+		intent.setType("text/plain"); 
+		//设置主题
+		intent.putExtra(Intent.EXTRA_SUBJECT, "分享新闻"); 
+		//设置内容
+		intent.putExtra(Intent.EXTRA_TEXT, tv_text.getText().toString()); 
+		//启动Activity，并设置菜单标题
+		startActivity(Intent.createChooser(intent, "分享")); 
+	}
+
 
 }

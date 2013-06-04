@@ -1,11 +1,16 @@
-package cn.edu.blcu.newsfeed.hot;
+package cn.edu.blcu.newsfeed;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.app.Activity;
+import com.markupartist.android.widget.PullToRefreshListView;
+import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
+
+import cn.edu.blcu.newsfeed.search.search;
+import cn.edu.blcu.newsfeed.utils.ConnectWeb;
+import cn.edu.blcu.newsfeed.utils.DBAdapter;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
@@ -14,37 +19,30 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-import cn.edu.blcu.newsfeed.R;
-import cn.edu.blcu.newsfeed.search.search;
-import cn.edu.blcu.newsfeed.utils.ConnectWeb;
-import cn.edu.blcu.newsfeed.utils.DBAdapter;
+import android.widget.AdapterView.OnItemClickListener;
 
-import com.markupartist.android.widget.PullToRefreshListView;
-import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
-
-public class hot_main extends Activity implements OnScrollListener {
-
+public class HotFragment extends Fragment implements OnScrollListener{
 	private ViewPager mPager;
 	private List<View> listViews;
 	private ImageView cursor;
@@ -69,17 +67,15 @@ public class hot_main extends Activity implements OnScrollListener {
 	private Cursor c_people;
 	private Cursor c_place;
 	private Cursor c_division;
-
+	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.hot_main);
-		moreView = getLayoutInflater().inflate(R.layout.moredata, null);
+	public void onActivityCreated(Bundle savedInstanceState) {
+		moreView = getActivity().getLayoutInflater().inflate(R.layout.moredata, null);
 		bt = (Button) moreView.findViewById(R.id.bt_load);
 		pg = (ProgressBar) moreView.findViewById(R.id.pg);
 		handler = new Handler();
 
-		dbadapter = new DBAdapter(this);
+		dbadapter = new DBAdapter(getActivity());
 		c_people = dbadapter.getpeople(0, MaxDataNum);
 		c_place = dbadapter.getplace(0, MaxDataNum);
 		c_division = dbadapter.getdivision(0, MaxDataNum);
@@ -87,8 +83,8 @@ public class hot_main extends Activity implements OnScrollListener {
 		InitImageView();
 		InitTextView();
 		InitViewPager();
+		super.onActivityCreated(savedInstanceState);
 	}
-
 	private void loadMoreData(int x) {
 		int count = 0;
 		switch (x) {
@@ -198,7 +194,7 @@ public class hot_main extends Activity implements OnScrollListener {
 				listItem0.add(map);
 			}
 
-			listItemAdapter0 = new SimpleAdapter(this, listItem0,
+			listItemAdapter0 = new SimpleAdapter(getActivity(), listItem0,
 					R.layout.hot_item,
 					new String[] { "ItemTitle", "ItemText" }, new int[] {
 							R.id.textView_name, R.id.textView_heat });
@@ -222,7 +218,7 @@ public class hot_main extends Activity implements OnScrollListener {
 				listItem1.add(map);
 			}
 
-			listItemAdapter1 = new SimpleAdapter(this, listItem1,
+			listItemAdapter1 = new SimpleAdapter(getActivity(), listItem1,
 					R.layout.hot_item,
 					new String[] { "ItemTitle", "ItemText" }, new int[] {
 							R.id.textView_name, R.id.textView_heat });
@@ -247,7 +243,7 @@ public class hot_main extends Activity implements OnScrollListener {
 				listItem2.add(map);
 			}
 
-			listItemAdapter2 = new SimpleAdapter(this, listItem2,
+			listItemAdapter2 = new SimpleAdapter(getActivity(), listItem2,
 					R.layout.hot_item,
 					new String[] { "ItemTitle", "ItemText" }, new int[] {
 							R.id.textView_name, R.id.textView_heat });
@@ -325,7 +321,7 @@ public class hot_main extends Activity implements OnScrollListener {
 				Log.d("zjj", str_title);
 				Bundle bundle = new Bundle();
 				bundle.putSerializable("keyword", str_title);
-				Intent intent = new Intent(hot_main.this, search.class);
+				Intent intent = new Intent(getActivity(), search.class);
 				intent.putExtras(bundle);
 				startActivity(intent);
 			}
@@ -333,9 +329,9 @@ public class hot_main extends Activity implements OnScrollListener {
 	}
 
 	private void InitTextView() {
-		t1 = (TextView) findViewById(R.id.text1);
-		t2 = (TextView) findViewById(R.id.text2);
-		t3 = (TextView) findViewById(R.id.text3);
+		t1 = (TextView) getActivity().findViewById(R.id.text1);
+		t2 = (TextView) getActivity().findViewById(R.id.text2);
+		t3 = (TextView) getActivity().findViewById(R.id.text3);
 
 		t1.setOnClickListener(new MyOnClickListener(0));
 		t2.setOnClickListener(new MyOnClickListener(1));
@@ -343,9 +339,9 @@ public class hot_main extends Activity implements OnScrollListener {
 	}
 
 	private void InitViewPager() {
-		mPager = (ViewPager) findViewById(R.id.vPager);
+		mPager = (ViewPager) getActivity().findViewById(R.id.vPager);
 		listViews = new ArrayList<View>();
-		LayoutInflater mInflater = getLayoutInflater();
+		LayoutInflater mInflater = getActivity().getLayoutInflater();
 		listViews.add(getPeopleView(mInflater));
 		listViews.add(getPlaceView(mInflater));
 		listViews.add(getDivisionView(mInflater));
@@ -355,11 +351,11 @@ public class hot_main extends Activity implements OnScrollListener {
 	}
 
 	private void InitImageView() {
-		cursor = (ImageView) findViewById(R.id.cursor);
+		cursor = (ImageView) getActivity().findViewById(R.id.cursor);
 		bmpW = BitmapFactory.decodeResource(getResources(), R.drawable.a)
 				.getWidth();
 		DisplayMetrics dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
 		int screenW = dm.widthPixels;
 		offset = (screenW / 3 - bmpW) / 2;
 		Matrix matrix = new Matrix();
@@ -504,22 +500,8 @@ public class hot_main extends Activity implements OnScrollListener {
 
 		}
 	}
-
-	@Override
-	public void onScroll(AbsListView view, int firstVisibleItem,
-			int visibleItemCount, int totalItemCount) {
-		// if (totalItemCount >= MaxDataNum && flag == 0) {
-		// Toast.makeText(this, "û�������", Toast.LENGTH_SHORT).show();
-		// flag = 1;
-		// }
-	}
-
-	@Override
-	public void onScrollStateChanged(AbsListView view, int scrollState) {
-		// TODO Auto-generated method stub
-
-	}
-
+	
+	
 	private class GetDataTask extends AsyncTask<Void, Void, String[]> {
 		private int index = 0;
 
@@ -541,7 +523,7 @@ public class hot_main extends Activity implements OnScrollListener {
 			switch (index) {
 			case 0:
 				c_people = dbadapter.getpeople(0, MaxDataNum);
-				Toast.makeText(hot_main.this, "更新了" + list_People.size() + "条",
+				Toast.makeText(getActivity(), "更新了" + list_People.size() + "条",
 						Toast.LENGTH_SHORT).show();
 
 				for (int i = 0; c_people.moveToNext(); i++) {
@@ -564,7 +546,7 @@ public class hot_main extends Activity implements OnScrollListener {
 				break;
 			case 1:
 				c_place = dbadapter.getplace(0, MaxDataNum);
-				Toast.makeText(hot_main.this, "更新了" + list_place.size() + "条",
+				Toast.makeText(getActivity(), "更新了" + list_place.size() + "条",
 						Toast.LENGTH_SHORT).show();
 
 				for (int i = 0; c_people.moveToNext(); i++) {
@@ -587,7 +569,7 @@ public class hot_main extends Activity implements OnScrollListener {
 				break;
 			case 2:
 				c_division = dbadapter.getdivision(0, MaxDataNum);
-				Toast.makeText(hot_main.this,
+				Toast.makeText(getActivity(),
 						"更新了" + list_division.size() + "条", Toast.LENGTH_SHORT)
 						.show();
 
@@ -615,15 +597,22 @@ public class hot_main extends Activity implements OnScrollListener {
 		}
 	}
 
+	
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		c_people.close();
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.hot_main, null);
 	}
-
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		return false;
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
